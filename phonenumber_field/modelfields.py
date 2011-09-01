@@ -54,9 +54,12 @@ class PhoneNumberField(models.Field):
 
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
-        # Need to convert File objects provided via a form to unicode for database insertion
         if value is None:
             return None
+        value = to_python(value)
+        if isinstance(value, basestring):
+            # it is an invalid phone number
+            return value
         return value.as_e164
 
     def contribute_to_class(self, cls, name):
