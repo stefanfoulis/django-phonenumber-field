@@ -18,6 +18,7 @@ Basic usage
 
 Use it like any regular model field::
 
+    from phonenumber_field.modelfields import PhoneNumberField
     class MyModel(models.Model):
         name = models.CharField(max_length=255)
         phone_number = PhoneNumberField()
