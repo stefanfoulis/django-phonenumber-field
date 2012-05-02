@@ -18,9 +18,11 @@ Basic usage
 
 Use it like any regular model field::
 
+    from phonenumber_field.modelfields import PhoneNumberField
     class MyModel(models.Model):
         name = models.CharField(max_length=255)
         phone_number = PhoneNumberField()
+        fax_number = PhoneNumberField(null=True, blank=True)
 
 PhoneNumberField will always represent the number as a string of an international phonenumber in the database. E.g
 `+41524204242`.

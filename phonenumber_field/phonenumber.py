@@ -2,7 +2,7 @@
 import phonenumbers
 from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
-
+from django.conf import settings
 
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
@@ -12,7 +12,8 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     @classmethod
     def from_string(cls, phone_number):
         phone_number_obj = cls()
-        phonenumbers.parse(number=phone_number, region=None, keep_raw_input=True, numobj=phone_number_obj)
+        region = getattr(settings,'PHONENUMER_DEFAULT_REGION', None)
+        phonenumbers.parse(number=phone_number, region=region, keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
     def __str__(self):
