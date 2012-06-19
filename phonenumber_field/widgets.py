@@ -22,9 +22,10 @@ class PhonePrefixSelect(Select):
             prefix = '+%d' % prefix
             if initial and initial in values:
                 self.initial = prefix
-            country_name = locale.territories.get(values[0])
-            if country_name:
-                choices.append((prefix, u'%s %s' % (country_name, prefix)))
+            for country_code in values:
+                country_name = locale.territories.get(country_code)
+                if country_name:
+                    choices.append((prefix, u'%s %s' % (country_name, prefix)))
         return super(PhonePrefixSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def render(self, name, value, *args, **kwargs):
