@@ -9,7 +9,7 @@ from phonenumber_field.phonenumber import PhoneNumber, to_python
 
 class PhoneNumberField(CharField):
     default_error_messages = {
-        'invalid': _(u'Enter a valid phone number ("e.g +411234567").'),
+        'invalid': _(u'Enter a valid phone number.'),
     }
     default_validators = [validate_international_phonenumber]
 
