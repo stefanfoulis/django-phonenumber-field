@@ -70,8 +70,7 @@ def to_python(value):
             phone_number = PhoneNumber(raw_input=value)
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
          not isinstance(value, PhoneNumber):
-        phone_number = self.field.attr_class()
-        phone_number.merge_from(value)
+        phone_number = Phonenumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     return phone_number
