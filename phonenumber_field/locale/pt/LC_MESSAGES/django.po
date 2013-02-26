@@ -18,10 +18,11 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 
 #: formfields.py:12 validators.py:11
-msgid "Enter a valid phone number (\"e.g +411234567\")."
-msgstr "Introduza um número de telefone válido (\"ex: +351282331478\")."
+msgid "Enter a valid phone number."
+msgstr "Introduza um número de telefone válido."
 
 #: modelfields.py:45
 msgid "Phone number"
 msgstr "Numero de telefone"
+
 
