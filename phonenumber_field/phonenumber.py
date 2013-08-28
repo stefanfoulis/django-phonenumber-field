@@ -11,10 +11,12 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
     """
     @classmethod
-    def from_string(cls, phone_number):
+    def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
-        region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
-        phonenumbers.parse(number=phone_number, region=region, keep_raw_input=True, numobj=phone_number_obj)
+        if region is None:
+            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+        phonenumbers.parse(number=phone_number, region=region,
+                           keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
     def __str__(self):
