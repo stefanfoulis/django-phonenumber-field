@@ -10,6 +10,13 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
     to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
     """
+    format_map = {
+        'E164': phonenumbers.PhoneNumberFormat.E164,
+        'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
+        'NATIONAL': phonenumbers.PhoneNumberFormat.NATIONAL,
+        'RFC3966': phonenumbers.PhoneNumberFormat.RFC3966,
+    }
+
     @classmethod
     def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
@@ -20,8 +27,10 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         return phone_number_obj
 
     def __unicode__(self):
+        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
+        fmt = self.format_map[format_string]
         if self.is_valid():
-            return self.as_e164
+            return self.format_as(fmt)
         return self.raw_input
 
     def __str__(self):
