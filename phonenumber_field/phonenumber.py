@@ -4,6 +4,7 @@ from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
 from django.conf import settings
 
+
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
@@ -12,7 +13,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     @classmethod
     def from_string(cls, phone_number):
         phone_number_obj = cls()
-        region = getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+        region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
         phonenumbers.parse(number=phone_number, region=region, keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
@@ -29,7 +30,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     def is_valid(self):
         """
-        checks wether the number supplied is actually valid
+        checks whether the number supplied is actually valid
         """
         return phonenumbers.is_valid_number(self)
 
@@ -70,7 +71,7 @@ def to_python(value):
             phone_number = PhoneNumber(raw_input=value)
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
          not isinstance(value, PhoneNumber):
-        phone_number = Phonenumber(value)
+        phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     return phone_number
