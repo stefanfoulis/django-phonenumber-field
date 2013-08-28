@@ -44,19 +44,19 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     @property
     def as_international(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+        return self.format_as(phonenumbers.PhoneNumberFormat.INTERNATIONAL)
 
     @property
     def as_e164(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.E164)
+        return self.format_as(phonenumbers.PhoneNumberFormat.E164)
 
     @property
     def as_national(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.NATIONAL)
+        return self.format_as(phonenumbers.PhoneNumberFormat.NATIONAL)
 
     @property
     def as_rfc3966(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.RFC3966)
+        return self.format_as(phonenumbers.PhoneNumberFormat.RFC3966)
 
     def __len__(self):
         return len(self.__unicode__())
