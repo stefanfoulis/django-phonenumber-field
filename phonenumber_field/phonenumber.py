@@ -19,13 +19,13 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
                            keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
-    def __str__(self):
+    def __unicode__(self):
         if self.is_valid():
             return self.as_e164
         return self.raw_input
 
-    def __unicode__(self):
-        return unicode(self.__str__())
+    def __str__(self):
+        return str(unicode(self))
 
     def original_unicode(self):
         return super(PhoneNumber, self).__unicode__()
