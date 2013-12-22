@@ -53,6 +53,19 @@ class PhoneNumberFieldTestCase(TestCase):
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
         self.assertTrue(all(n==numbers[0] for n in numbers))
+    
+    def test_same_number_different_extensions_not_equal(self):
+        p1 = OptionalPhoneNumber()
+        p1.phone_number = self.test_number_ext
+        p2 = OptionalPhoneNumber()
+        p2.phone_number = p1.phone_number.as_e164
+        p3 = OptionalPhoneNumber()
+        p3.phone_number = "%sx%s9" % (p2.phone_number.as_e164, p1.phone_number.extension)
+        self.assertEqual(p2.phone_number.extension, None)
+        self.assertNotEqual(p1.phone_number.extension, p3.phone_number.extension)
+        self.assertNotEqual(p1.phone_number.extension, p2.phone_number.extension)
+        self.assertNotEqual(p1.phone_number, p2.phone_number)
+        self.assertNotEqual(p1.phone_number, p3.phone_number)
 
     def test_field_returns_correct_type(self):
         model = OptionalPhoneNumber()
