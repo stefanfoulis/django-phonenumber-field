@@ -77,14 +77,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
             return super(PhoneNumber, self).__eq__(other)
     
     def __hash__(self):
-        return hash((self.country_code,
-                     self.national_number,
-                     self.extension,
-                     self.italian_leading_zero,
-                     self.number_of_leading_zeros,
-                     self.raw_input,
-                     self.country_code_source,
-                     self.preferred_domestic_carrier_code))
+        return hash(self.as_rfc3966)
 
 
 def to_python(value):
