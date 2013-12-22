@@ -27,14 +27,14 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         return phone_number_obj
 
     def __unicode__(self):
-        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
-        fmt = self.format_map[format_string]
         if self.is_valid():
-            return self.format_as(fmt)
+            if self.extension:
+                return u"%sx%s" % (self.as_e164, self.extension)
+            return self.as_e164
         return self.raw_input
 
     def __str__(self):
-        return str(unicode(self))
+        return str(self.__unicode__())
 
     def original_unicode(self):
         return super(PhoneNumber, self).__unicode__()
