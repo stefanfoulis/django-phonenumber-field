@@ -60,6 +60,8 @@ class PhoneNumberField(models.Field):
         if isinstance(value, basestring):
             # it is an invalid phone number
             return value
+        if value.extension:
+            return "%sx%s" % (value.as_e164, value.extension)
         return value.as_e164
 
     def contribute_to_class(self, cls, name):

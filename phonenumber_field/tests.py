@@ -25,6 +25,7 @@ class OptionalPhoneNumber(models.Model):
 
 class PhoneNumberFieldTestCase(TestCase):
     test_number_1 = '+414204242'
+    test_number_ext = 'tel:+1-800-765-4321;ext=111'
     equal_number_strings = ['+44 113 8921113', '+441138921113']
     local_numbers = [
         ('GB', '01606 751 78'),
@@ -77,4 +78,18 @@ class PhoneNumberFieldTestCase(TestCase):
         p3h = hash(p3.phone_number)
         self.assertNotEqual(p1h, p2h)
         self.assertEqual(p2h,p3h)
+    
+    def test_extensions_survive_database(self):
+        p1 = MandatoryPhoneNumber()
+        p1.phone_number = self.test_number_ext
         
+        self.assertTrue(p1.phone_number.is_valid())
+        self.assertTrue(p1.phone_number.extension)
+        
+        db_val = PhoneNumberField().get_prep_value(p1.phone_number)
+        p2 = MandatoryPhoneNumber()
+        p2.phone_number = db_val
+        
+        self.assertTrue(p2.phone_number.is_valid())
+        self.assertEqual(p1.phone_number.extension, p2.phone_number.extension)
+        self.assertEqual(p1.phone_number, p2.phone_number)
