@@ -75,6 +75,9 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
             return self.as_e164 == other.as_e164
         else:
             return super(PhoneNumber, self).__eq__(other)
+    
+    def __hash__(self):
+        return hash(self.__unicode__())
 
 
 def to_python(value):

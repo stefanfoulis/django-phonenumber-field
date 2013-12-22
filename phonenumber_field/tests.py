@@ -64,3 +64,17 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.phone_number = self.test_number_1
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+    
+    def test_can_hash_for_m2m(self):
+        p1 = OptionalPhoneNumber()
+        p1.phone_number = self.test_number_1
+        p1h = hash(p1.phone_number)
+        p2 = OptionalPhoneNumber()
+        p2.phone_number = self.equal_number_strings[0]
+        p2h = hash(p2.phone_number)
+        p3 = OptionalPhoneNumber()
+        p3.phone_number = self.equal_number_strings[1]
+        p3h = hash(p3.phone_number)
+        self.assertNotEqual(p1h, p2h)
+        self.assertEqual(p2h,p3h)
+        
