@@ -1,4 +1,9 @@
 from setuptools import setup, find_packages
+import sys
+
+extra = {}
+if sys.version_info >= (3,):
+    extra['use_2to3'] = True
 
 setup(
     name="django-phonenumber-field",
@@ -29,5 +34,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP',
-    ]
+    ],
+    **extra
 )
