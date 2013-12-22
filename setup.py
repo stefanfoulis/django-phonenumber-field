@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from itertools import chain
 import sys
 
 extra = {}
@@ -25,6 +26,10 @@ setup(
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
     include_package_data=True,
+    package_data = {
+        'phonenumber_field': [
+            'templates/phonenumber_field/*.html',
+    ]},
     zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',
