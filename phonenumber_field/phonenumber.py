@@ -72,7 +72,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     def __eq__(self, other):
         if type(other) == PhoneNumber:
-            return self.as_e164 == other.as_e164
+            return self.as_rfc3966 == other.as_rfc3966
         else:
             return super(PhoneNumber, self).__eq__(other)
     
