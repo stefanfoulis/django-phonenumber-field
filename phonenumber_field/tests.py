@@ -17,6 +17,12 @@ class MandatoryPhoneNumber(models.Model):
 class OptionalPhoneNumber(models.Model):
     phone_number = PhoneNumberField(blank=True, default='')
 
+class PhoneNumberPK(models.Model):
+    phone_number = PhoneNumberField(primary_key=True)
+
+class MultiplePhoneNumbers(models.Model):
+    phone_numbers = models.ManyToManyField(PhoneNumberPK)
+
 
 ##############
 # Test Cases #
@@ -25,6 +31,7 @@ class OptionalPhoneNumber(models.Model):
 
 class PhoneNumberFieldTestCase(TestCase):
     test_number_1 = '+414204242'
+    test_number_noext = 'tel:+1-800-765-4321'
     test_number_ext = 'tel:+1-800-765-4321;ext=111'
     equal_number_strings = ['+44 113 8921113', '+441138921113']
     local_numbers = [
@@ -106,3 +113,25 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertTrue(p2.phone_number.is_valid())
         self.assertEqual(p1.phone_number.extension, p2.phone_number.extension)
         self.assertEqual(p1.phone_number, p2.phone_number)
+    
+    def test_m2m_respects_extension(self):
+        p1 = PhoneNumberPK()
+        p1.pk = self.test_number_noext
+        p1.save()
+        p2 = PhoneNumberPK()
+        p2.pk = self.test_number_ext
+        p2.save()
+        m2m = MultiplePhoneNumbers()
+        m2m.save()
+        m2m.phone_numbers.add(p1)
+        m2m.save()
+        all_numbers = m2m.phone_numbers.all()
+        self.assertEqual(len(all_numbers), 1)
+        self.assertIn(p1, all_numbers)
+        self.assertNotIn(p2, all_numbers)
+        m2m.phone_numbers.add(p2)
+        m2m.save()
+        all_numbers = m2m.phone_numbers.all()
+        self.assertEqual(len(all_numbers), 2)
+        self.assertIn(p1, all_numbers)
+        self.assertIn(p2, all_numbers)
