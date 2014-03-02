@@ -56,3 +56,15 @@ class PhoneNumberWidget(MultiWidget):
         })
         t = get_template("phonenumber_field/format_phone_number_widget_output.html")
         return t.render(c)
+    
+    @property
+    def country_code_widget(self):
+        return self.widgets[0]
+    
+    @property
+    def national_number_widget(self):
+        return self.widgets[1]
+    
+    @property
+    def extension_widget(self):
+        return self.widgets[2]
