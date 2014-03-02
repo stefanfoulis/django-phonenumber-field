@@ -31,6 +31,7 @@ class PhoneNumberWidget(MultiWidget):
     def __init__(self, attrs=None, initial=None):
         widgets = (CountryCodeSelect(),TextInput(),TextInput())
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
+        self.empty_country_code = None
 
     def decompress(self, value):
         if not isinstance(value, PhoneNumber):
@@ -42,8 +43,8 @@ class PhoneNumberWidget(MultiWidget):
 
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
-        if country_code:
-            country_code = "+%s" % country_code
+        if country_code or (self.empty_country_code and national_number):
+            country_code = "+{0}".format(country_code or self.empty_country_code)
         if extension:
             extension = "x%s" % extension
         return '%s%s%s' % (country_code, national_number, extension)
