@@ -9,7 +9,8 @@ from phonenumber_field.phonenumber import PhoneNumber, to_python
 class CountryCodeSelect(Select):
     initial = None
 
-    def __init__(self, initial=None):
+    def __init__(self, phone_widget, initial=None):
+        self.phone_widget = phone_widget
         choices = [('', '---------')]
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
             if initial and initial in values:
@@ -19,7 +20,11 @@ class CountryCodeSelect(Select):
         return super(CountryCodeSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def render(self, name, value, *args, **kwargs):
-        return super(CountryCodeSelect, self).render(name, value or self.initial, *args, **kwargs)
+        if value == self.phone_widget.empty_country_code:
+            value = ""
+        else:
+            value = value or self.initial
+        return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
 
 class PhoneNumberWidget(MultiWidget):
     """
@@ -29,9 +34,17 @@ class PhoneNumberWidget(MultiWidget):
     - an input for extension
     """
     def __init__(self, attrs=None, initial=None):
-        widgets = (CountryCodeSelect(),TextInput(),TextInput())
+        widgets = (CountryCodeSelect(self),TextInput(),TextInput())
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
-        self.empty_country_code = None
+        self._empty_country_code = [None]
+    
+    @property
+    def empty_country_code(self):
+        return self._empty_country_code[0]
+    
+    @empty_country_code.setter
+    def empty_country_code(self, value):
+        self._empty_country_code[0] = value
 
     def decompress(self, value):
         if not isinstance(value, PhoneNumber):
