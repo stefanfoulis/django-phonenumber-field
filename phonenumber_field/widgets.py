@@ -35,6 +35,17 @@ class PhoneNumberWidget(MultiWidget):
     """
     def __init__(self, attrs=None, initial=None):
         widgets = (CountryCodeSelect(self),TextInput(),TextInput())
+        
+        def f(i):
+            def id_for_label(id_):
+                if id_.endswith("_0"):
+                    id_ = id_[:-2]
+                return "{0}_{1}".format(id_, i) if id_ else id_
+            return id_for_label
+        
+        for i, widget in enumerate(widgets):
+            widget.id_for_label = f(i)
+        
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
         self._empty_country_code = [None]
         self._base_id = ""
