@@ -49,6 +49,9 @@ class PhoneNumberWidget(MultiWidget):
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
         self._empty_country_code = [None]
         self._base_id = ""
+        self.country_code = None
+        self.national_number = None
+        self.extension = None
     
     @property
     def empty_country_code(self):
@@ -64,13 +67,18 @@ class PhoneNumberWidget(MultiWidget):
         if isinstance(value, PhoneNumber):
             return [value.country_code, value.national_number, value.extension]
         else:
-            return [None, None, None]
+            return [self.country_code, self.national_number, self.extension]
 
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
         if country_code or (self.empty_country_code and national_number):
+            if country_code:
+                self.country_code = country_code
             country_code = "+{0}-".format(country_code or self.empty_country_code)
+        if national_number:
+            self.national_number = national_number
         if extension:
+            self.extension = extension
             extension = "x%s" % extension
         return '%s%s%s' % (country_code, national_number, extension)
     
