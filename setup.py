@@ -1,4 +1,8 @@
 from setuptools import setup, find_packages
+import pkgutil
+
+phonenumbers_installed = filter(lambda p: p[1] == 'phonenumbers', 
+                                pkgutil.iter_modules())
 
 setup(
     name="django-phonenumber-field",
@@ -11,7 +15,7 @@ setup(
         'versiontools >= 1.4',
     ],
     install_requires = [
-        'phonenumbers',
+        'phonenumberslite>=6.0.0a' if not phonenumbers_installed else '',
     ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',

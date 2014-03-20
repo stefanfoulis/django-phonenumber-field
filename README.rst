@@ -3,7 +3,10 @@ django-phonenumber-field
 ========================
 
 
-A international phone number field for django that uses http://pypi.python.org/pypi/phonenumbers for validation .
+A international phone number field for django that uses http://pypi.python.org/pypi/phonenumbers for validation.
+
+*Note:* This package will by default install `phonenumberslite` if no
+ phonenumbers package has been installed already.
 
 Installation
 ============
@@ -28,7 +31,6 @@ PhoneNumberField will always represent the number as a string of an internationa
 `+41524204242`.
 
 The object returned is not just a plain String. It is a PhoneNumber object. Currently it is necessary to always use
-the international format when entering data. 
+the international format when entering data.
 
 Future versions of django-phonenumber-field may provide custom special widgets that support more custom formatting.
-
