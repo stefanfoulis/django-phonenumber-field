@@ -12,7 +12,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     @classmethod
     def from_string(cls, phone_number):
         phone_number_obj = cls()
-        region = getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+        region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None) or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
         phonenumbers.parse(number=phone_number, region=region, keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
