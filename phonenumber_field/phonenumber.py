@@ -4,32 +4,38 @@ from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
 from django.conf import settings
 
+
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
     to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
     """
+    format_map = {
+        'E164': phonenumbers.PhoneNumberFormat.E164,
+        'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
+        'NATIONAL': phonenumbers.PhoneNumberFormat.NATIONAL,
+        'RFC3966': phonenumbers.PhoneNumberFormat.RFC3966,
+    }
+
     @classmethod
-    def from_string(cls, phone_number):
+    def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
-        region = getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
-        phonenumbers.parse(number=phone_number, region=region, keep_raw_input=True, numobj=phone_number_obj)
+        if region is None:
+            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+        phonenumbers.parse(number=phone_number, region=region,
+                           keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
-    def __str__(self):
-        if self.is_valid():
-            return self.as_e164
-        return self.raw_input
-
     def __unicode__(self):
-        return unicode(self.__str__())
-
-    def original_unicode(self):
-        return super(PhoneNumber, self).__unicode__()
+        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
+        fmt = self.format_map[format_string]
+        if self.is_valid():
+            return self.format_as(fmt)
+        return self.raw_input
 
     def is_valid(self):
         """
-        checks wether the number supplied is actually valid
+        checks whether the number supplied is actually valid
         """
         return phonenumbers.is_valid_number(self)
 
@@ -41,22 +47,28 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     @property
     def as_international(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+        return self.format_as(phonenumbers.PhoneNumberFormat.INTERNATIONAL)
 
     @property
     def as_e164(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.E164)
+        return self.format_as(phonenumbers.PhoneNumberFormat.E164)
 
     @property
     def as_national(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.NATIONAL)
+        return self.format_as(phonenumbers.PhoneNumberFormat.NATIONAL)
 
     @property
     def as_rfc3966(self):
-        return phonenumbers.format_number(self, phonenumbers.PhoneNumberFormat.RFC3966)
+        return self.format_as(phonenumbers.PhoneNumberFormat.RFC3966)
 
     def __len__(self):
         return len(self.__unicode__())
+
+    def __eq__(self, other):
+        if type(other) == PhoneNumber:
+            return self.as_e164 == other.as_e164
+        else:
+            return super(PhoneNumber, self).__eq__(other)
 
 
 def to_python(value):
@@ -70,7 +82,7 @@ def to_python(value):
             phone_number = PhoneNumber(raw_input=value)
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
          not isinstance(value, PhoneNumber):
-        phone_number = Phonenumber(value)
+        phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     return phone_number
