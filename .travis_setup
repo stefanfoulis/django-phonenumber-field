@@ -1,2 +1,3 @@
 #!/bin/bash
 pip install $DJANGO
+python setup.py develop
