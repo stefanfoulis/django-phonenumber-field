@@ -85,4 +85,8 @@ def to_python(value):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
+    else:
+        # TODO: this should somehow show that it has invalid data, but not completely die for
+        #       bad data in the database. (Same for the NumberParseException above)
+        phone_number = None
     return phone_number

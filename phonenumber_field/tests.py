@@ -4,6 +4,7 @@ from django.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.validators import to_python
 
 
 ###############
@@ -64,3 +65,8 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.phone_number = self.test_number_1
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+
+    def test_does_not_fail_on_invalid_values(self):
+        # testcase for https://github.com/stefanfoulis/django-phonenumber-field/issues/11
+        phone = to_python(42)
+        self.assertEqual(phone, None)
