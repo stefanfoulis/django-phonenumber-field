@@ -21,3 +21,13 @@ class PhonenumerFieldAppTest(TestCase):
         tm = TestModel.objects.get(pk=pk)
         self.assertTrue(isinstance(tm.phone, PhoneNumber))
         self.assertEqual(str(tm.phone), '+41524242424')
+        
+    def test_save_blank_phone_to_database(self):
+        from testapp.models import TestModelBlankPhone
+        from phonenumber_field.phonenumber import PhoneNumber
+        tm = TestModelBlankPhone()
+        tm.save()
+        
+        pk = tm.id
+        tm = TestModelBlankPhone.objects.get(pk=pk)
+        self.assertIsNone(tm.phone)
