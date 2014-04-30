@@ -3,6 +3,7 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
+from django.utils.six import PY3
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
@@ -12,7 +13,8 @@ class CountryCodeSelect(Select):
     def __init__(self, phone_widget, initial=None):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
+        codes = _COUNTRY_CODE_TO_REGION_CODE.items() if PY3 else _COUNTRY_CODE_TO_REGION_CODE.iteritems()
+        for prefix, values in codes:
             if initial and initial in values:
                 self.initial = prefix
             for code in values:
