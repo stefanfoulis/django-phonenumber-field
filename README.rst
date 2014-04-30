@@ -2,6 +2,11 @@
 django-phonenumber-field
 ========================
 
+.. image:: https://secure.travis-ci.org/davidfischer-ch/django-phonenumber-field.png
+   :target: http://travis-ci.org/davidfischer-ch/django-phonenumber-field
+
+Afraid of red status ? Please click on the link, sometimes this is not my fault ;-)
+
 A Django library which interfaces with `python-phonenumbers`_ to validate, pretty print and convert
 phone numbers. ``python-phonenumbers`` is a port of Google's `libphonenumber`_ library, which powers Android's phone number handling.
 
