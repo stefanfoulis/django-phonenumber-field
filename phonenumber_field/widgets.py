@@ -7,6 +7,7 @@ from django.utils.six import PY3
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
+
 class CountryCodeSelect(Select):
     initial = None
 
@@ -28,6 +29,7 @@ class CountryCodeSelect(Select):
             value = value or self.initial
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
 
+
 class PhoneNumberWidget(MultiWidget):
     """
     A Widget that splits phone number input into:
@@ -36,29 +38,29 @@ class PhoneNumberWidget(MultiWidget):
     - an input for extension
     """
     def __init__(self, attrs=None, initial=None):
-        widgets = (CountryCodeSelect(self),TextInput(),TextInput())
-        
+        widgets = (CountryCodeSelect(self), TextInput(), TextInput())
+
         def f(i):
             def id_for_label(id_):
                 if id_.endswith("_0"):
                     id_ = id_[:-2]
                 return "{0}_{1}".format(id_, i) if id_ else id_
             return id_for_label
-        
+
         for i, widget in enumerate(widgets):
             widget.id_for_label = f(i)
-        
+
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
         self._empty_country_code = [None]
         self._base_id = ""
         self.country_code = None
         self.national_number = None
         self.extension = None
-    
+
     @property
     def empty_country_code(self):
         return self._empty_country_code[0]
-    
+
     @empty_country_code.setter
     def empty_country_code(self, value):
         self._empty_country_code[0] = value
@@ -83,12 +85,12 @@ class PhoneNumberWidget(MultiWidget):
             self.extension = extension
             extension = "x%s" % extension
         return '%s%s%s' % (country_code, national_number, extension)
-    
+
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}
         self._base_id = attrs.get("id", "")
         return super(PhoneNumberWidget, self).render(*args, **kwargs)
-    
+
     def format_output(self, rendered_widgets):
         c = Context({
             "code": rendered_widgets[0],
@@ -100,15 +102,15 @@ class PhoneNumberWidget(MultiWidget):
         })
         t = get_template("phonenumber_field/format_phone_number_widget_output.html")
         return t.render(c)
-    
+
     @property
     def country_code_widget(self):
         return self.widgets[0]
-    
+
     @property
     def national_number_widget(self):
         return self.widgets[1]
-    
+
     @property
     def extension_widget(self):
         return self.widgets[2]

@@ -7,6 +7,7 @@ from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
+
 class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
     default_validators = [validate_international_phonenumber]
 
@@ -29,7 +30,7 @@ class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
             # it is an invalid phone number
             return value
         return u"%s" % value
-    
+
     def to_python(self, value):
         if isinstance(value, PhoneNumber):
             return value

@@ -90,8 +90,7 @@ def to_python(value):
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
-         not isinstance(value, PhoneNumber):
+    elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and not isinstance(value, PhoneNumber):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
