@@ -9,3 +9,7 @@ env:
   - DJANGO="django>=1.4,<1.5"
   - DJANGO="django>=1.5,<1.6"
 script: cd ./testproject; python manage.py test phonenumber_field testapp
+matrix:
+  exclude:
+    - python: "3.3"
+      env: DJANGO="django>=1.4,<1.5"
