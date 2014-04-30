@@ -87,7 +87,7 @@ def to_python(value):
     elif value and isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
-        except NumberParseException, e:
+        except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
