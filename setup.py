@@ -1,9 +1,8 @@
-from setuptools import setup, find_packages
-from itertools import chain
 import sys
+from setuptools import setup, find_packages
 
 extra = {}
-if sys.version_info >= (3,):
+if sys.version_info[0] >= 3:
     extra['use_2to3'] = True
 
 setup(
