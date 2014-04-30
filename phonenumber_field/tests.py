@@ -4,6 +4,7 @@ from django.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.validators import to_python
 
 
 ###############
@@ -60,7 +61,7 @@ class PhoneNumberFieldTestCase(TestCase):
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
         self.assertTrue(all(n==numbers[0] for n in numbers))
-    
+
     def test_same_number_different_extensions_not_equal(self):
         p1 = OptionalPhoneNumber()
         p1.phone_number = self.test_number_ext
@@ -85,7 +86,7 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.phone_number = self.test_number_1
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
-    
+
     def test_can_hash_for_m2m(self):
         p1 = OptionalPhoneNumber()
         p1.phone_number = self.test_number_1
@@ -98,22 +99,27 @@ class PhoneNumberFieldTestCase(TestCase):
         p3h = hash(p3.phone_number)
         self.assertNotEqual(p1h, p2h)
         self.assertEqual(p2h,p3h)
-    
+
     def test_extensions_survive_database(self):
         p1 = MandatoryPhoneNumber()
         p1.phone_number = self.test_number_ext
-        
+
         self.assertTrue(p1.phone_number.is_valid())
         self.assertTrue(p1.phone_number.extension)
-        
+
         db_val = PhoneNumberField().get_prep_value(p1.phone_number)
         p2 = MandatoryPhoneNumber()
         p2.phone_number = db_val
-        
+
         self.assertTrue(p2.phone_number.is_valid())
         self.assertEqual(p1.phone_number.extension, p2.phone_number.extension)
         self.assertEqual(p1.phone_number, p2.phone_number)
-    
+
+    def test_does_not_fail_on_invalid_values(self):
+        # testcase for https://github.com/stefanfoulis/django-phonenumber-field/issues/11
+        phone = to_python(42)
+        self.assertEqual(phone, None)
+
     def test_m2m_respects_extension(self):
         p1 = PhoneNumberPK()
         p1.pk = self.test_number_noext

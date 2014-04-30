@@ -21,7 +21,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
         if region is None:
-            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None) or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
         phonenumbers.parse(number=phone_number, region=region,
                            keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
@@ -75,7 +75,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
             return self.as_rfc3966 == other.as_rfc3966
         else:
             return super(PhoneNumber, self).__eq__(other)
-    
+
     def __hash__(self):
         return hash(self.as_rfc3966)
 
@@ -94,4 +94,8 @@ def to_python(value):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
+    else:
+        # TODO: this should somehow show that it has invalid data, but not completely die for
+        #       bad data in the database. (Same for the NumberParseException above)
+        phone_number = None
     return phone_number

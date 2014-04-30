@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'phonenumber_field',
+    'testapp',
 )
 
 # A sample logging configuration. The only tangible logging
