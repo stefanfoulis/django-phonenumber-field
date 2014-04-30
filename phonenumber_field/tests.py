@@ -18,8 +18,10 @@ class MandatoryPhoneNumber(models.Model):
 class OptionalPhoneNumber(models.Model):
     phone_number = PhoneNumberField(blank=True, default='')
 
+
 class PhoneNumberPK(models.Model):
     phone_number = PhoneNumberField(primary_key=True)
+
 
 class MultiplePhoneNumbers(models.Model):
     phone_numbers = models.ManyToManyField(PhoneNumberPK)
@@ -54,13 +56,12 @@ class PhoneNumberFieldTestCase(TestCase):
                    for number_string in self.invalid_numbers]
         self.assertTrue(all([not number.is_valid() for number in numbers]))
 
-
     def test_objects_with_same_number_are_equal(self):
         numbers = [
             MandatoryPhoneNumber.objects.create(
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
-        self.assertTrue(all(n==numbers[0] for n in numbers))
+        self.assertTrue(all(n == numbers[0] for n in numbers))
 
     def test_same_number_different_extensions_not_equal(self):
         p1 = OptionalPhoneNumber()
@@ -98,7 +99,7 @@ class PhoneNumberFieldTestCase(TestCase):
         p3.phone_number = self.equal_number_strings[1]
         p3h = hash(p3.phone_number)
         self.assertNotEqual(p1h, p2h)
-        self.assertEqual(p2h,p3h)
+        self.assertEqual(p2h, p3h)
 
     def test_extensions_survive_database(self):
         p1 = MandatoryPhoneNumber()
