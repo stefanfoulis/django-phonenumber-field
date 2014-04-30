@@ -55,7 +55,11 @@ class PhoneNumberField(models.Field):
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
         if value is None:
-            return None
+            if not self.blank:
+                return None or to_python(self.default)
+            elif self.blank:
+                return to_python(self.default) or ''
+
         value = to_python(value)
         if isinstance(value, basestring):
             # it is an invalid phone number
