@@ -61,7 +61,7 @@ class PhoneNumberField(models.Field):
                 return to_python(self.default) or ''
 
         value = to_python(value)
-        if isinstance(value, basestring):
+        if isinstance(value, (str,bytes)):
             # it is an invalid phone number
             return value
         return value.as_e164
