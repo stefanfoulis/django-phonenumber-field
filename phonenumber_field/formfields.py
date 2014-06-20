@@ -13,6 +13,8 @@ class PhoneNumberField(CharField):
     default_validators = [validate_international_phonenumber]
 
     def to_python(self, value):
+        if value in self.empty_values:
+            return ''
         phone_number = to_python(value)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages['invalid'])
