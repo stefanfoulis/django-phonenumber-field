@@ -1,8 +1,8 @@
 #-*- coding: utf-8 -*-
-import phonenumbers
-from django.core import validators
-from phonenumbers.phonenumberutil import NumberParseException
 from django.conf import settings
+from django.core import validators
+import phonenumbers
+from phonenumbers.phonenumberutil import NumberParseException
 
 
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
@@ -77,11 +77,11 @@ def to_python(value):
     elif value and isinstance(value, basestring):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
-        except NumberParseException, e:
+        except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
-         not isinstance(value, PhoneNumber):
+            not isinstance(value, PhoneNumber):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
