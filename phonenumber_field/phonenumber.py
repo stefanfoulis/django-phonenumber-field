@@ -2,6 +2,7 @@
 import phonenumbers
 from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
+from django.utils.six import string_types
 from django.conf import settings
 
 
@@ -74,7 +75,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = None
-    elif value and isinstance(value, basestring):
+    elif value and isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
         except NumberParseException:
