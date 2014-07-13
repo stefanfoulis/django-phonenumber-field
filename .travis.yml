@@ -7,6 +7,7 @@ python:
 install:
   - ./.travis_setup
 env:
+  - DJANGO="django>=1.4,<1.5"
   - DJANGO="django>=1.5,<1.6"
   - DJANGO="django>=1.6,<1.7"
 script: cd ./testproject; python manage.py test phonenumber_field testapp
