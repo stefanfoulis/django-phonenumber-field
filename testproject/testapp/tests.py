@@ -4,7 +4,10 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-from django.db import transaction
+try:
+    from django.db.transaction import atomic
+except ImportError:
+    from django.db.transaction import commit_on_success as atomic
 from django.db.utils import IntegrityError
 
 from django.test import TestCase
@@ -49,7 +52,7 @@ class PhonenumerFieldAppTest(TestCase):
         tm_unique = TestModelBlankAndUniquePhone.objects.create(phone='+41 52 424 2424')
         self.assertEqual(str(tm_unique.phone), '+41524242424')
         with self.assertRaises(IntegrityError):
-            with transaction.atomic():
+            with atomic():
                 TestModelBlankAndUniquePhone.objects.create(phone='+41524242424')
 
         self.assertEqual(TestModelBlankAndUniquePhone.objects.count(), 3)
