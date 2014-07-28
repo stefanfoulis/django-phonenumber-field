@@ -22,6 +22,8 @@ Installation
 
     pip install django-phonenumber-field
 
+Then, in your ``settings.py``'s ``INSTALLED_APPS`` list, add ``'phonenumber_field'``.
+
 
 Basic usage
 ===========
@@ -42,7 +44,15 @@ The object returned is a PhoneNumber instance, not a string. If strings are used
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
 
+Configuration
+=============
 
+There's a couple of constants that you can set in your ``settings.py`` unit that change
+PhoneNumberField's behavior.
 
-
+* ``PHONENUMBER_DEFAULT_REGION``: The region code to use when formatting the phone number. For
+  example, setting it to ``US`` will cause the phone formatting to be made in US style.
+  Default: ``None``.
+* ``PHONENUMBER_DEFAULT_FORMAT``: The type of phone format to use. Possible values: ``E164``,
+  ``INTERNATIONAL``, ``NATIONAL``, ``RFC3966``. Default: ``E164``.
 
