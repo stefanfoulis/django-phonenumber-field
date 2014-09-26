@@ -9,7 +9,7 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 
 from phonenumber_field.phonenumber import to_python
-
+from phonenumber_field.phonenumber import PhoneNumber
 
 class PhonePrefixSelect(Select):
 
@@ -43,8 +43,13 @@ class PhoneNumberPrefixWidget(MultiWidget):
 
     def decompress(self, value):
         if value:
-            return value.split('.')
+            if type(value) == PhoneNumber:
+                if value.country_code and value.national_number:
+                    return ["+%d" % value.country_code, value.national_number]
+            else:
+                return value.split('.')
         return [None, None]
+    
 
     def value_from_datadict(self, data, files, name):
         values = super(PhoneNumberPrefixWidget, self).value_from_datadict(data, files, name)
