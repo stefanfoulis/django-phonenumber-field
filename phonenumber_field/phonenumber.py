@@ -75,12 +75,6 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __len__(self):
         return len(self.__unicode__())
 
-    def __eq__(self, other):
-        if type(other) == PhoneNumber:
-            return self.as_e164 == other.as_e164
-        else:
-            return super(PhoneNumber, self).__eq__(other)
-
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
