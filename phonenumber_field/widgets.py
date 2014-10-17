@@ -8,7 +8,7 @@ from django.utils import translation
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 
-from phonenumber_field.phonenumber import to_python
+from phonenumber_field.phonenumber import to_python, PhoneNumber
 
 
 class PhonePrefixSelect(Select):
@@ -49,3 +49,30 @@ class PhoneNumberPrefixWidget(MultiWidget):
     def value_from_datadict(self, data, files, name):
         values = super(PhoneNumberPrefixWidget, self).value_from_datadict(data, files, name)
         return '%s.%s' % tuple(values)
+
+
+class PhoneNumberExtensionWidget(MultiWidget):
+    """
+    A Widget that splits phone number input into:
+    - an input for local phone number
+    - an input for an extension
+    """
+    def __init__(self, attrs=None, initial=None):
+        widgets = (TextInput(), TextInput(attrs={'size': '5'}),)
+        super(PhoneNumberExtensionWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if isinstance(value, PhoneNumber):
+            return [value.national_number, value.extension]
+        if value:
+            return value.split('ext.')
+        return [None, None]
+
+    def value_from_datadict(self, data, files, name):
+        values = super(PhoneNumberExtensionWidget, self).value_from_datadict(
+            data, files, name
+        )
+        phone, ext = values
+        if not ext:
+            return phone
+        return '%s ext.%s' % tuple(values)
