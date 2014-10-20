@@ -10,4 +10,6 @@ env:
   - DJANGO="django>=1.6,<1.7"
   - DJANGO="django>=1.7,<1.8"
 script:
-  - cd ./testproject; python manage.pt test phonenumber_field testapp
+  - cd ./testproject; coverage run --source=phonenumber_field manage.pt test phonenumber_field testapp
+after_success:
+  coveralls
