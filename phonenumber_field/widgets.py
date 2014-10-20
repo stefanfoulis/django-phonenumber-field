@@ -8,8 +8,6 @@ from django.utils import translation
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 
-from phonenumber_field.phonenumber import to_python
-
 
 class PhonePrefixSelect(Select):
 
