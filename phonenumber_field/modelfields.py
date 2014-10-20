@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -11,8 +12,8 @@ import phonenumbers
 
 class PhoneNumberDescriptor(object):
     """
-    The descriptor for the phone number attribute on the model instance. Returns a PhoneNumber when accessed so you can
-    do stuff like::
+    The descriptor for the phone number attribute on the model instance.
+    Returns a PhoneNumber when accessed so you can do stuff like::
 
         >>> instance.phone_number.as_international
 

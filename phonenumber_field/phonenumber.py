@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 import sys
 import phonenumbers
 from django.core import validators
@@ -15,8 +16,9 @@ else:
 
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
-    A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
-    to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
+    A extended version of phonenumbers.phonenumber.PhoneNumber that provides
+    some neat and more pythonic, easy to access methods. This makes using a
+    PhoneNumber instance much easier, especially in templates and such.
     """
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
@@ -29,7 +31,8 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
         if region is None:
-            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None) or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
         phonenumbers.parse(number=phone_number, region=region,
                            keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
@@ -88,13 +91,14 @@ def to_python(value):
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
-         not isinstance(value, PhoneNumber):
+    elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
+          not isinstance(value, PhoneNumber)):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     else:
-        # TODO: this should somehow show that it has invalid data, but not completely die for
-        #       bad data in the database. (Same for the NumberParseException above)
+        # TODO: this should somehow show that it has invalid data, but not
+        #       completely die for bad data in the database.
+        #       (Same for the NumberParseException above)
         phone_number = None
     return phone_number

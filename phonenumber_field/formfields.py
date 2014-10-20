@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.forms.fields import CharField
 from django.core.exceptions import ValidationError
