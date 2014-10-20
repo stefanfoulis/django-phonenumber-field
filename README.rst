@@ -41,8 +41,3 @@ Internally, PhoneNumberField is based upon ``CharField`` and represents the numb
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
-
-
-
-
-
