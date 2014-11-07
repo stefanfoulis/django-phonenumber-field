@@ -43,7 +43,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
 
     def decompress(self, value):
         if value:
-            return value.split('.')
+            return ['+{%d}' % value.country_code, value.national_number]
         return [None, None]
 
     def value_from_datadict(self, data, files, name):
