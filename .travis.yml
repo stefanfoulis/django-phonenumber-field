@@ -1,20 +1,15 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
   - "3.4"
 install:
   - ./.travis_setup
 env:
-  - DJANGO="django>=1.4,<1.5"
   - DJANGO="django>=1.5,<1.6"
   - DJANGO="django>=1.6,<1.7"
+  - DJANGO="django>=1.7,<1.8"
 script:
-  - cd ./testproject; python manage.py test phonenumber_field testapp
-matrix:
-  exclude:
-    - python: "3.3"
-      env: DJANGO="django>=1.4,<1.5"
-    - python: "3.4"
-      env: DJANGO="django>=1.4,<1.5"
+  - cd ./testproject; coverage run --source=phonenumber_field manage.py test phonenumber_field testapp
+after_success:
+  coveralls

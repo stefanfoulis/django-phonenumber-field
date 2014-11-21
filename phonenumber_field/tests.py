@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 from django.test.testcases import TestCase
 from django.db import models
 
@@ -46,13 +47,12 @@ class PhoneNumberFieldTestCase(TestCase):
                    for number_string in self.invalid_numbers]
         self.assertTrue(all([not number.is_valid() for number in numbers]))
 
-
     def test_objects_with_same_number_are_equal(self):
         numbers = [
             MandatoryPhoneNumber.objects.create(
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
-        self.assertTrue(all(n==numbers[0] for n in numbers))
+        self.assertTrue(all(n == numbers[0] for n in numbers))
 
     def test_field_returns_correct_type(self):
         model = OptionalPhoneNumber()
@@ -67,6 +67,7 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
 
     def test_does_not_fail_on_invalid_values(self):
-        # testcase for https://github.com/stefanfoulis/django-phonenumber-field/issues/11
+        # testcase for
+        # https://github.com/stefanfoulis/django-phonenumber-field/issues/11
         phone = to_python(42)
         self.assertEqual(phone, None)
