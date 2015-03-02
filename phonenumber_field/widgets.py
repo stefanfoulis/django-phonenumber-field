@@ -17,17 +17,28 @@ class PhonePrefixSelect(Select):
 
     def __init__(self, initial=None):
         choices = [('', '---------')]
-        locale = Locale(translation.get_language())
+        region_choices = []
+
+        locale = Locale.parse(translation.get_language(), sep='-') 
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
             prefix = '+%d' % prefix
+            
             if initial and initial in values:
                 self.initial = prefix
-            for country_code in values:
+                
+            for i, country_code in enumerate(values):
                 country_name = locale.territories.get(country_code)
                 if country_name:
-                    choices.append((prefix, u'%s %s' % (country_name, prefix)))
-        return super(PhonePrefixSelect, self).__init__(
-            choices=sorted(choices, key=lambda item: item[1]))
+                    opt = (prefix, u'%s %s' % (country_name, prefix))
+                    if i == 0:
+                        choices.append(opt)
+                    else:
+                        region_choices.append(opt)
+
+        choices = sorted(choices, key=lambda item: item[1])
+        choices += sorted(region_choices, key=lambda item: item[1])
+
+        return super(PhonePrefixSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
         return super(PhonePrefixSelect, self).render(
