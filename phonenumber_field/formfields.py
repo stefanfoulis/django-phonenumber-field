@@ -9,6 +9,10 @@ from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field.phonenumber import to_python
 
 
+import logging
+logger = logging.getLogger('werkzeug')
+
+
 class PhoneNumberField(CharField):
     default_error_messages = {
         'invalid': _('Enter a valid phone number.'),

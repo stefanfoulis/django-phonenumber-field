@@ -11,6 +11,7 @@ setup(
         'versiontools >= 1.4',
     ],
     install_requires=[
+        'babel >= 1.0',
         'phonenumbers >= 5.9b1',
     ],
     long_description=open('README.rst').read(),
