@@ -1,17 +1,16 @@
 from setuptools import setup, find_packages
+from phonenumber_field import __version__
+
 
 setup(
     name="django-phonenumber-field",
-    version=":versiontools:phonenumber_field:",
+    version=__version__,
     url='http://github.com/stefanfoulis/django-phonenumber-field',
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
-    setup_requires=[
-        'versiontools >= 1.4',
-    ],
     install_requires=[
-        'phonenumbers >= 5.9b1',
+        'phonenumbers>=7.0.2',
     ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
