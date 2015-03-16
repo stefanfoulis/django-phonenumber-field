@@ -33,6 +33,7 @@ class PhoneNumberFieldTestCase(TestCase):
         ('DE', '0176/96842671'),
     ]
     invalid_numbers = ['+44 113 892111', ]
+    number_with_ext = '+86 0451 8450 2510 x231'
 
     def test_valid_numbers_are_valid(self):
         numbers = [PhoneNumber.from_string(number_string)
@@ -71,3 +72,11 @@ class PhoneNumberFieldTestCase(TestCase):
         # https://github.com/stefanfoulis/django-phonenumber-field/issues/11
         phone = to_python(42)
         self.assertEqual(phone, None)
+
+    def test_can_store_as_rfc3966(self):
+        rfc_phone_number_field = PhoneNumberField(blank=True, default='',
+                                                  number_format='rfc3966')
+        rfc_string = PhoneNumber.from_string(self.number_with_ext).as_rfc3966
+        self.assertEqual(
+            rfc_phone_number_field.get_prep_value(self.number_with_ext),
+            rfc_string)
