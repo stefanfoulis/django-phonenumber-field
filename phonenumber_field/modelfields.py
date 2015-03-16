@@ -40,11 +40,15 @@ class PhoneNumberField(models.Field):
     attr_class = PhoneNumber
     descriptor_class = PhoneNumberDescriptor
     default_validators = [validate_international_phonenumber]
+    writing_formats = ['e164','rfc3966']
 
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = kwargs.get('max_length', 128)
+        self.number_format = kwargs.pop('number_format', 'e164')
+        if not self.number_format in self.writing_formats:
+            raise NotImplementedError('Formats other than `e164` or `rfc3966` are not implemented')
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
 
@@ -63,6 +67,8 @@ class PhoneNumberField(models.Field):
         if isinstance(value, string_types):
             # it is an invalid phone number
             return value
+        if self.number_format == 'rfc3966':
+            return value.as_rfc3966
         return value.as_e164
 
     def contribute_to_class(self, cls, name):
