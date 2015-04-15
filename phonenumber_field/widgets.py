@@ -17,7 +17,7 @@ class PhonePrefixSelect(Select):
 
     def __init__(self, initial=None):
         choices = [('', '---------')]
-        locale = Locale(translation.get_language())
+        locale = Locale(translation.to_locale(translation.get_language()))
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
             prefix = '+%d' % prefix
             if initial and initial in values:
