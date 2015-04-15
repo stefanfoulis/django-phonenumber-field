@@ -18,6 +18,11 @@ setup(
     maintainer='Stefan Foulis',
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
+    package_data = {
+        'phonenumber_field': [
+            'locale/*/LC_MESSAGES/*',
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
     classifiers=[
