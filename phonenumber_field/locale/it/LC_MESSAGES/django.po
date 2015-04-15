@@ -18,7 +18,6 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 
 #: formfields.py:11
-#, fuzzy
 msgid "Enter a valid phone number."
 msgstr "Inserire un numero di telefono valido."
 
