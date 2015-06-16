@@ -3,6 +3,8 @@
 from django.test.testcases import TestCase
 from django.db import models
 
+from phonenumbers import is_number_match, MatchType
+
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import to_python
@@ -52,7 +54,8 @@ class PhoneNumberFieldTestCase(TestCase):
             MandatoryPhoneNumber.objects.create(
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
-        self.assertTrue(all(n == numbers[0] for n in numbers))
+        self.assertTrue(all(is_number_match(n, numbers[0]) == MatchType.EXACT_MATCH
+                        for n in numbers))
 
     def test_field_returns_correct_type(self):
         model = OptionalPhoneNumber()
