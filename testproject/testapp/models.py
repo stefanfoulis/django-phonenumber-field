@@ -7,7 +7,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 class TestModel(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField()
-    
+
 class TestModelBlankPhone(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField(blank=True)
+
+class TestModelRfc(models.Model):
+    name = models.CharField(max_length=255, blank=True, default='')
+    phone = PhoneNumberField(number_format='rfc3966')
