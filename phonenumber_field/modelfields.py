@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -65,7 +66,9 @@ class PhoneNumberField(models.Field):
         if isinstance(value, string_types):
             # it is an invalid phone number
             return value
-        return value.as_e164
+        format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+        fmt = PhoneNumber.format_map[format_string]
+        return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name):
         super(PhoneNumberField, self).contribute_to_class(cls, name)
