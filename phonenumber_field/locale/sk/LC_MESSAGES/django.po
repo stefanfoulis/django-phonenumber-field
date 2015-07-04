@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-30 11:09+0200\n"
+"POT-Creation-Date: 2015-07-04 01:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Enter a valid phone number."
 msgstr "Vložte platné telefónne číslo"
 
-#: modelfields.py:44
+#: modelfields.py:45
 msgid "Phone number"
 msgstr "Telefónne číslo"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 14:37+0700\n"
+"POT-Creation-Date: 2015-07-04 01:32+0200\n"
 "PO-Revision-Date: 2011-10-19 14:10+0200\n"
 "Last-Translator: Francesco Facconi <francesco@immediatic.it>\n"
 "Language-Team: Italian <francesco@immediatic.it>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "X-Generator: Lokalize 1.2\n"
 
-#: formfields.py:11
+#: formfields.py:14
 msgid "Enter a valid phone number."
 msgstr "Inserire un numero di telefono valido."
 
@@ -25,6 +25,6 @@ msgstr "Inserire un numero di telefono valido."
 msgid "Phone number"
 msgstr "Numero di telefono"
 
-#: validators.py:11
+#: validators.py:13
 msgid "The phone number entered is not valid."
 msgstr ""
