@@ -11,6 +11,7 @@ setup(
     description="An international phone number field for django models.",
     install_requires=[
         'phonenumbers>=7.0.2',
+        'babel',
     ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
