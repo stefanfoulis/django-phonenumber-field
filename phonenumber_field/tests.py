@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.test.testcases import TestCase
-from django.db import models
 
-from phonenumbers import is_number_match, MatchType
-
-from phonenumber_field.modelfields import PhoneNumberField
-from phonenumber_field.phonenumber import PhoneNumber
-from phonenumber_field.validators import to_python
 from django.conf import settings
+from django.db import models
+from django.test.testcases import TestCase
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.phonenumber import PhoneNumber, to_python
+from phonenumbers import phonenumberutil
+import phonenumbers
 
 
 ###############
@@ -60,18 +59,32 @@ class PhoneNumberFieldTestCase(TestCase):
             MandatoryPhoneNumber.objects.create(
                 phone_number=number_string).phone_number
             for number_string in self.equal_number_strings]
-        self.assertTrue(all(is_number_match(n, numbers[0]) == MatchType.EXACT_MATCH
-                        for n in numbers))
+        self.assertTrue(
+            all(phonenumbers.is_number_match(n, numbers[0]) ==
+                phonenumbers.MatchType.EXACT_MATCH for n in numbers))
 
     def test_field_returns_correct_type(self):
         model = OptionalPhoneNumber()
         self.assertEqual(model.phone_number, None)
         model.phone_number = '+49 176 96842671'
         self.assertEqual(type(model.phone_number), PhoneNumber)
+        model.phone_number = phonenumberutil.parse(
+            self.test_number_1, keep_raw_input=True)
+        self.assertEqual(type(model.phone_number), PhoneNumber)
 
     def test_can_assign_string_phone_number(self):
         opt_phone = OptionalPhoneNumber()
         opt_phone.phone_number = self.test_number_1
+        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+
+    def test_can_assign_phonenumber(self):
+        """
+        Tests assignment phonenumberutil.PhoneNumber to field
+        """
+        opt_phone = OptionalPhoneNumber()
+        opt_phone.phone_number = phonenumberutil.parse(
+            self.test_number_1, keep_raw_input=True)
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
 
