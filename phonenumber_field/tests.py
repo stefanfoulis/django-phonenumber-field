@@ -22,6 +22,8 @@ class MandatoryPhoneNumber(models.Model):
 class OptionalPhoneNumber(models.Model):
     phone_number = PhoneNumberField(blank=True, default='')
 
+class NullablePhoneNumber(models.Model):
+    phone_number = PhoneNumberField(null=True)
 
 ##############
 # Test Cases #
@@ -63,9 +65,15 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertTrue(all(is_number_match(n, numbers[0]) == MatchType.EXACT_MATCH
                         for n in numbers))
 
-    def test_field_returns_correct_type(self):
+    def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
         self.assertEqual(model.phone_number, '')
+        model.phone_number = '+49 176 96842671'
+        self.assertEqual(type(model.phone_number), PhoneNumber)
+        
+    def test_null_field_returns_none(self):
+        model = NullablePhoneNumber()
+        self.assertEqual(model.phone_number, None)
         model.phone_number = '+49 176 96842671'
         self.assertEqual(type(model.phone_number), PhoneNumber)
 
