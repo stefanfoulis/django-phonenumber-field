@@ -81,6 +81,20 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __len__(self):
         return len(self.__unicode__())
 
+    def __eq__(self, other):
+        """
+        Override parent equality because we store only string representation
+        of phone number, so we must compare only this string representation
+        """
+        if (isinstance(other, PhoneNumber) or
+                isinstance(other, phonenumbers.phonenumber.PhoneNumber)):
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            fmt = self.format_map[format_string]
+            other_string = phonenumbers.format_number(other, fmt)
+            return self.format_as(fmt) == other_string
+        else:
+            return False
+
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''

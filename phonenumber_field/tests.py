@@ -69,6 +69,8 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertTrue(
             all(phonenumbers.is_number_match(n, numbers[0]) ==
                 phonenumbers.MatchType.EXACT_MATCH for n in numbers))
+        for number in numbers:
+            self.assertEqual(number, numbers[0])
 
     def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
