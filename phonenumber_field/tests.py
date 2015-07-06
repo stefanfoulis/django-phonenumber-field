@@ -22,6 +22,7 @@ class MandatoryPhoneNumber(models.Model):
 class OptionalPhoneNumber(models.Model):
     phone_number = PhoneNumberField(blank=True, default='')
 
+
 class NullablePhoneNumber(models.Model):
     phone_number = PhoneNumberField(null=True)
 
@@ -94,7 +95,8 @@ class PhoneNumberFieldTestCase(TestCase):
         Aggregate of tests to perform for db storage formats
         '''
         self.test_objects_with_same_number_are_equal()
-        self.test_field_returns_correct_type()
+        self.test_blank_field_returns_empty_string()
+        self.test_null_field_returns_none()
         self.test_can_assign_string_phone_number()
 
     def test_storage_formats(self):
