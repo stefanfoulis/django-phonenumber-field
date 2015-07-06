@@ -48,8 +48,16 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def is_valid(self):
         """
         checks whether the number supplied is actually valid
+        (e.g. it's in an assigned exchange)
         """
         return phonenumbers.is_valid_number(self)
+
+    def is_possible(self):
+        """
+        checks whether the number supplied is actually possible
+        (e.g. it has the right number of digits)
+        """
+        return phonenumbers.is_possible_number(self)
 
     def format_as(self, format):
         return phonenumbers.format_number(self, format)
