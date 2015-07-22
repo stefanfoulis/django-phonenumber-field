@@ -8,9 +8,16 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class PhonenumerFieldAppTest(TestCase):
+    def test_save_field_to_database(self):
+        from testapp.models import TestModel
+        from phonenumber_field.phonenumber import PhoneNumber
+        tm = TestModel()
+        tm.phone = '+41 52 424 2424'
+        tm.full_clean()
+        tm.save()
+        pk = tm.id
+
+        tm = TestModel.objects.get(pk=pk)
+        self.assertTrue(isinstance(tm.phone, PhoneNumber))
+        self.assertEqual(str(tm.phone), '+41524242424')
