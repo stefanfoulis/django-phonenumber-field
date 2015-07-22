@@ -1,11 +1,12 @@
 #-*- coding: utf-8 -*-
 from django.core import validators
 from django.db import models
-from django.utils.six import with_metaclass
+from django.utils.six import string_types, with_metaclass
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
+
 
 class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
     default_validators = [validate_international_phonenumber]
@@ -25,11 +26,11 @@ class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
         if value is None:
             return None
         value = to_python(value)
-        if isinstance(value, basestring):
+        if isinstance(value, string_types):
             # it is an invalid phone number
             return value
         return u"%s" % value
-    
+
     def to_python(self, value):
         if isinstance(value, PhoneNumber):
             return value
