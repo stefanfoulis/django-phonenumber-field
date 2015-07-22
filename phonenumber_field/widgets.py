@@ -86,7 +86,7 @@ class PhoneNumberWidget(MultiWidget):
         if extension:
             self.extension = extension
             extension = "x%s" % extension
-        return '%s%s%s' % (country_code, national_number, extension)
+        return '%s%s%s' % (country_code, national_number, extension or "")
 
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}
