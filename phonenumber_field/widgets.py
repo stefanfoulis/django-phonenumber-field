@@ -33,6 +33,8 @@ class PhoneNumberWidget(MultiWidget):
     - an input for local phone number
     - an input for extension
     """
+    template_name = "phonenumber_field/format_phone_number_widget_output.html"
+    
     def __init__(self, attrs=None, initial=None):
         widgets = (CountryCodeSelect(self),TextInput(),TextInput())
         
@@ -96,7 +98,7 @@ class PhoneNumberWidget(MultiWidget):
             "extension": rendered_widgets[2],
             "extension_id": "{0}_2".format(self._base_id),
         })
-        t = get_template("phonenumber_field/format_phone_number_widget_output.html")
+        t = get_template(self.template_name)
         return t.render(c)
     
     @property
