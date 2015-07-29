@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Country, CallingCode
+from .models import Country, CountryCode
 
-class CallingCodeInline(admin.TabularInline):
-    model = CallingCode
+class CountryCodeInline(admin.TabularInline):
+    model = CountryCode
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    inlines = (CallingCodeInline,)
+    inlines = (CountryCodeInline,)

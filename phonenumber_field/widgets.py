@@ -3,16 +3,16 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
-from .models import CallingCode
+from .models import CountryCode
 
-CALLING_CODE_CHOICE_SEP = unicode(",")
+COUNTRY_CODE_CHOICE_SEP = unicode(",")
 
-def calling_code_to_choice(calling_code):
-    return CALLING_CODE_CHOICE_SEP.join((calling_code.country.id, calling_code.code))
+def country_code_to_choice(country_code):
+    return COUNTRY_CODE_CHOICE_SEP.join((country_code.country.id, country_code.code.id))
 
-def calling_code_from_choice(choice):
-    country_id, code = choice.split(CALLING_CODE_CHOICE_SEP)
-    return CallingCode.objects.get(country__id=country_id, code=code)
+def country_code_from_choice(choice):
+    country_id, code_id = choice.split(COUNTRY_CODE_CHOICE_SEP)
+    return CountryCode.objects.get(country__id=country_id, code__id=code_id)
 
 class CountryCodeSelect(Select):
     initial = None
@@ -20,14 +20,14 @@ class CountryCodeSelect(Select):
     def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        calling_codes = CallingCode.objects.filter(country__active=True)
-        for calling_code in calling_codes:
-            choices.append((calling_code_to_choice(calling_code), unicode(calling_code)))
-        return super(CountryCodeSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
+        country_codes = CountryCode.objects.filter(country__active=True, code__active=True)
+        for country_code in country_codes:
+            choices.append((country_code_to_choice(country_code), unicode(country_code)))
+        return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
-        if isinstance(value, CallingCode):
-            value = calling_code_to_choice(value)
+        if isinstance(value, CountryCode):
+            value = country_code_to_choice(value)
         if value == self.phone_widget.empty_country_code:
             value = ""
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
@@ -40,8 +40,8 @@ class CountryCodeSelect(Select):
         choice = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
         if choice:
             try:
-                code = calling_code_from_choice(choice)
-            except (CallingCode.DoesNotExist, ValueError):
+                code = country_code_from_choice(choice)
+            except (CountryCode.DoesNotExist, ValueError):
                 pass
         return code
 
@@ -93,7 +93,7 @@ class PhoneNumberWidget(MultiWidget):
             if country_code:
                 self.country_code = country_code
                 country_id = "%s," % country_code.country.id 
-            country_code = "+{0}-".format(country_code.code or self.empty_country_code)
+            country_code = "+{0}-".format(country_code.code.id or self.empty_country_code)
         if national_number:
             self.national_number = national_number
         if extension:

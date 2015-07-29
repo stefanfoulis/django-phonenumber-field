@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 from django_countries.data import COUNTRIES
-from ...models import Country, CallingCode
+from ...models import Country, Code, CountryCode
 
 class Command(BaseCommand):
 
@@ -100,11 +100,16 @@ class Command(BaseCommand):
                 country = Country()
                 country.id = country_code
                 country.name = COUNTRIES[country_code] if country_code in COUNTRIES else country_code
+                country.active = True
                 country.save()
-            saved_calling_codes = [calling_code.code for calling_code in country.calling_codes.all()]
+            
             for calling_code in calling_codes:
-                if calling_code not in saved_calling_codes:
-                    cc = CallingCode()
-                    cc.country = country
-                    cc.code = calling_code
-                    cc.save()
+                try:
+                    code = Code.objects.get(id=calling_code)
+                except Code.DoesNotExist:
+                    code = Code()
+                    code.id = calling_code
+                    code.active = True
+                    code.save()
+                
+                CountryCode.objects.get_or_create(country=country, code=code)
