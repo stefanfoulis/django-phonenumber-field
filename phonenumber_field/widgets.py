@@ -5,6 +5,15 @@ from django.template import Context
 from django.template.loader import get_template
 from .models import CallingCode
 
+CALLING_CODE_CHOICE_SEP = unicode(",")
+
+def calling_code_to_choice(calling_code):
+    return CALLING_CODE_CHOICE_SEP.join((calling_code.country.id, calling_code.code))
+
+def calling_code_from_choice(choice):
+    country_id, code = choice.split(CALLING_CODE_CHOICE_SEP)
+    return CallingCode.objects.get(country__id=country_id, code=code)
+
 class CountryCodeSelect(Select):
     initial = None
 
@@ -13,12 +22,12 @@ class CountryCodeSelect(Select):
         choices = [('', '---------')]
         calling_codes = CallingCode.objects.filter(country__active=True)
         for calling_code in calling_codes:
-            choices.append((unicode(calling_code.id), unicode(calling_code)))
+            choices.append((calling_code_to_choice(calling_code), unicode(calling_code)))
         return super(CountryCodeSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CallingCode):
-            value = unicode(value.id)
+            value = calling_code_to_choice(value)
         if value == self.phone_widget.empty_country_code:
             value = ""
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
@@ -28,10 +37,10 @@ class CountryCodeSelect(Select):
         Returns a country code model instance
         """
         code = None
-        pk = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
-        if pk:
+        choice = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
+        if choice:
             try:
-                code = CallingCode.objects.get(pk=pk)
+                code = calling_code_from_choice(choice)
             except (CallingCode.DoesNotExist, ValueError):
                 pass
         return code
