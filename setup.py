@@ -16,6 +16,7 @@ setup(
         'versiontools >= 1.4',
     ],
     install_requires=[
+        'django-countries',
         'phonenumbers >= 5.9b1',
     ],
     long_description=open('README.rst').read(),
