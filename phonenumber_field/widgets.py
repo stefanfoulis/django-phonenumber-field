@@ -27,11 +27,13 @@ class CountryCodeSelect(Select):
         """
         Returns a country code model instance
         """
+        code = None
         pk = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
-        try:
-            code = CallingCode.objects.get(pk=pk)
-        except CallingCode.DoesNotExist:
-            code = None
+        if pk:
+            try:
+                code = CallingCode.objects.get(pk=pk)
+            except (CallingCode.DoesNotExist, ValueError):
+                pass
         return code
 
 
