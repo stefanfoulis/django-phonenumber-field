@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
+from django.core.exceptions import ValidationError
 
 
 class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
@@ -14,7 +15,7 @@ class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = kwargs.get('max_length', 128)
+        kwargs['max_length'] = kwargs.get('max_length', 131)# 128 for longest phone number + 2 for country id + 1 for comma
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
 
@@ -23,18 +24,20 @@ class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
 
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
-        if value is None:
-            return None
-        value = to_python(value)
-        if isinstance(value, string_types):
-            # it is an invalid phone number
-            return value
-        return u"%s" % value
+        value = self.to_python(value)# PhoneNumber or None
+        if isinstance(value, PhoneNumber):
+            pieces = [unicode(value)]
+            if value.country_id:
+                pieces.insert(0, value.country_id)
+            value = unicode(",").join(pieces)
+        return value
 
     def to_python(self, value):
-        if isinstance(value, PhoneNumber):
-            return value
-        return to_python(value)
+        if isinstance(value, string_types):
+            value = to_python(value)
+        if not (value is None or isinstance(value, PhoneNumber)):
+            raise ValidationError("'%s' is an invalid value." % value)
+        return value
 
     def formfield(self, **kwargs):
         defaults = {

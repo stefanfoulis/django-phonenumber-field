@@ -3,31 +3,36 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.six import PY3
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
-from phonenumber_field.phonenumber import PhoneNumber, to_python
-
+from .models import CallingCode
 
 class CountryCodeSelect(Select):
     initial = None
 
-    def __init__(self, phone_widget, initial=None):
+    def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        codes = _COUNTRY_CODE_TO_REGION_CODE.items() if PY3 else _COUNTRY_CODE_TO_REGION_CODE.iteritems()
-        for prefix, values in codes:
-            if initial and initial in values:
-                self.initial = prefix
-            for code in values:
-                choices.append((u'%s' % prefix, u'%s (%s)' % (code, prefix)))
+        calling_codes = CallingCode.objects.filter(country__active=True)
+        for calling_code in calling_codes:
+            choices.append((unicode(calling_code.id), unicode(calling_code)))
         return super(CountryCodeSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def render(self, name, value, *args, **kwargs):
+        if isinstance(value, CallingCode):
+            value = unicode(value.id)
         if value == self.phone_widget.empty_country_code:
             value = ""
-        else:
-            value = value or self.initial
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
+    
+    def value_from_datadict(self, *args, **kwargs):
+        """
+        Returns a country code model instance
+        """
+        pk = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
+        try:
+            code = CallingCode.objects.get(pk=pk)
+        except CallingCode.DoesNotExist:
+            code = None
+        return code
 
 
 class PhoneNumberWidget(MultiWidget):
@@ -68,26 +73,23 @@ class PhoneNumberWidget(MultiWidget):
         self._empty_country_code[0] = value
 
     def decompress(self, value):
-        if not isinstance(value, PhoneNumber):
-            value = to_python(value)
-        if isinstance(value, PhoneNumber):
-            return [value.country_code, value.national_number, value.extension]
-        else:
-            return [self.country_code, self.national_number, self.extension]
-
+        return [self.country_code, self.national_number, self.extension]
+    
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
+        country_id = ""
         if country_code or (self.empty_country_code and national_number):
             if country_code:
                 self.country_code = country_code
-            country_code = "+{0}-".format(country_code or self.empty_country_code)
+                country_id = "%s," % country_code.country.id 
+            country_code = "+{0}-".format(country_code.code or self.empty_country_code)
         if national_number:
             self.national_number = national_number
         if extension:
             self.extension = extension
             extension = "x%s" % extension
-        return '%s%s%s' % (country_code, national_number, extension or "")
-
+        return '%s%s%s%s' % (country_id, country_code, national_number, extension or "")
+    
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}
         self._base_id = attrs.get("id", "")
