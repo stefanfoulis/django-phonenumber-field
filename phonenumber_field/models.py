@@ -12,7 +12,7 @@ class Country(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return unicode("({0}) {1}").format(self.id, self.name)
+        return unicode("{} ({})").format(self.name, self.id)
 
 class Code(models.Model):
     class Meta:
@@ -40,4 +40,4 @@ class CountryCode(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return unicode("{} {}").format(self.code, self.country)
+        return unicode("{}, +{}").format(self.country, self.code)
