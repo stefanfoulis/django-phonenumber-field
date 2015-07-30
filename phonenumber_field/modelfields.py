@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.conf import settings
 from django.core import validators
 from django.db import models
-from django.utils.six import string_types, with_metaclass
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
@@ -36,7 +34,7 @@ class PhoneNumberDescriptor(object):
         return instance.__dict__[self.field.name]
 
     def __set__(self, instance, value):
-        instance.__dict__[self.field.name] = to_python(value)
+        instance.__dict__[self.field.name] = instance.to_python(value)
 
 
 class PhoneNumberField(models.Field):
@@ -62,6 +60,9 @@ class PhoneNumberField(models.Field):
             if value.country_id:
                 pieces.insert(0, value.country_id)
             value = unicode(",").join(pieces)
+        else:
+            if not self.null:
+                value = unicode("")
         return value
 
     def to_python(self, value):
@@ -70,6 +71,9 @@ class PhoneNumberField(models.Field):
         if not (value is None or isinstance(value, PhoneNumber)):
             raise ValidationError("'%s' is an invalid value." % value)
         return value
+    
+    def from_db_value(self, value, *args, **kwargs):
+        return self.to_python(value)
 
     def formfield(self, **kwargs):
         defaults = {
