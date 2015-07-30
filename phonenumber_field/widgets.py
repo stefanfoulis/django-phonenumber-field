@@ -10,6 +10,9 @@ COUNTRY_CODE_CHOICE_SEP = unicode(",")
 def country_code_to_choice(country_code):
     return unicode("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
 
+def country_code_to_display(country_code):
+    return unicode(country_code)
+
 def country_code_from_choice(choice):
     country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
     return CountryCode.objects.get(country__id=country_id, code__id=code_id)
@@ -22,7 +25,7 @@ class CountryCodeSelect(Select):
         choices = [('', '---------')]
         country_codes = CountryCode.objects.filter(active=True, country__active=True, code__active=True)
         for country_code in country_codes:
-            choices.append((country_code_to_choice(country_code), unicode(country_code)))
+            choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
         return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
