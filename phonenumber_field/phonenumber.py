@@ -22,7 +22,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     PhoneNumber instance much easier, especially in templates and such.
     """
     country_id = None
-    country_id_sep = "|"
+    country_id_sep = getattr(settings, 'PHONENUMBER_COUNTRY_ID_SEP', '|')
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
