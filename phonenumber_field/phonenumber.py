@@ -22,6 +22,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     PhoneNumber instance much easier, especially in templates and such.
     """
     country_id = None
+    country_id_sep = "|"
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
@@ -84,7 +85,7 @@ def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = None
     elif value and isinstance(value, string_types):
-        result = value.split(",")
+        result = value.split(PhoneNumber.country_id_sep, 1)
         len_result = len(result)
         
         if len_result == 1:

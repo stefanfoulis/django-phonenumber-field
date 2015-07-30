@@ -59,7 +59,7 @@ class PhoneNumberField(models.Field):
             pieces = [unicode(value)]
             if value.country_id:
                 pieces.insert(0, value.country_id)
-            value = unicode(",").join(pieces)
+            value = unicode(PhoneNumber.country_id_sep).join(pieces)
         else:
             if not self.null:
                 value = unicode("")
