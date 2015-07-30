@@ -11,6 +11,15 @@ from django.test import TestCase
 
 
 class PhonenumerFieldAppTest(TestCase):
+    def test_to_python_country_id_parse(self):
+        from phonenumber_field.phonenumber import PhoneNumber, to_python
+        value = PhoneNumber.country_id_sep.join(["CH", "+41524242424"])
+        p = to_python(value)
+        self.assertEqual(p.country_id, "CH")
+        
+        p = to_python("+41524242424")
+        self.assertIsNone(p.country_id)
+
     def test_save_field_to_database(self):
         from testapp.models import TestModel
         from phonenumber_field.phonenumber import PhoneNumber
