@@ -97,11 +97,7 @@ class Command(BaseCommand):
             try:
                 country = Country.objects.get(id=country_code)
             except Country.DoesNotExist:
-                country = Country()
-                country.id = country_code
-                country.name = COUNTRIES[country_code] if country_code in COUNTRIES else country_code
-                country.active = True
-                country.save()
+                country = None
             
             for calling_code in calling_codes:
                 try:
@@ -112,4 +108,5 @@ class Command(BaseCommand):
                     code.active = True
                     code.save()
                 
-                CountryCode.objects.get_or_create(country=country, code=code, active=True)
+                if country:
+                    CountryCode.objects.get_or_create(country=country, code=code, active=True)
