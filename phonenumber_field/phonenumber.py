@@ -2,9 +2,10 @@
 
 import sys
 import phonenumbers
-from django.core import validators
-from phonenumbers.phonenumberutil import NumberParseException
 from django.conf import settings
+from django.core import validators
+from django.utils.six import string_types
+from phonenumbers.phonenumberutil import NumberParseException
 
 
 # Snippet from the `six` library to help with Python3 compatibility
@@ -20,6 +21,8 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     some neat and more pythonic, easy to access methods. This makes using a
     PhoneNumber instance much easier, especially in templates and such.
     """
+    country_id = None
+    country_id_sep = getattr(settings, 'PHONENUMBER_COUNTRY_ID_SEP', '|')
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
@@ -40,9 +43,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __unicode__(self):
         format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
         fmt = self.format_map[format_string]
-        if self.is_valid():
-            return self.format_as(fmt)
-        return self.raw_input
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
@@ -50,11 +51,13 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, format):
+    def format_as(self, fmt):
         if self.is_valid():
-            return phonenumbers.format_number(self, format)
-        else:
-            return self.raw_input
+            value = phonenumbers.format_number(self, fmt)
+            if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
+                value = unicode("{}x{}").format(value, self.extension)
+            return value
+        return self.raw_input
 
     @property
     def as_international(self):
@@ -80,19 +83,29 @@ def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = None
     elif value and isinstance(value, string_types):
+        result = value.split(PhoneNumber.country_id_sep, 1)
+        len_result = len(result)
+        
+        if len_result == 1:
+            country_id, phone_number_str = (None, result[0])
+        elif len_result == 2:
+            country_id, phone_number_str = result
+        else:
+            country_id, phone_number_str = (None, "")
+        
         try:
-            phone_number = PhoneNumber.from_string(phone_number=value)
+            phone_number = PhoneNumber.from_string(phone_number=phone_number_str)
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
-            phone_number = PhoneNumber(raw_input=value)
-    elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
-          not isinstance(value, PhoneNumber)):
+            phone_number = PhoneNumber(raw_input=phone_number_str)
+        phone_number.country_id = country_id
+        
+    elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and not isinstance(value, PhoneNumber):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     else:
-        # TODO: this should somehow show that it has invalid data, but not
-        #       completely die for bad data in the database.
-        #       (Same for the NumberParseException above)
+        # TODO: this should somehow show that it has invalid data, but not completely die for
+        #       bad data in the database. (Same for the NumberParseException above)
         phone_number = None
     return phone_number

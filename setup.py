@@ -1,6 +1,6 @@
+import sys
 from setuptools import setup, find_packages
 from phonenumber_field import __version__
-
 
 setup(
     name="django-phonenumber-field",
@@ -10,6 +10,7 @@ setup(
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
     install_requires=[
+        'django-countries',
         'phonenumbers>=7.0.2',
         'babel',
     ],
@@ -19,12 +20,13 @@ setup(
     maintainer='Stefan Foulis',
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
+    include_package_data=True,
     package_data = {
         'phonenumber_field': [
+            'templates/phonenumber_field/*.html',
             'locale/*/LC_MESSAGES/*',
         ],
     },
-    include_package_data=True,
     zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -33,6 +35,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP',
-    ]
+    ],
 )

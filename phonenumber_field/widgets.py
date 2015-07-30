@@ -1,59 +1,134 @@
-# -*- coding: utf-8 -*-
-
-from babel import Locale
-
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
-
-from django.utils import translation
+#-*- coding: utf-8 -*-
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
+from django.template import Context
+from django.template.loader import get_template
+from .models import CountryCode
 
-from phonenumber_field.phonenumber import PhoneNumber
+COUNTRY_CODE_CHOICE_SEP = unicode(",")
 
+def country_code_to_choice(country_code):
+    return unicode("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
 
-class PhonePrefixSelect(Select):
+def country_code_to_display(country_code):
+    return unicode(country_code)
 
+def country_code_from_choice(choice):
+    country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
+    return CountryCode.objects.get(country__id=country_id, code__id=code_id)
+
+class CountryCodeSelect(Select):
     initial = None
 
-    def __init__(self, initial=None):
+    def __init__(self, phone_widget):
+        self.phone_widget = phone_widget
         choices = [('', '---------')]
-        locale = Locale(translation.to_locale(translation.get_language()))
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
-            prefix = '+%d' % prefix
-            if initial and initial in values:
-                self.initial = prefix
-            for country_code in values:
-                country_name = locale.territories.get(country_code)
-                if country_name:
-                    choices.append((prefix, u'%s %s' % (country_name, prefix)))
-        return super(PhonePrefixSelect, self).__init__(
-            choices=sorted(choices, key=lambda item: item[1]))
+        country_codes = CountryCode.objects.filter(active=True, country__active=True, code__active=True)
+        for country_code in country_codes:
+            choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
+        return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
-        return super(PhonePrefixSelect, self).render(
-            name, value or self.initial, *args, **kwargs)
+        if isinstance(value, CountryCode):
+            value = country_code_to_choice(value)
+        if value == self.phone_widget.empty_country_code:
+            value = ""
+        return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
+    
+    def value_from_datadict(self, *args, **kwargs):
+        """
+        Returns a country code model instance
+        """
+        code = None
+        choice = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
+        if choice:
+            try:
+                code = country_code_from_choice(choice)
+            except (CountryCode.DoesNotExist, ValueError):
+                pass
+        return code
 
 
-class PhoneNumberPrefixWidget(MultiWidget):
+class PhoneNumberWidget(MultiWidget):
     """
     A Widget that splits phone number input into:
-    - a country select box for phone prefix
+    - an input for the country code prefix
     - an input for local phone number
+    - an input for extension
     """
+    template_name = "phonenumber_field/format_phone_number_widget_output.html"
+    
     def __init__(self, attrs=None, initial=None):
-        widgets = (PhonePrefixSelect(initial), TextInput(),)
-        super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
+        widgets = (CountryCodeSelect(self), TextInput(), TextInput())
+
+        def f(i):
+            def id_for_label(id_):
+                if id_.endswith("_0"):
+                    id_ = id_[:-2]
+                return "{0}_{1}".format(id_, i) if id_ else id_
+            return id_for_label
+
+        for i, widget in enumerate(widgets):
+            widget.id_for_label = f(i)
+
+        super(PhoneNumberWidget, self).__init__(widgets, attrs)
+        self._empty_country_code = [None]
+        self._base_id = ""
+        self.country_code = None
+        self.national_number = None
+        self.extension = None
+
+    @property
+    def empty_country_code(self):
+        return self._empty_country_code[0]
+
+    @empty_country_code.setter
+    def empty_country_code(self, value):
+        self._empty_country_code[0] = value
 
     def decompress(self, value):
-        if value:
-            if type(value) == PhoneNumber:
-                if value.country_code and value.national_number:
-                    return ["+%d" % value.country_code, value.national_number]
-            else:
-                return value.split('.')
-        return [None, None]
-
+        return [self.country_code, self.national_number, self.extension]
+    
     def value_from_datadict(self, data, files, name):
-        values = super(PhoneNumberPrefixWidget, self).value_from_datadict(
-            data, files, name)
-        return '%s.%s' % tuple(values)
+        country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
+        country_id = ""
+        if country_code or (self.empty_country_code and national_number):
+            if country_code:
+                self.country_code = country_code
+                country_id = "%s," % country_code.country.id 
+            country_code = "+{0}-".format(country_code.code.id or self.empty_country_code)
+        if national_number:
+            self.national_number = national_number
+        if extension:
+            self.extension = extension
+            extension = "x%s" % extension
+        return '%s%s%s%s' % (country_id, country_code, national_number, extension or "")
+    
+    def render(self, *args, **kwargs):
+        attrs = kwargs.get("attrs", None) or {}
+        self._base_id = attrs.get("id", "")
+        return super(PhoneNumberWidget, self).render(*args, **kwargs)
+
+    def format_output(self, rendered_widgets):
+        c = Context({
+            "code": rendered_widgets[0],
+            "code_id": "{0}_0".format(self._base_id),
+            "number": rendered_widgets[1],
+            "number_id": "{0}_1".format(self._base_id),
+            "extension": rendered_widgets[2],
+            "extension_id": "{0}_2".format(self._base_id),
+        })
+        t = get_template(self.template_name)
+        return t.render(c)
+
+    @property
+    def country_code_widget(self):
+        return self.widgets[0]
+
+    @property
+    def national_number_widget(self):
+        return self.widgets[1]
+
+    @property
+    def extension_widget(self):
+        return self.widgets[2]
