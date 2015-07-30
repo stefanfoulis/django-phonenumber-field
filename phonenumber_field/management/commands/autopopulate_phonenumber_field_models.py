@@ -114,7 +114,7 @@ class Command(BaseCommand):
         self.stdout.write("-------------------------------")
         self.stdout.write("-------------------------------")
         self.stdout.write("There are %d records total." % len(old_dict))
-        self.stdout.write("Deactivated shipping to %d countries." % deactivated_country_count)
+        self.stdout.write("Deactivated %d countries." % deactivated_country_count)
         self.stdout.write("Added %d countries." % (len(added_keys) - len(failed_to_add)))
         self.stdout.write("Failed to add %d countries." % len(failed_to_add))
         self.stdout.write("Changed %d countries." % (len(changed_keys) - len(failed_to_change)))
