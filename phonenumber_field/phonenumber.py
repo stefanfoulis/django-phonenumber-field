@@ -11,6 +11,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
     to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
     """
+    country_id = None
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
@@ -85,11 +86,23 @@ def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = None
     elif value and isinstance(value, string_types):
+        result = value.split(",")
+        len_result = len(result)
+        
+        if len_result == 1:
+            country_id, phone_number_str = (None, result[0])
+        elif len_result == 2:
+            country_id, phone_number_str = result
+        else:
+            country_id, phone_number_str = (None, "")
+        
         try:
-            phone_number = PhoneNumber.from_string(phone_number=value)
+            phone_number = PhoneNumber.from_string(phone_number=phone_number_str)
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
-            phone_number = PhoneNumber(raw_input=value)
+            phone_number = PhoneNumber(raw_input=phone_number_str)
+        phone_number.country_id = country_id
+        
     elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and not isinstance(value, PhoneNumber):
         phone_number = PhoneNumber(value)
     elif isinstance(value, PhoneNumber):

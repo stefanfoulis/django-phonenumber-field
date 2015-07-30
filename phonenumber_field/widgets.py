@@ -3,31 +3,50 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.six import PY3
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
-from phonenumber_field.phonenumber import PhoneNumber, to_python
+from .models import CountryCode
 
+COUNTRY_CODE_CHOICE_SEP = unicode(",")
+
+def country_code_to_choice(country_code):
+    return unicode("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
+
+def country_code_to_display(country_code):
+    return unicode(country_code)
+
+def country_code_from_choice(choice):
+    country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
+    return CountryCode.objects.get(country__id=country_id, code__id=code_id)
 
 class CountryCodeSelect(Select):
     initial = None
 
-    def __init__(self, phone_widget, initial=None):
+    def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        codes = _COUNTRY_CODE_TO_REGION_CODE.items() if PY3 else _COUNTRY_CODE_TO_REGION_CODE.iteritems()
-        for prefix, values in codes:
-            if initial and initial in values:
-                self.initial = prefix
-            for code in values:
-                choices.append((u'%s' % prefix, u'%s (%s)' % (code, prefix)))
-        return super(CountryCodeSelect, self).__init__(choices=sorted(choices, key=lambda item: item[1]))
+        country_codes = CountryCode.objects.filter(active=True, country__active=True, code__active=True)
+        for country_code in country_codes:
+            choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
+        return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
+        if isinstance(value, CountryCode):
+            value = country_code_to_choice(value)
         if value == self.phone_widget.empty_country_code:
             value = ""
-        else:
-            value = value or self.initial
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
+    
+    def value_from_datadict(self, *args, **kwargs):
+        """
+        Returns a country code model instance
+        """
+        code = None
+        choice = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
+        if choice:
+            try:
+                code = country_code_from_choice(choice)
+            except (CountryCode.DoesNotExist, ValueError):
+                pass
+        return code
 
 
 class PhoneNumberWidget(MultiWidget):
@@ -68,26 +87,23 @@ class PhoneNumberWidget(MultiWidget):
         self._empty_country_code[0] = value
 
     def decompress(self, value):
-        if not isinstance(value, PhoneNumber):
-            value = to_python(value)
-        if isinstance(value, PhoneNumber):
-            return [value.country_code, value.national_number, value.extension]
-        else:
-            return [self.country_code, self.national_number, self.extension]
-
+        return [self.country_code, self.national_number, self.extension]
+    
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
+        country_id = ""
         if country_code or (self.empty_country_code and national_number):
             if country_code:
                 self.country_code = country_code
-            country_code = "+{0}-".format(country_code or self.empty_country_code)
+                country_id = "%s," % country_code.country.id 
+            country_code = "+{0}-".format(country_code.code.id or self.empty_country_code)
         if national_number:
             self.national_number = national_number
         if extension:
             self.extension = extension
             extension = "x%s" % extension
-        return '%s%s%s' % (country_code, national_number, extension or "")
-
+        return '%s%s%s%s' % (country_id, country_code, national_number, extension or "")
+    
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}
         self._base_id = attrs.get("id", "")
