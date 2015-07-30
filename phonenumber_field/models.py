@@ -7,7 +7,7 @@ class Country(models.Model):
     class Meta:
         verbose_name_plural = "Countries"
     
-    id = CaseInsensitiveCharField(primary_key=True, max_length=2)
+    id = CaseInsensitiveCharField(primary_key=True, max_length=3)
     name = models.CharField(max_length=50)
     active = models.BooleanField(default=False)
     
