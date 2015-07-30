@@ -1,8 +1,12 @@
 #-*- coding: utf-8 -*-
 from django.db import models
+from django.core import validators
 from .fields.models.caseinsensitivecharfield import CaseInsensitiveCharField
 
 class Country(models.Model):
+    class Meta:
+        verbose_name_plural = "Countries"
+    
     id = CaseInsensitiveCharField(primary_key=True, max_length=2)
     name = models.CharField(max_length=50)
     active = models.BooleanField(default=False)
@@ -11,7 +15,10 @@ class Country(models.Model):
         return unicode("({0}) {1}").format(self.id, self.name)
 
 class Code(models.Model):
-    id = CaseInsensitiveCharField(primary_key=True, max_length=3)
+    class Meta:
+        ordering = ("id",)
+    
+    id = models.PositiveSmallIntegerField(primary_key=True, validators=(validators.MinValueValidator(1),))
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
@@ -28,8 +35,8 @@ class CountryCode(models.Model):
     
     objects = CountryCodeManager()
     
-    country = models.ForeignKey(Country)
-    code = models.ForeignKey(Code)
+    country = models.ForeignKey(Country, related_name="country_codes")
+    code = models.ForeignKey(Code, related_name="country_codes")
     
     def __unicode__(self):
         return unicode("{} {}").format(self.code, self.country)

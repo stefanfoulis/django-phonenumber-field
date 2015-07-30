@@ -8,10 +8,10 @@ from .models import CountryCode
 COUNTRY_CODE_CHOICE_SEP = unicode(",")
 
 def country_code_to_choice(country_code):
-    return COUNTRY_CODE_CHOICE_SEP.join((country_code.country.id, country_code.code.id))
+    return unicode("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
 
 def country_code_from_choice(choice):
-    country_id, code_id = choice.split(COUNTRY_CODE_CHOICE_SEP)
+    country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
     return CountryCode.objects.get(country__id=country_id, code__id=code_id)
 
 class CountryCodeSelect(Select):
