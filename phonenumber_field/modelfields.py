@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -56,7 +57,9 @@ class PhoneNumberField(models.Field):
         "Returns field's value prepared for saving into a database."
         value = self.to_python(value)# PhoneNumber or None
         if isinstance(value, PhoneNumber):
-            pieces = [unicode(value)]
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            fmt = PhoneNumber.format_map[format_string]
+            pieces = [value.format_as(fmt)]
             if value.country_id:
                 pieces.insert(0, value.country_id)
             value = unicode(PhoneNumber.country_id_sep).join(pieces)

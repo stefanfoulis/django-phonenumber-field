@@ -41,13 +41,9 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         return phone_number_obj
 
     def __unicode__(self):
-        if self.is_valid():
-            if self.extension:
-                return u"%sx%s" % (self.as_e164, self.extension)
-            format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
-            fmt = self.format_map[format_string]
-            return self.format_as(fmt)
-        return self.raw_input
+        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
+        fmt = self.format_map[format_string]
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
@@ -55,11 +51,13 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, format):
+    def format_as(self, fmt):
         if self.is_valid():
-            return phonenumbers.format_number(self, format)
-        else:
-            return self.raw_input
+            value = phonenumbers.format_number(self, fmt)
+            if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
+                value = unicode("{}x{}").format(value, self.extension)
+            return value
+        return self.raw_input
 
     @property
     def as_international(self):
