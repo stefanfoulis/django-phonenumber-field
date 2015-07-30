@@ -18,7 +18,7 @@ class Code(models.Model):
     class Meta:
         ordering = ("id",)
     
-    id = models.PositiveSmallIntegerField(primary_key=True, validators=(validators.MinValueValidator(1),))
+    id = models.PositiveSmallIntegerField(primary_key=True, validators=[validators.MinValueValidator(1)])
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
