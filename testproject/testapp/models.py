@@ -9,5 +9,9 @@ class TestModel(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField()
 
+class TestModelBlankPhone(models.Model):
+    name = models.CharField(max_length=255, blank=True, default='')
+    phone = PhoneNumberField(blank=True)
+
 class CICharFieldTestModel(models.Model):
     value = CaseInsensitiveCharField(primary_key=True, max_length=1)

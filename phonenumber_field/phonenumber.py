@@ -1,4 +1,6 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+import sys
 import phonenumbers
 from django.conf import settings
 from django.core import validators
@@ -6,12 +8,21 @@ from django.utils.six import string_types
 from phonenumbers.phonenumberutil import NumberParseException
 
 
+# Snippet from the `six` library to help with Python3 compatibility
+if sys.version_info[0] == 3:
+    string_types = str
+else:
+    string_types = basestring
+
+
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
-    A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
-    to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
+    A extended version of phonenumbers.phonenumber.PhoneNumber that provides
+    some neat and more pythonic, easy to access methods. This makes using a
+    PhoneNumber instance much easier, especially in templates and such.
     """
     country_id = None
+    country_id_sep = getattr(settings, 'PHONENUMBER_COUNTRY_ID_SEP', '|')
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
@@ -23,23 +34,16 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
         if region is None:
-            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None) or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
         phonenumbers.parse(number=phone_number, region=region,
                            keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
     def __unicode__(self):
-        if self.is_valid():
-            if self.extension:
-                return u"%sx%s" % (self.as_e164, self.extension)
-            return self.as_e164
-        return self.raw_input
-
-    def __str__(self):
-        return str(self.__unicode__())
-
-    def original_unicode(self):
-        return super(PhoneNumber, self).__unicode__()
+        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
+        fmt = self.format_map[format_string]
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
@@ -47,11 +51,13 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, format):
+    def format_as(self, fmt):
         if self.is_valid():
-            return phonenumbers.format_number(self, format)
-        else:
-            return self.raw_input
+            value = phonenumbers.format_number(self, fmt)
+            if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
+                value = unicode("{}x{}").format(value, self.extension)
+            return value
+        return self.raw_input
 
     @property
     def as_international(self):
@@ -72,21 +78,12 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __len__(self):
         return len(self.__unicode__())
 
-    def __eq__(self, other):
-        if type(other) == PhoneNumber:
-            return self.as_rfc3966 == other.as_rfc3966
-        else:
-            return super(PhoneNumber, self).__eq__(other)
-
-    def __hash__(self):
-        return hash(self.as_rfc3966)
-
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = None
     elif value and isinstance(value, string_types):
-        result = value.split(",")
+        result = value.split(PhoneNumber.country_id_sep, 1)
         len_result = len(result)
         
         if len_result == 1:
