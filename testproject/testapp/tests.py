@@ -5,11 +5,13 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
+from django.db import IntegrityError, DEFAULT_DB_ALIAS
 from django.test import TestCase
-from unittest import expectedFailure
+from unittest import skipIf
 
+DATABASE_IS_SQLITE = settings.DATABASES[DEFAULT_DB_ALIAS]['ENGINE'] == 'django.db.backends.sqlite3'
 
 class PhonenumerFieldAppTest(TestCase):
     def test_to_python_country_id_parse(self):
@@ -75,7 +77,7 @@ class CICharFieldTestModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             obj.full_clean()
     
-    @expectedFailure
+    @skipIf(DATABASE_IS_SQLITE, "Sqlite does not enforce varchar max_length")
     def test_max_length_db(self):
         from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
@@ -83,7 +85,7 @@ class CICharFieldTestModelTestCase(TestCase):
         CICharFieldTestModel.objects.create(value="bb")
         self.assertNotEqual(CICharFieldTestModel.objects.all()[0].value.lower(), "bb")
     
-    @expectedFailure
+    @skipIf(DATABASE_IS_SQLITE, "Sqlite does not enforce varchar max_length")
     def test_max_length_db_truncates(self):
         from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
