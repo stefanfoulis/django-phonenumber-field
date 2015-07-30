@@ -23,10 +23,27 @@ Included are:
 Installation
 ============
 
+To install django-phonenumber-field use your favorite packaging tool, e.g.pip:
+
 ::
 
     pip install django-phonenumber-field
 
+Then add 'phonenumber_field' to your INSTALLED_APPS setting:
+
+::
+
+    INSTALLED_APPS = (
+        # ...
+        'phonenumber_field',
+    )
+
+To make use of the supplied widget, migrate and populate the database:
+
+::
+
+    python manage.py migrate
+    python manage.py autopopulate_phonenumber_field_models
 
 Basic usage
 ===========
