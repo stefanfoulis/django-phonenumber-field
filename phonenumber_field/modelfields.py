@@ -1,15 +1,47 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.six import string_types, with_metaclass
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
-from phonenumber_field.phonenumber import PhoneNumber, to_python
+from phonenumber_field.phonenumber import PhoneNumber, to_python, string_types
 from django.core.exceptions import ValidationError
 
 
-class PhoneNumberField(with_metaclass(models.SubfieldBase, models.Field)):
+class PhoneNumberDescriptor(object):
+    """
+    The descriptor for the phone number attribute on the model instance.
+    Returns a PhoneNumber when accessed so you can do stuff like::
+
+        >>> instance.phone_number.as_international
+
+    Assigns a phone number object on assignment so you can do::
+
+        >>> instance.phone_number = PhoneNumber(...)
+    or
+        >>> instance.phone_number = '+414204242'
+    """
+
+    def __init__(self, field):
+        self.field = field
+
+    def __get__(self, instance=None, owner=None):
+        if instance is None:
+            raise AttributeError(
+                "The '%s' attribute can only be accessed from %s instances."
+                % (self.field.name, owner.__name__))
+        return instance.__dict__[self.field.name]
+
+    def __set__(self, instance, value):
+        instance.__dict__[self.field.name] = to_python(value)
+
+
+class PhoneNumberField(models.Field):
+    attr_class = PhoneNumber
+    descriptor_class = PhoneNumberDescriptor
     default_validators = [validate_international_phonenumber]
 
     description = _("Phone number")

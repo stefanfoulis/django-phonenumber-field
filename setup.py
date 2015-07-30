@@ -1,23 +1,18 @@
 import sys
 from setuptools import setup, find_packages
-
-extra = {}
-if sys.version_info[0] >= 3:
-    extra['use_2to3'] = True
+from phonenumber_field import __version__
 
 setup(
     name="django-phonenumber-field",
-    version=":versiontools:phonenumber_field:",
+    version=__version__,
     url='http://github.com/stefanfoulis/django-phonenumber-field',
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
-    setup_requires=[
-        'versiontools >= 1.4',
-    ],
     install_requires=[
         'django-countries',
-        'phonenumbers >= 5.9b1',
+        'phonenumbers>=7.0.2',
+        'babel',
     ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
@@ -26,10 +21,11 @@ setup(
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    package_data={
+    package_data = {
         'phonenumber_field': [
             'templates/phonenumber_field/*.html',
-        ]
+            'locale/*/LC_MESSAGES/*',
+        ],
     },
     zip_safe=False,
     classifiers=[
@@ -43,5 +39,4 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Internet :: WWW/HTTP',
     ],
-    **extra
 )
