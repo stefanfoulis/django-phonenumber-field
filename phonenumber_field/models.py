@@ -37,6 +37,7 @@ class CountryCode(models.Model):
     
     country = models.ForeignKey(Country, related_name="country_codes")
     code = models.ForeignKey(Code, related_name="country_codes")
+    active = models.BooleanField(default=False)
     
     def __unicode__(self):
         return unicode("{} {}").format(self.code, self.country)

@@ -20,7 +20,7 @@ class CountryCodeSelect(Select):
     def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        country_codes = CountryCode.objects.filter(country__active=True, code__active=True)
+        country_codes = CountryCode.objects.filter(active=True, country__active=True, code__active=True)
         for country_code in country_codes:
             choices.append((country_code_to_choice(country_code), unicode(country_code)))
         return super(CountryCodeSelect, self).__init__(choices=choices)

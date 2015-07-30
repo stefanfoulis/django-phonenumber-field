@@ -112,4 +112,4 @@ class Command(BaseCommand):
                     code.active = True
                     code.save()
                 
-                CountryCode.objects.get_or_create(country=country, code=code)
+                CountryCode.objects.get_or_create(country=country, code=code, active=True)
