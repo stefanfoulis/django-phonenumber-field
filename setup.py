@@ -1,4 +1,3 @@
-import sys
 from setuptools import setup, find_packages
 from phonenumber_field import __version__
 
