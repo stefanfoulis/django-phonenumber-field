@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+from django.db.models import Q
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
@@ -30,7 +31,11 @@ class CountryCodeSelect(Select):
     def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        country_codes = CountryCode.objects.filter(active=True, region_code_obj__active=True, calling_code_obj__active=True)
+        country_codes = CountryCode.objects.filter(
+            Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
+            active=True,
+            calling_code_obj__active=True,
+        )
         for country_code in country_codes:
             choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
         choices.sort(key=lambda c: c[1])
