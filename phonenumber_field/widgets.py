@@ -5,22 +5,18 @@ from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
+from json import dumps, loads
 from .models import CountryCode
 from .phonenumber import PhoneNumber
 
-COUNTRY_CODE_CHOICE_SEP = force_text(",")
-
 def country_code_to_choice(country_code):
-    region_code, calling_code = country_code.natural_key()
-    return COUNTRY_CODE_CHOICE_SEP.join((region_code or force_text(""), force_text(calling_code)))
+    return dumps(country_code.natural_key(), separators=(',',':'))
 
 def country_code_to_display(country_code):
     return force_text(country_code)
 
 def country_code_from_choice(choice):
-    region_code, calling_code = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP, 1)]
-    region_code = region_code or None
-    return CountryCode.objects.get_by_natural_key(region_code, calling_code)
+    return CountryCode.objects.get_by_natural_key(*loads(choice))
 
 class CountryCodeSelect(Select):
     initial = None
