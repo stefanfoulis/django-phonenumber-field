@@ -37,11 +37,10 @@ class Migration(migrations.Migration):
             name='RegionCode',
             fields=[
                 ('code', phonenumber_field.fields.models.caseinsensitivecharfield.CaseInsensitiveCharField(max_length=2, serialize=False, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
                 ('active', models.BooleanField(default=False)),
             ],
             options={
-                'ordering': ('name',),
+                'ordering': ('code',),
             },
         ),
         migrations.AddField(

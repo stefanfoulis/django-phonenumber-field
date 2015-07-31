@@ -1,20 +1,26 @@
 #-*- coding: utf-8 -*-
+from babel import Locale
 from django.db import models
 from django.core import validators
 from django.utils.encoding import force_text
 from django.utils.functional import cached_property
+from django.utils import translation
 from .fields.models.caseinsensitivecharfield import CaseInsensitiveCharField
 
 class RegionCode(models.Model):
     class Meta:
-        ordering = ("name",)
+        ordering = ("code",)
     
     code = CaseInsensitiveCharField(primary_key=True, max_length=2)
-    name = models.CharField(max_length=50)
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
         return force_text("{} ({})").format(self.name, self.code)
+    
+    @cached_property
+    def name(self):
+        locale = Locale(translation.to_locale(translation.get_language()))
+        return locale.territories.get(self.code)
 
 class CallingCode(models.Model):
     class Meta:

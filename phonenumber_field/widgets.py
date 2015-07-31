@@ -33,6 +33,7 @@ class CountryCodeSelect(Select):
         country_codes = CountryCode.objects.filter(active=True, region_code_obj__active=True, calling_code_obj__active=True)
         for country_code in country_codes:
             choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
+        choices.sort(key=lambda c: c[1])
         return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):
