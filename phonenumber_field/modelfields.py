@@ -78,9 +78,6 @@ class PhoneNumberField(models.Field):
         if not (value is None or isinstance(value, PhoneNumber)):
             raise ValidationError("'%s' is an invalid value." % value)
         return value
-    
-    def from_db_value(self, value, *args, **kwargs):
-        return self.to_python(value)
 
     def formfield(self, **kwargs):
         defaults = {
