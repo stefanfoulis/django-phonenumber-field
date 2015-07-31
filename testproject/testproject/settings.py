@@ -1,4 +1,5 @@
 # Django settings for testproject project.
+from django import VERSION
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -113,7 +114,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -126,7 +127,10 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'phonenumber_field',
     'testapp',
-)
+]
+
+if VERSION < (1, 7):
+    INSTALLED_APPS = INSTALLED_APPS + ['phonenumber_field.tests']
 
 MIGRATION_MODULES = dict((app, '%s.fake_migrations' % app) for app in INSTALLED_APPS)
 
