@@ -3,15 +3,16 @@ from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
+from django.utils.encoding import force_text
 from .models import CountryCode
 
-COUNTRY_CODE_CHOICE_SEP = unicode(",")
+COUNTRY_CODE_CHOICE_SEP = force_text(",")
 
 def country_code_to_choice(country_code):
-    return unicode("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
+    return force_text("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
 
 def country_code_to_display(country_code):
-    return unicode(country_code)
+    return force_text(country_code)
 
 def country_code_from_choice(choice):
     country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]

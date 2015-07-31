@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.core import validators
+from django.utils.encoding import force_text
 from .fields.models.caseinsensitivecharfield import CaseInsensitiveCharField
 
 class Country(models.Model):
@@ -12,7 +13,7 @@ class Country(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return unicode("{} ({})").format(self.name, self.id)
+        return force_text("{} ({})").format(self.name, self.id)
 
 class Code(models.Model):
     class Meta:
@@ -22,7 +23,7 @@ class Code(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return unicode(self.id)
+        return force_text(self.id)
 
 class CountryCodeManager(models.Manager):
     def get_by_natural_key(self, country, code):
@@ -40,4 +41,4 @@ class CountryCode(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return unicode("{}, +{}").format(self.country, self.code)
+        return force_text("{}, +{}").format(self.country, self.code)

@@ -4,6 +4,7 @@ import sys
 import phonenumbers
 from django.conf import settings
 from django.core import validators
+from django.utils.encoding import force_text
 from django.utils.six import string_types
 from phonenumbers.phonenumberutil import NumberParseException
 
@@ -55,7 +56,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         if self.is_valid():
             value = phonenumbers.format_number(self, fmt)
             if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
-                value = unicode("{}x{}").format(value, self.extension)
+                value = force_text("{}x{}").format(value, self.extension)
             return value
         return self.raw_input
 

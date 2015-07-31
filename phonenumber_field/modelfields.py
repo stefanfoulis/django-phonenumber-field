@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.core import validators
 from django.db import models
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
@@ -66,10 +67,10 @@ class PhoneNumberField(models.Field):
             pieces = [value.format_as(fmt)]
             if value.country_id:
                 pieces.insert(0, value.country_id)
-            value = unicode(PhoneNumber.country_id_sep).join(pieces)
+            value = force_text(PhoneNumber.country_id_sep).join(pieces)
         else:
             if not self.null:
-                value = unicode("")
+                value = force_text("")
         return value
 
     def to_python(self, value):

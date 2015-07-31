@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ValidationError
+from django.utils.encoding import force_text
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 from django_countries.data import COUNTRIES
 from ...models import Country, Code, CountryCode
@@ -77,7 +78,7 @@ class Command(BaseCommand):
             self.stdout.write("")
             self.stdout.write("Failed to add the following countries:")
             for record in failed_to_add:
-                self.stdout.write(unicode(record))
+                self.stdout.write(force_text(record))
             self.stdout.write("")
         
         # change existing keys
@@ -101,7 +102,7 @@ class Command(BaseCommand):
             self.stdout.write("")
             self.stdout.write("Failed to change the following countries:")
             for record in failed_to_change:
-                self.stdout.write(unicode(record))
+                self.stdout.write(force_text(record))
             self.stdout.write("")
         
         #
@@ -186,14 +187,14 @@ class Command(BaseCommand):
             self.stdout.write("")
             self.stdout.write("Failed to add the following codes:")
             for record in failed_to_add_code:
-                self.stdout.write(unicode(record))
+                self.stdout.write(force_text(record))
             self.stdout.write("")
         
         if failed_to_add_country_code:
             self.stdout.write("")
             self.stdout.write("Failed to add the following country codes:")
             for record in failed_to_add_country_code:
-                self.stdout.write(unicode(record))
+                self.stdout.write(force_text(record))
             self.stdout.write("")
         
         self.stdout.write("")

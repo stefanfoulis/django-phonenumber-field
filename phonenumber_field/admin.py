@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.encoding import force_text
 from .models import Country, Code, CountryCode
 
 class CountryCodeInline(admin.TabularInline):
@@ -13,7 +14,7 @@ class CountryAdmin(admin.ModelAdmin):
     def codes(self, country):
         ids = list(country.country_codes.values_list("code__id", flat=True).distinct())
         ids.sort()
-        return unicode(", ").join([unicode(i) for i in ids])
+        return force_text(", ").join([force_text(i) for i in ids])
 
 @admin.register(Code)
 class CodeAdmin(admin.ModelAdmin):
@@ -24,7 +25,7 @@ class CodeAdmin(admin.ModelAdmin):
     def countries(self, code):
         names = list(code.country_codes.values_list("country__name", flat=True).distinct())
         names.sort()
-        return unicode(", ").join(names)
+        return force_text(", ").join(names)
 
 @admin.register(CountryCode)
 class CountryCodeAdmin(admin.ModelAdmin):
