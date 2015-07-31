@@ -7,7 +7,7 @@ class CountryCodeInline(admin.TabularInline):
 
 @admin.register(RegionCode)
 class RegionCodeAdmin(admin.ModelAdmin):
-    list_display = ("code", "name", "active", "calling_code")
+    list_display = ("code", "name", "calling_code", "active")
     inlines = (CountryCodeInline,)
     extra = 0
     
@@ -16,7 +16,7 @@ class RegionCodeAdmin(admin.ModelAdmin):
 
 @admin.register(CallingCode)
 class CallingCodeAdmin(admin.ModelAdmin):
-    list_display = ("__unicode__", "active", "region_codes")
+    list_display = ("code", "region_codes", "active")
     inlines = (CountryCodeInline,)
     extra = 0
     
@@ -31,12 +31,18 @@ class CallingCodeAdmin(admin.ModelAdmin):
 
 @admin.register(CountryCode)
 class CountryCodeAdmin(admin.ModelAdmin):
-    list_display = ("get_region_code", "get_calling_code", "get_region_code_active", "get_calling_code_active", "active", "all_active")
+    list_display = ("get_region_code", "get_region_name", "get_calling_code", "get_region_code_active", "get_calling_code_active", "active", "displayed_as_choice")
     
     def get_region_code(self, country_code):
         return country_code.region_code
     get_region_code.short_description = "Region Code"
     get_region_code.admin_order_field = "region_code_obj__code"
+    
+    def get_region_name(self, country_code):
+        if country_code.region_code_obj:
+            return country_code.region_code_obj.name
+        return None
+    get_region_name.short_description = "Region Name"
     
     def get_region_code_active(self, country_code):
         if country_code.region_code_obj and country_code.region_code_obj.active:
@@ -63,10 +69,10 @@ class CountryCodeAdmin(admin.ModelAdmin):
     get_calling_code_active.admin_order_field = "calling_code_obj__active"
     get_calling_code_active.allow_tags = True
     
-    def all_active(self, country_code):
+    def displayed_as_choice(self, country_code):
         if country_code.active and (not country_code.region_code_obj or country_code.region_code_obj.active) and country_code.calling_code_obj.active:
             html = '<img src="/static/admin/img/icon-yes.gif" alt="True" />'
         else:
             html = '<img src="/static/admin/img/icon-no.gif" alt="False" />'
         return html
-    all_active.allow_tags = True
+    displayed_as_choice.allow_tags = True
