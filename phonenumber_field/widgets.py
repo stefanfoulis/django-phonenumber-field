@@ -19,27 +19,23 @@ def country_code_from_choice(choice):
     return CountryCode.objects.get_by_natural_key(*loads(choice))
 
 class CountryCodeSelect(Select):
-    initial = None
-
-    def __init__(self, phone_widget):
-        self.phone_widget = phone_widget
-        choices = []
-        country_codes = CountryCode.objects.filter(
-            Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
-            active=True,
-            calling_code_obj__active=True,
-        )
-        for country_code in country_codes:
-            choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
-        choices.sort(key=lambda c: c[1])
-        choices.insert(0, ('', '---------'))
-        return super(CountryCodeSelect, self).__init__(choices=choices)
+    def __init__(self, choices=(), **kwargs):
+        if not choices:
+            choices = []
+            country_codes = CountryCode.objects.filter(
+                Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
+                active=True,
+                calling_code_obj__active=True,
+            )
+            for country_code in country_codes:
+                choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
+            choices.sort(key=lambda c: c[1])
+            choices.insert(0, ('', '---------'))
+        return super(CountryCodeSelect, self).__init__(choices=choices, **kwargs)
 
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CountryCode):
             value = country_code_to_choice(value)
-        if value == self.phone_widget.empty_country_code:
-            value = ""
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
     
     def value_from_datadict(self, *args, **kwargs):
@@ -64,10 +60,15 @@ class PhoneNumberWidget(MultiWidget):
     - an input for extension
     """
     template_name = "phonenumber_field/format_phone_number_widget_output.html"
+    country_code = None
+    national_number = ""
+    extension = ""
+    widgets = (CountryCodeSelect, TextInput, TextInput)
+    _base_id = ""
     
-    def __init__(self, attrs=None, initial=None):
-        widgets = (CountryCodeSelect(self), TextInput(), TextInput())
-
+    def __init__(self, attrs=None):
+        widgets = [w() if isinstance(w, type) else w for w in self.widgets]
+        
         def f(i):
             def id_for_label(id_):
                 if id_.endswith("_0"):
@@ -79,19 +80,6 @@ class PhoneNumberWidget(MultiWidget):
             widget.id_for_label = f(i)
 
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
-        self._empty_country_code = [None]
-        self._base_id = ""
-        self.country_code = None
-        self.national_number = None
-        self.extension = None
-
-    @property
-    def empty_country_code(self):
-        return self._empty_country_code[0]
-
-    @empty_country_code.setter
-    def empty_country_code(self, value):
-        self._empty_country_code[0] = value
 
     def decompress(self, value):
         return [self.country_code, self.national_number, self.extension]
@@ -99,15 +87,11 @@ class PhoneNumberWidget(MultiWidget):
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
         region_code_prefix = ""
-        if country_code or (self.empty_country_code and national_number):
-            if country_code:
-                self.country_code = country_code
-                if country_code.region_code:
-                    region_code_prefix = "{}{}".format(country_code.region_code, PhoneNumber.region_code_sep)
-                fmt_arg = country_code.calling_code
-            else:
-                fmt_arg = self.empty_country_code
-            country_code = force_text("+{0}-").format(fmt_arg)
+        if country_code:
+            self.country_code = country_code
+            if country_code.region_code:
+                region_code_prefix = "{}{}".format(country_code.region_code, PhoneNumber.region_code_sep)
+            country_code = force_text("+{0}-").format(country_code.calling_code)
         if national_number:
             self.national_number = national_number
         if extension:
