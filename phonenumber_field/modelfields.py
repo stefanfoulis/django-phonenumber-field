@@ -47,7 +47,7 @@ class PhoneNumberField(models.Field):
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = kwargs.get('max_length', 131)# 128 for longest phone number + 2 for country id + 1 for comma
+        kwargs['max_length'] = kwargs.get('max_length', 131)# 128 for longest phone number + 2 for region code + 1 for separator
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
     
@@ -65,9 +65,9 @@ class PhoneNumberField(models.Field):
             format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
             fmt = PhoneNumber.format_map[format_string]
             pieces = [value.format_as(fmt)]
-            if value.country_id:
-                pieces.insert(0, value.country_id)
-            value = force_text(PhoneNumber.country_id_sep).join(pieces)
+            if value.region_code:
+                pieces.insert(0, value.region_code)
+            value = force_text(PhoneNumber.region_code_sep).join(pieces)
         else:
             if not self.null:
                 value = force_text("")

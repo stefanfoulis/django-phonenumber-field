@@ -16,12 +16,12 @@ DATABASE_IS_SQLITE = settings.DATABASES[DEFAULT_DB_ALIAS]['ENGINE'] == 'django.d
 class PhonenumerFieldAppTest(TestCase):
     def test_to_python_country_id_parse(self):
         from phonenumber_field.phonenumber import PhoneNumber, to_python
-        value = PhoneNumber.country_id_sep.join(["CH", "+41524242424"])
+        value = PhoneNumber.region_code_sep.join(["CH", "+41524242424"])
         p = to_python(value)
-        self.assertEqual(p.country_id, "CH")
+        self.assertEqual(p.region_code, "CH")
         
         p = to_python("+41524242424")
-        self.assertIsNone(p.country_id)
+        self.assertIsNone(p.region_code)
 
     def test_save_field_to_database(self):
         from testapp.models import TestModel
@@ -35,13 +35,13 @@ class PhonenumerFieldAppTest(TestCase):
         tm = TestModel.objects.get(pk=pk)
         self.assertTrue(isinstance(tm.phone, PhoneNumber))
         self.assertEqual(str(tm.phone), '+41524242424')
-        self.assertIsNone(tm.phone.country_id)
+        self.assertIsNone(tm.phone.region_code)
         
-        tm.phone = PhoneNumber.country_id_sep.join(["CH", str(tm.phone)])
+        tm.phone = PhoneNumber.region_code_sep.join(["CH", str(tm.phone)])
         tm.save()
         
         tm = TestModel.objects.get(pk=pk)
-        self.assertEqual(tm.phone.country_id, "CH")
+        self.assertEqual(tm.phone.region_code, "CH")
         
         tm.phone.extension = "777"
         tm.save()

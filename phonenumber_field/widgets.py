@@ -5,18 +5,19 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
 from .models import CountryCode
+from .phonenumber import PhoneNumber
 
 COUNTRY_CODE_CHOICE_SEP = force_text(",")
 
 def country_code_to_choice(country_code):
-    return force_text("{}{}{}").format(country_code.country.id, COUNTRY_CODE_CHOICE_SEP, country_code.code.id)
+    return force_text("{}{}{}").format(country_code.region_code_obj.code, COUNTRY_CODE_CHOICE_SEP, country_code.calling_code_obj.code)
 
 def country_code_to_display(country_code):
     return force_text(country_code)
 
 def country_code_from_choice(choice):
-    country_id, code_id = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
-    return CountryCode.objects.get(country__id=country_id, code__id=code_id)
+    region_code, calling_code = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
+    return CountryCode.objects.get(region_code_obj__code=region_code, calling_code_obj__code=calling_code)
 
 class CountryCodeSelect(Select):
     initial = None
@@ -24,7 +25,7 @@ class CountryCodeSelect(Select):
     def __init__(self, phone_widget):
         self.phone_widget = phone_widget
         choices = [('', '---------')]
-        country_codes = CountryCode.objects.filter(active=True, country__active=True, code__active=True)
+        country_codes = CountryCode.objects.filter(active=True, region_code_obj__active=True, calling_code_obj__active=True)
         for country_code in country_codes:
             choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
         return super(CountryCodeSelect, self).__init__(choices=choices)
@@ -92,18 +93,18 @@ class PhoneNumberWidget(MultiWidget):
     
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
-        country_id = ""
+        region_code_prefix = ""
         if country_code or (self.empty_country_code and national_number):
             if country_code:
                 self.country_code = country_code
-                country_id = "%s," % country_code.country.id 
-            country_code = "+{0}-".format(country_code.code.id or self.empty_country_code)
+                region_code_prefix = "{}{}".format(country_code.region_code_obj.code, PhoneNumber.region_code_sep)
+            country_code = "+{0}-".format(country_code.calling_code.code or self.empty_country_code)
         if national_number:
             self.national_number = national_number
         if extension:
             self.extension = extension
             extension = "x%s" % extension
-        return '%s%s%s%s' % (country_id, country_code, national_number, extension or "")
+        return '%s%s%s%s' % (region_code_prefix, country_code, national_number, extension or "")
     
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}

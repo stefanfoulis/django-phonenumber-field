@@ -1,73 +1,70 @@
 from django.contrib import admin
 from django.utils.encoding import force_text
-from .models import Country, Code, CountryCode
+from .models import RegionCode, CallingCode, CountryCode
 
 class CountryCodeInline(admin.TabularInline):
     model = CountryCode
 
-@admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "active", "codes")
+@admin.register(RegionCode)
+class RegionCodeAdmin(admin.ModelAdmin):
+    list_display = ("code", "name", "active", "calling_code")
     inlines = (CountryCodeInline,)
     extra = 0
     
-    def codes(self, country):
-        ids = list(country.country_codes.values_list("code__id", flat=True).distinct())
-        ids.sort()
-        return force_text(", ").join([force_text(i) for i in ids])
+    def calling_code(self, region_code):
+        return region_code.country_code.calling_code
 
-@admin.register(Code)
-class CodeAdmin(admin.ModelAdmin):
-    list_display = ("__unicode__", "active", "countries")
+@admin.register(CallingCode)
+class CallingCodeAdmin(admin.ModelAdmin):
+    list_display = ("__unicode__", "active", "region_codes")
     inlines = (CountryCodeInline,)
     extra = 0
     
-    def countries(self, code):
-        names = list(code.country_codes.values_list("country__name", flat=True).distinct())
-        names.sort()
-        return force_text(", ").join(names)
+    def region_codes(self, calling_code):
+        regions = [r for r in list(calling_code.country_codes.values_list("region_code_obj__code", flat=True).distinct()) if not r is None]
+        if regions:
+            regions.sort()
+            regions = force_text(", ").join(regions)
+        else:
+            regions = None
+        return regions
 
 @admin.register(CountryCode)
 class CountryCodeAdmin(admin.ModelAdmin):
-    list_display = ("get_country_id", "get_country_name", "get_code_id", "get_country_active", "get_code_active", "active", "all_active")
+    list_display = ("get_region_code", "get_calling_code", "get_region_code_active", "get_calling_code_active", "active", "all_active")
     
-    def get_country_id(self, country_code):
-        return country_code.country.id
-    get_country_id.short_description = "Country ID"
-    get_country_id.admin_order_field = "country__id"
+    def get_region_code(self, country_code):
+        return country_code.region_code
+    get_region_code.short_description = "Region Code"
+    get_region_code.admin_order_field = "region_code_obj__code"
     
-    def get_country_name(self, country_code):
-        return country_code.country.name
-    get_country_name.short_description = "Country Name"
-    get_country_name.admin_order_field = "country__name"
-    
-    def get_country_active(self, country_code):
-        if country_code.country.active:
+    def get_region_code_active(self, country_code):
+        if country_code.region_code_obj and country_code.region_code_obj.active:
             html = '<img src="/static/admin/img/icon-yes.gif" alt="True" />'
         else:
             html = '<img src="/static/admin/img/icon-no.gif" alt="False" />'
         return html
-    get_country_active.short_description = "Country Active"
-    get_country_active.admin_order_field = "country__active"
-    get_country_active.allow_tags = True
+    get_region_code_active.short_description = "Region Code Active"
+    get_region_code_active.admin_order_field = "region_code_obj__active"
+    get_region_code_active.allow_tags = True
     
-    def get_code_id(self, country_code):
-        return country_code.code.id
-    get_code_id.short_description = "Code ID"
-    get_code_id.admin_order_field = "code__id"
+    def get_calling_code(self, country_code):
+        return country_code.calling_code
+    get_calling_code.short_description = "Calling Code"
+    get_calling_code.admin_order_field = "calling_code_obj__code"
     
-    def get_code_active(self, country_code):
-        if country_code.code.active:
+    def get_calling_code_active(self, country_code):
+        if country_code.calling_code_obj.active:
             html = '<img src="/static/admin/img/icon-yes.gif" alt="True" />'
         else:
             html = '<img src="/static/admin/img/icon-no.gif" alt="False" />'
         return html
-    get_code_active.short_description = "Code Active"
-    get_code_active.admin_order_field = "code__active"
-    get_code_active.allow_tags = True
+    get_calling_code_active.short_description = "Code Active"
+    get_calling_code_active.admin_order_field = "calling_code_obj__active"
+    get_calling_code_active.allow_tags = True
     
     def all_active(self, country_code):
-        if country_code.active and country_code.country.active and country_code.code.active:
+        if country_code.active and (not country_code.region_code_obj or country_code.region_code_obj.active) and country_code.calling_code_obj.active:
             html = '<img src="/static/admin/img/icon-yes.gif" alt="True" />'
         else:
             html = '<img src="/static/admin/img/icon-no.gif" alt="False" />'

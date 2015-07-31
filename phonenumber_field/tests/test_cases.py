@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import phonenumbers
 
 from django.test.testcases import TestCase
 from django.db import models
@@ -106,3 +107,12 @@ class PhoneNumberFieldTestCase(TestCase):
                 ),
                 self.storage_numbers[frmt][1])
         setattr(settings, 'PHONENUMBER_DB_FORMAT', old_format)
+
+
+class PhoneNumberObjectTestCase(TestCase):
+    def test_attrs_are_not_masking(self):
+        pn = phonenumbers.phonenumber.PhoneNumber()
+        
+        self.assertFalse(hasattr(pn, "region_code"))
+        self.assertFalse(hasattr(pn, "region_code_sep"))
+        self.assertFalse(hasattr(pn, "format_map"))
