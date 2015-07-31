@@ -113,6 +113,7 @@ class PhoneNumberObjectTestCase(TestCase):
     def test_attrs_are_not_masking(self):
         pn = phonenumbers.phonenumber.PhoneNumber()
         
+        self.assertFalse(hasattr(pn, "_region_code"))
         self.assertFalse(hasattr(pn, "region_code"))
         self.assertFalse(hasattr(pn, "region_code_sep"))
         self.assertFalse(hasattr(pn, "format_map"))

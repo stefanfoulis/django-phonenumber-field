@@ -9,20 +9,13 @@ from django.utils.six import string_types
 from phonenumbers.phonenumberutil import NumberParseException
 
 
-# Snippet from the `six` library to help with Python3 compatibility
-if sys.version_info[0] == 3:
-    string_types = str
-else:
-    string_types = basestring
-
-
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides
     some neat and more pythonic, easy to access methods. This makes using a
     PhoneNumber instance much easier, especially in templates and such.
     """
-    region_code = None
+    _region_code = None
     region_code_sep = getattr(settings, 'PHONENUMBER_REGION_CODE_SEPARATOR', '|')
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
@@ -119,6 +112,19 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     @property
     def as_rfc3966(self):
         return self.format_as(phonenumbers.PhoneNumberFormat.RFC3966)
+    
+    @property
+    def region_code(self):
+        return self._region_code
+    
+    @region_code.setter
+    def region_code(self, value):
+        if value is None:
+            self._region_code = None
+        elif isinstance(value, string_types):
+            self._region_code = value.upper()
+        else:
+            raise TypeError("Supplied value must be None or a string.  Value was of type: %s" % type(value))
 
     def __len__(self):
         return len(self.__unicode__())
