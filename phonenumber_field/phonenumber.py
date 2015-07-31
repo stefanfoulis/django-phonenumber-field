@@ -5,6 +5,8 @@ from django.conf import settings
 from django.core import validators
 from django.utils.encoding import force_text
 from django.utils.six import string_types
+from json import dumps
+from phonenumbers.data import _AVAILABLE_REGION_CODES
 from phonenumbers.phonenumberutil import NumberParseException
 
 
@@ -121,7 +123,9 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         if value is None:
             self._region_code = None
         elif isinstance(value, string_types):
-            self._region_code = value.upper()
+            if not value in _AVAILABLE_REGION_CODES:
+                raise ValueError("Supplied value '%s' is invalid.  Value must be one of: %s" % dumps(_AVAILABLE_REGION_CODES))
+            self._region_code = value
         else:
             raise TypeError("Supplied value must be None or a string.  Value was of type: %s" % type(value))
 
