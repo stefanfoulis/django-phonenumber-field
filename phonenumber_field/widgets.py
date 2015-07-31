@@ -108,7 +108,8 @@ class PhoneNumberWidget(MultiWidget):
         if country_code or (self.empty_country_code and national_number):
             if country_code:
                 self.country_code = country_code
-                region_code_prefix = "{}{}".format(country_code.region_code_obj.code, PhoneNumber.region_code_sep)
+                if country_code.region_code:
+                    region_code_prefix = "{}{}".format(country_code.region_code, PhoneNumber.region_code_sep)
                 fmt_arg = country_code.calling_code
             else:
                 fmt_arg = self.empty_country_code
