@@ -10,14 +10,19 @@ from .phonenumber import PhoneNumber
 COUNTRY_CODE_CHOICE_SEP = force_text(",")
 
 def country_code_to_choice(country_code):
-    return force_text("{}{}{}").format(country_code.region_code_obj.code, COUNTRY_CODE_CHOICE_SEP, country_code.calling_code_obj.code)
+    return force_text("{}{}{}").format(country_code.region_code or force_text(""), COUNTRY_CODE_CHOICE_SEP, country_code.calling_code)
 
 def country_code_to_display(country_code):
     return force_text(country_code)
 
 def country_code_from_choice(choice):
-    region_code, calling_code = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP)]
-    return CountryCode.objects.get(region_code_obj__code=region_code, calling_code_obj__code=calling_code)
+    region_code, calling_code = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP, 1)]
+    kwargs = {"calling_code_obj__code": calling_code}
+    if region_code:
+        kwargs["region_code_obj__code"] = region_code
+    else:
+        kwargs["region_code_obj__isnull"] = True
+    return CountryCode.objects.get(**kwargs)
 
 class CountryCodeSelect(Select):
     initial = None
