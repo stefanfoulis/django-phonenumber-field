@@ -64,10 +64,7 @@ class PhoneNumberField(models.Field):
         if isinstance(value, PhoneNumber):
             format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
             fmt = PhoneNumber.format_map[format_string]
-            pieces = [value.format_as(fmt)]
-            if value.region_code:
-                pieces.insert(0, value.region_code)
-            value = force_text(PhoneNumber.region_code_sep).join(pieces)
+            value = value.format_as(fmt, include_region_code=True)
         else:
             if not self.null:
                 value = force_text("")

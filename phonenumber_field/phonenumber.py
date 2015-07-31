@@ -93,13 +93,16 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, fmt):
+    def format_as(self, fmt, include_region_code=False):
         if self.is_valid():
             value = phonenumbers.format_number(self, fmt)
             if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
                 value = force_text("{}x{}").format(value, self.extension)
-            return value
-        return self.raw_input
+        else:
+            value = self.raw_input
+        if include_region_code and self.region_code:
+            value = force_text("{}{}{}").format(self.region_code, self.region_code_sep, value)
+        return value
 
     @property
     def as_international(self):
