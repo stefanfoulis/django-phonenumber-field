@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import phonenumbers
 from django.conf import settings
 from django.core import validators
