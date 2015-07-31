@@ -10,7 +10,6 @@ setup(
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
     install_requires=[
-        'django-countries',
         'phonenumbers>=7.0.2',
         'babel',
     ],
