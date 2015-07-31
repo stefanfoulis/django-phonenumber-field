@@ -5,6 +5,7 @@ from django.test.testcases import TestCase
 from django.db import models
 
 from phonenumbers import is_number_match, MatchType
+from phonenumbers.data import _AVAILABLE_REGION_CODES
 
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
@@ -117,3 +118,31 @@ class PhoneNumberObjectTestCase(TestCase):
         self.assertFalse(hasattr(pn, "region_code"))
         self.assertFalse(hasattr(pn, "region_code_sep"))
         self.assertFalse(hasattr(pn, "format_map"))
+    
+    def test_region_code_property(self):
+        pn = PhoneNumber()
+        
+        for rc in _AVAILABLE_REGION_CODES:
+            self.assertEqual(rc, rc.upper(), "It is assumed that region codes are all upper case.")
+            self.assertEqual(len(rc), 2, "It is assumed that region codes are all of length 2")
+        
+        valid_region_code = _AVAILABLE_REGION_CODES[0]
+        lower_case_valid_region_code = valid_region_code.lower()
+        
+        invalid_region_code = "9z"
+        self.assertNotIn(invalid_region_code, _AVAILABLE_REGION_CODES)
+        
+        with self.assertRaises(ValueError):
+            pn.region_code = invalid_region_code
+        
+        with self.assertRaises(TypeError):
+            pn.region_code = 1
+        
+        pn.region_code = valid_region_code
+        self.assertEqual(pn.region_code, valid_region_code)
+        
+        pn.region_code = None
+        self.assertIsNone(pn.region_code)
+        
+        pn.region_code = lower_case_valid_region_code
+        self.assertEqual(pn.region_code, valid_region_code)
