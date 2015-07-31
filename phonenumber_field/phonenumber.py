@@ -124,7 +124,10 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
             self._region_code = None
         elif isinstance(value, string_types):
             if not value in _AVAILABLE_REGION_CODES:
-                raise ValueError("Supplied value '%s' is invalid.  Value must be one of: %s" % dumps(_AVAILABLE_REGION_CODES))
+                if value.upper() in _AVAILABLE_REGION_CODES:
+                    value = value.upper()
+                else:
+                    raise ValueError("Supplied value '%s' is invalid.  Value must be one of: %s" % (value, dumps(_AVAILABLE_REGION_CODES)))
             self._region_code = value
         else:
             raise TypeError("Supplied value must be None or a string.  Value was of type: %s" % type(value))
