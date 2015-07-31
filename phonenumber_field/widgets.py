@@ -30,7 +30,7 @@ class CountryCodeSelect(Select):
 
     def __init__(self, phone_widget):
         self.phone_widget = phone_widget
-        choices = [('', '---------')]
+        choices = []
         country_codes = CountryCode.objects.filter(
             Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
             active=True,
@@ -39,6 +39,7 @@ class CountryCodeSelect(Select):
         for country_code in country_codes:
             choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
         choices.sort(key=lambda c: c[1])
+        choices.insert(0, ('', '---------'))
         return super(CountryCodeSelect, self).__init__(choices=choices)
 
     def render(self, name, value, *args, **kwargs):

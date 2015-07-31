@@ -48,7 +48,12 @@ class CountryCode(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return force_text("{}, +{}").format(self.region_code_obj, self.calling_code_obj)
+        fmt_str = force_text("+{}")
+        fmt_args = [self.calling_code_obj]
+        if self.region_code_obj:
+            fmt_str = force_text("{}, %s") % fmt_str
+            fmt_args.insert(0, self.region_code_obj)
+        return fmt_str.format(*fmt_args)
     
     @cached_property
     def calling_code(self):
