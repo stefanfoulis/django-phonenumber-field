@@ -10,17 +10,7 @@ from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import to_python
 from django.conf import settings
 
-
-###############
-# Test Models #
-###############
-
-class MandatoryPhoneNumber(models.Model):
-    phone_number = PhoneNumberField()
-
-
-class OptionalPhoneNumber(models.Model):
-    phone_number = PhoneNumberField(blank=True, default='')
+from .models import *
 
 
 ##############
