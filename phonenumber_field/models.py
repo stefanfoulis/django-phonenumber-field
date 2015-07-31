@@ -37,8 +37,13 @@ class CallingCode(models.Model):
         return force_text(self.code)
 
 class CountryCodeManager(models.Manager):
-    def get_by_natural_key(self, country, code):
-        return self.get(country=country, code=code)
+    def get_by_natural_key(self, region_code, calling_code):
+        kwargs = {"calling_code_obj__code": calling_code}
+        if region_code is None:
+            kwargs["region_code_obj__isnull"] = True
+        else:
+            kwargs["region_code_obj__code"] = region_code
+        return CountryCode.objects.get(**kwargs)
 
 class CountryCode(models.Model):
     class Meta:
@@ -58,6 +63,9 @@ class CountryCode(models.Model):
             fmt_str = force_text("{}, %s") % fmt_str
             fmt_args.insert(0, self.region_code_obj)
         return fmt_str.format(*fmt_args)
+    
+    def natural_key(self):
+        return (self.region_code, self.calling_code)
     
     @cached_property
     def calling_code(self):

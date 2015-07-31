@@ -11,19 +11,16 @@ from .phonenumber import PhoneNumber
 COUNTRY_CODE_CHOICE_SEP = force_text(",")
 
 def country_code_to_choice(country_code):
-    return force_text("{}{}{}").format(country_code.region_code or force_text(""), COUNTRY_CODE_CHOICE_SEP, country_code.calling_code)
+    region_code, calling_code = country_code.natural_key()
+    return COUNTRY_CODE_CHOICE_SEP.join((region_code or force_text(""), force_text(calling_code)))
 
 def country_code_to_display(country_code):
     return force_text(country_code)
 
 def country_code_from_choice(choice):
     region_code, calling_code = [v.strip() for v in choice.split(COUNTRY_CODE_CHOICE_SEP, 1)]
-    kwargs = {"calling_code_obj__code": calling_code}
-    if region_code:
-        kwargs["region_code_obj__code"] = region_code
-    else:
-        kwargs["region_code_obj__isnull"] = True
-    return CountryCode.objects.get(**kwargs)
+    region_code = region_code or None
+    return CountryCode.objects.get_by_natural_key(region_code, calling_code)
 
 class CountryCodeSelect(Select):
     initial = None
