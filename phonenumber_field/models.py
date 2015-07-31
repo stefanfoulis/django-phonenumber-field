@@ -15,12 +15,16 @@ class RegionCode(models.Model):
     active = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return force_text("{} ({})").format(self.name, self.code)
+        if translation.get_language():
+            return force_text("{} ({})").format(self.name, self.code)
+        return self.code
     
     @cached_property
     def name(self):
-        locale = Locale(translation.to_locale(translation.get_language()))
-        return locale.territories.get(self.code)
+        if translation.get_language():
+            locale = Locale(translation.to_locale(translation.get_language()))
+            return locale.territories.get(self.code)
+        return self.code
 
 class CallingCode(models.Model):
     class Meta:
