@@ -98,13 +98,16 @@ class PhoneNumberWidget(MultiWidget):
             if country_code:
                 self.country_code = country_code
                 region_code_prefix = "{}{}".format(country_code.region_code_obj.code, PhoneNumber.region_code_sep)
-            country_code = "+{0}-".format(country_code.calling_code.code or self.empty_country_code)
+                fmt_arg = country_code.calling_code
+            else:
+                fmt_arg = self.empty_country_code
+            country_code = force_text("+{0}-").format(fmt_arg)
         if national_number:
             self.national_number = national_number
         if extension:
             self.extension = extension
             extension = "x%s" % extension
-        return '%s%s%s%s' % (region_code_prefix, country_code, national_number, extension or "")
+        return force_text('%s%s%s%s') % (region_code_prefix, country_code, national_number, extension or "")
     
     def render(self, *args, **kwargs):
         attrs = kwargs.get("attrs", None) or {}
