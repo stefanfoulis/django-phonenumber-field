@@ -14,7 +14,7 @@ from .phonenumber import PhoneNumber
 
 logger = logging.getLogger(".".join(("django", __name__)))
 
-class CountryCodeSelectIterator(object):
+class CountryCodeSelectChoicesIterator(object):
     def __init__(self, widget):
         self.widget = widget
     
@@ -31,7 +31,7 @@ class CountryCodeSelect(Select):
     def __init__(self, **kwargs):
         kwargs.pop("choices", None)
         super(CountryCodeSelect, self).__init__(**kwargs)
-        self.choices = CountryCodeSelectIterator(self)
+        self.choices = CountryCodeSelectChoicesIterator(self)
 
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CountryCode):
