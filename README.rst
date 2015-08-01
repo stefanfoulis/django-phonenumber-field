@@ -46,7 +46,7 @@ To make use of the supplied widget, migrate and populate the database:
     python manage.py autopopulate_phonenumber_field_models
 
 Note that the database will automatically be populated when the PhoneNumber widget
-is rendered and no CountryCode instances exist in the database.  However, you must
+is rendered if no CountryCode instances exist in the database.  However, you must
 manually run the management command when updating in order for the database to reflect
 changes to the choices available from the underlying ``python-phonenumbers`` package.
 
