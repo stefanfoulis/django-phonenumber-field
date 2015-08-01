@@ -45,6 +45,11 @@ To make use of the supplied widget, migrate and populate the database:
     python manage.py migrate
     python manage.py autopopulate_phonenumber_field_models
 
+Note that the database will automatically be populated when the PhoneNumber widget
+is rendered and no CountryCode instances exist in the database.  However, you must
+manually run the management command when updating in order for the database to reflect
+changes to the choices available from the underlying ``python-phonenumbers`` package.
+
 Basic usage
 ===========
 
@@ -71,3 +76,6 @@ As with ``CharField``'s, it is discouraged to use ``null=True``.
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
+
+Country Codes displayed to the user by the default widget can be controlled via the admin site by
+setting the ``active`` field on any of the RegionCode, CallingCode, or CountryCode model instances.
