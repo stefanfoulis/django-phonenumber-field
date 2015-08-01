@@ -28,9 +28,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __init__(self, **kwargs):
         raw = kwargs.get("raw_input", None)
         if raw:
-            region_code, phone_number = self.parse_region_code(raw)
-            self.region_code = region_code
-            kwargs["raw_input"] = phone_number
+            self.region_code, kwargs["raw_input"] = self.parse_region_code(raw)
         
         super(PhoneNumber, self).__init__(**kwargs)
     
