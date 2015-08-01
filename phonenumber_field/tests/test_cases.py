@@ -125,8 +125,6 @@ class PhoneNumberObjectTestCase(TestCase):
         self.assertFalse(hasattr(pn, "format_map"))
 
     def test_region_code_parse(self):
-        from phonenumber_field.phonenumber import PhoneNumber
-        
         region_code = "CH"
         number_str = "+41524242424"
         expected_value = (region_code, number_str)
