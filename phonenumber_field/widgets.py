@@ -9,15 +9,6 @@ from json import dumps, loads
 from .models import CountryCode
 from .phonenumber import PhoneNumber
 
-def country_code_to_choice(country_code):
-    return dumps(country_code.natural_key(), separators=(',',':'))
-
-def country_code_to_display(country_code):
-    return force_text(country_code)
-
-def country_code_from_choice(choice):
-    return CountryCode.objects.get_by_natural_key(*loads(choice))
-
 class CountryCodeSelect(Select):
     def __init__(self, choices=(), **kwargs):
         if not choices:
@@ -28,14 +19,14 @@ class CountryCodeSelect(Select):
                 calling_code_obj__active=True,
             )
             for country_code in country_codes:
-                choices.append((country_code_to_choice(country_code), country_code_to_display(country_code)))
+                choices.append((self.country_code_to_choice(country_code), self.country_code_to_display(country_code)))
             choices.sort(key=lambda c: c[1])
-            choices.insert(0, ('', '---------'))
+            choices.insert(0, self.empty_choice)
         return super(CountryCodeSelect, self).__init__(choices=choices, **kwargs)
 
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CountryCode):
-            value = country_code_to_choice(value)
+            value = self.country_code_to_choice(value)
         return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
     
     def value_from_datadict(self, *args, **kwargs):
@@ -46,11 +37,23 @@ class CountryCodeSelect(Select):
         choice = super(CountryCodeSelect, self).value_from_datadict(*args, **kwargs)
         if choice:
             try:
-                code = country_code_from_choice(choice)
+                code = self.country_code_from_choice(choice)
             except (CountryCode.DoesNotExist, ValueError):
                 pass
         return code
+    
+    def country_code_to_choice(self, country_code):
+        return dumps(country_code.natural_key(), separators=(',',':'))
 
+    def country_code_to_display(self, country_code):
+        return force_text(country_code)
+    
+    def country_code_from_choice(self, choice):
+        return CountryCode.objects.get_by_natural_key(*loads(choice))
+    
+    @property
+    def empty_choice(self):
+        return ('', '---------')
 
 class PhoneNumberWidget(MultiWidget):
     """
