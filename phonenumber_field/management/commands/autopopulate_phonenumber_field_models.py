@@ -7,7 +7,7 @@ from ...models import RegionCode, CallingCode, CountryCode
 def clean_and_save(instance, added_list, errors_list):
     try:
         instance.full_clean()
-    except ValidationError, e:
+    except ValidationError as e:
         errors_list.append([instance, e])
     else:
         instance.save()
