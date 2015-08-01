@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+import logging
+from django.core.management import call_command
 from django.db.models import Q
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
@@ -6,14 +8,30 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
 from json import dumps, loads
+from StringIO import StringIO
 from .models import CountryCode
 from .phonenumber import PhoneNumber
 
+logger = logging.getLogger(".".join(("django", __name__)))
+
+class CountryCodeSelectIterator(object):
+    def __init__(self, widget):
+        self.widget = widget
+    
+    def __iter__(self):
+        return iter(self.widget.get_choices())
+
 class CountryCodeSelect(Select):
-    def __init__(self, choices=(), **kwargs):
-        if not choices:
-            choices = self.get_choices()
-        return super(CountryCodeSelect, self).__init__(choices=choices, **kwargs)
+    queryset = CountryCode.objects.filter(
+        Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
+        active=True,
+        calling_code_obj__active=True,
+    )
+    
+    def __init__(self, **kwargs):
+        kwargs.pop("choices", None)
+        super(CountryCodeSelect, self).__init__(**kwargs)
+        self.choices = CountryCodeSelectIterator(self)
 
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CountryCode):
@@ -56,11 +74,20 @@ class CountryCodeSelect(Select):
         return choices
     
     def get_country_codes(self):
-        return CountryCode.objects.filter(
-            Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
-            active=True,
-            calling_code_obj__active=True,
-        )
+        country_codes = self.queryset.all()
+        if not country_codes and not CountryCode.objects.exists():
+            logger.critical("No CountryCode instances detected in the database.  Running the 'autopopulate_phonenumber_field_models' management command.")
+            stdout = StringIO()
+            stderr = StringIO()
+            try:
+                call_command("autopopulate_phonenumber_field_models", stdout=stdout, stderr=stderr)
+            finally:
+                logger.critical(stdout.getvalue())
+                logger.critical(stderr.getvalue())
+                stdout.close()
+                stderr.close()
+            country_codes = self.queryset.all()
+        return country_codes
     
     def sort_choices(self, choices):
         if not isinstance(choices, list):
