@@ -7,8 +7,8 @@ from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
+from django.utils.six import StringIO
 from json import dumps, loads
-from StringIO import StringIO
 from .models import CountryCode
 from .phonenumber import PhoneNumber
 
