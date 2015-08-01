@@ -22,12 +22,6 @@ class CountryCodeSelectChoicesIterator(object):
         return iter(self.widget.get_choices())
 
 class CountryCodeSelect(Select):
-    queryset = CountryCode.objects.filter(
-        Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
-        active=True,
-        calling_code_obj__active=True,
-    )
-    
     def __init__(self, **kwargs):
         kwargs.pop("choices", None)
         super(CountryCodeSelect, self).__init__(**kwargs)
@@ -104,6 +98,14 @@ class CountryCodeSelect(Select):
     @property
     def empty_choice(self):
         return ('', '---------')
+    
+    @property
+    def queryset(self):
+        return CountryCode.objects.filter(
+            Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
+            active=True,
+            calling_code_obj__active=True,
+        )
 
 class PhoneNumberWidget(MultiWidget):
     """

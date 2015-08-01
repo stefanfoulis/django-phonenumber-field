@@ -10,6 +10,7 @@ from phonenumbers.data import _AVAILABLE_REGION_CODES
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import to_python
+from phonenumber_field.widgets import CountryCodeSelect
 from django.conf import settings
 
 from .models import *
@@ -146,3 +147,17 @@ class PhoneNumberObjectTestCase(TestCase):
         
         pn.region_code = lower_case_valid_region_code
         self.assertEqual(pn.region_code, valid_region_code)
+
+class CountryCodeSelectWidgetTestCase(TestCase):
+    def test_choices_update_with_database(self):
+        widget = CountryCodeSelect()
+        
+        choice = list(widget.choices)[-1][0]
+        
+        self.assertTrue(choice[0])# verify we didn't get the empty choice
+        
+        country_code = widget.country_code_from_choice(choice)
+        country_code.active = False
+        country_code.save()
+        
+        self.assertNotIn(choice[0], [c[0] for c in widget.choices])
