@@ -67,7 +67,7 @@ class Command(BaseCommand):
         
         calling_codes_added = []
         calling_codes_add_errors = []
-        for calling_code in _COUNTRY_CODE_TO_REGION_CODE.iterkeys():
+        for calling_code in _COUNTRY_CODE_TO_REGION_CODE:
             try:
                 instance = CallingCode.objects.get(code=calling_code)
             except CallingCode.DoesNotExist:
@@ -79,7 +79,7 @@ class Command(BaseCommand):
         self.stdout.write("Deactivating calling codes.")
         
         calling_codes_deactivated = []
-        for instance in CallingCode.objects.exclude(code__in=_COUNTRY_CODE_TO_REGION_CODE.iterkeys()):
+        for instance in CallingCode.objects.exclude(code__in=_COUNTRY_CODE_TO_REGION_CODE.keys()):
             instance.active = False
             instance.save()
             calling_codes_deactivated.append(instance)
