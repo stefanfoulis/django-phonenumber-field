@@ -5,17 +5,24 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
-from django.conf import settings
 from django.test import TestCase
 
 class PhonenumerFieldAppTest(TestCase):
-    def test_to_python_country_id_parse(self):
-        from phonenumber_field.phonenumber import PhoneNumber, to_python
-        value = PhoneNumber.region_code_sep.join(["CH", "+41524242424"])
-        p = to_python(value)
-        self.assertEqual(p.region_code, "CH")
+    def test_region_code_parse(self):
+        from phonenumber_field.phonenumber import PhoneNumber
         
-        p = to_python("+41524242424")
+        region_code = "CH"
+        number_str = "+41524242424"
+        expected_value = (region_code, number_str)
+        
+        value = PhoneNumber.region_code_sep.join([region_code, number_str])
+        
+        self.assertEqual(PhoneNumber.parse_region_code(value), expected_value)
+        
+        p = PhoneNumber.from_string(value)
+        self.assertEqual((p.region_code, p.__unicode__()), expected_value)
+        
+        p = PhoneNumber.from_string(number_str)
         self.assertIsNone(p.region_code)
 
     def test_save_field_to_database(self):
