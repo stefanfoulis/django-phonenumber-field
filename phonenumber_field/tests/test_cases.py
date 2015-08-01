@@ -123,7 +123,24 @@ class PhoneNumberObjectTestCase(TestCase):
         self.assertFalse(hasattr(pn, "region_code"))
         self.assertFalse(hasattr(pn, "region_code_sep"))
         self.assertFalse(hasattr(pn, "format_map"))
-    
+
+    def test_region_code_parse(self):
+        from phonenumber_field.phonenumber import PhoneNumber
+        
+        region_code = "CH"
+        number_str = "+41524242424"
+        expected_value = (region_code, number_str)
+        
+        value = PhoneNumber.region_code_sep.join([region_code, number_str])
+        
+        self.assertEqual(PhoneNumber.parse_region_code(value), expected_value)
+        
+        p = PhoneNumber.from_string(value)
+        self.assertEqual((p.region_code, p.__unicode__()), expected_value)
+        
+        p = PhoneNumber.from_string(number_str)
+        self.assertIsNone(p.region_code)
+
     def test_region_code_property(self):
         pn = PhoneNumber()
         
