@@ -12,16 +12,7 @@ from .phonenumber import PhoneNumber
 class CountryCodeSelect(Select):
     def __init__(self, choices=(), **kwargs):
         if not choices:
-            choices = []
-            country_codes = CountryCode.objects.filter(
-                Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
-                active=True,
-                calling_code_obj__active=True,
-            )
-            for country_code in country_codes:
-                choices.append((self.country_code_to_choice(country_code), self.country_code_to_display(country_code)))
-            choices.sort(key=lambda c: c[1])
-            choices.insert(0, self.empty_choice)
+            choices = self.get_choices()
         return super(CountryCodeSelect, self).__init__(choices=choices, **kwargs)
 
     def render(self, name, value, *args, **kwargs):
@@ -42,6 +33,12 @@ class CountryCodeSelect(Select):
                 pass
         return code
     
+    def get_choices(self):
+        choices = self.get_country_code_choices()
+        choices = self.sort_choices(choices)
+        choices = self.insert_empty_choice(choices)
+        return choices
+    
     def country_code_to_choice(self, country_code):
         return dumps(country_code.natural_key(), separators=(',',':'))
 
@@ -50,6 +47,29 @@ class CountryCodeSelect(Select):
     
     def country_code_from_choice(self, choice):
         return CountryCode.objects.get_by_natural_key(*loads(choice))
+    
+    def get_country_code_choices(self):
+        choices = []
+        country_codes = CountryCode.objects.filter(
+            Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
+            active=True,
+            calling_code_obj__active=True,
+        )
+        for country_code in country_codes:
+            choices.append((self.country_code_to_choice(country_code), self.country_code_to_display(country_code)))
+        return choices
+    
+    def sort_choices(self, choices):
+        if not isinstance(choices, list):
+            choices = list(choices)
+        choices.sort(key=lambda c: c[1])
+        return choices
+    
+    def insert_empty_choice(self, choices):
+        if not isinstance(choices, list):
+            choices = list(choices)
+        choices.insert(0, self.empty_choice)
+        return choices
     
     @property
     def empty_choice(self):
