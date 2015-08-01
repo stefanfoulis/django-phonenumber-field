@@ -87,7 +87,7 @@ class Command(BaseCommand):
         self.stdout.write("Adding country codes.")
         
         region_to_calling_code_map = {}
-        for calling_code, region_codes in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
+        for calling_code, region_codes in _COUNTRY_CODE_TO_REGION_CODE.items():
             for region_code in region_codes:
                 if region_code not in region_to_calling_code_map:
                     region_to_calling_code_map[region_code] = []
@@ -95,7 +95,7 @@ class Command(BaseCommand):
         
         country_codes_added = []
         country_codes_add_errors = []
-        for region_code, calling_codes in region_to_calling_code_map.iteritems():
+        for region_code, calling_codes in region_to_calling_code_map.items():
             try:
                 region_code_obj = RegionCode.objects.get(code=region_code)
             except RegionCode.DoesNotExist:
