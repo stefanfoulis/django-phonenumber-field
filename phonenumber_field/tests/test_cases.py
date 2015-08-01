@@ -168,7 +168,6 @@ class CountryCodeSelectWidgetTestCase(TestCase):
 
 class CICharFieldTestModelTestCase(TestCase):
     def test_integrity_error(self):
-        from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
         
         CICharFieldTestModel.objects.create(value="a")
@@ -178,14 +177,12 @@ class CICharFieldTestModelTestCase(TestCase):
             CICharFieldTestModel.objects.create(value="A")
     
     def test_max_length(self):
-        from testapp.models import CICharFieldTestModel
         obj = CICharFieldTestModel(value="bb")
         with self.assertRaises(ValidationError):
             obj.full_clean()
     
     @skipIf(DATABASE_IS_SQLITE, "Sqlite does not enforce varchar max_length")
     def test_max_length_db(self):
-        from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
         
         CICharFieldTestModel.objects.create(value="bb")
@@ -193,14 +190,12 @@ class CICharFieldTestModelTestCase(TestCase):
     
     @skipIf(DATABASE_IS_SQLITE, "Sqlite does not enforce varchar max_length")
     def test_max_length_db_truncates(self):
-        from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
         
         CICharFieldTestModel.objects.create(value="bb")
         self.assertEqual(CICharFieldTestModel.objects.all()[0].value.lower(), "b")
     
     def test_lookup(self):
-        from testapp.models import CICharFieldTestModel
         self.assertEqual(CICharFieldTestModel.objects.count(), 0)
         
         a_lower = "a"
