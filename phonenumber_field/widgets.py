@@ -50,14 +50,17 @@ class CountryCodeSelect(Select):
     
     def get_country_code_choices(self):
         choices = []
-        country_codes = CountryCode.objects.filter(
+        country_codes = self.get_country_codes()
+        for country_code in country_codes:
+            choices.append((self.country_code_to_choice(country_code), self.country_code_to_display(country_code)))
+        return choices
+    
+    def get_country_codes(self):
+        return CountryCode.objects.filter(
             Q(region_code_obj__isnull=True) | Q(region_code_obj__active=True),
             active=True,
             calling_code_obj__active=True,
         )
-        for country_code in country_codes:
-            choices.append((self.country_code_to_choice(country_code), self.country_code_to_display(country_code)))
-        return choices
     
     def sort_choices(self, choices):
         if not isinstance(choices, list):
