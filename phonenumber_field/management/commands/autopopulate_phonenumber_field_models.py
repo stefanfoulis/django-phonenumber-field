@@ -14,6 +14,8 @@ def clean_and_save(instance, added_list, errors_list):
         added_list.append(instance)
 
 class Command(BaseCommand):
+    leave_locale_alone = True
+    
     def report_results(self, action, instances):
         if instances:
             len_instances = len(instances)
