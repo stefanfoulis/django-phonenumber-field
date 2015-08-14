@@ -7,7 +7,7 @@ from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.encoding import force_text
-from django.utils.six import StringIO
+from django.utils.six import StringIO, string_types
 from json import dumps, loads
 from .models import CountryCode
 from .phonenumber import PhoneNumber
@@ -59,6 +59,17 @@ class CountryCodeSelect(Select):
     
     def country_code_from_choice(self, choice):
         return CountryCode.objects.get_by_natural_key(*loads(choice))
+    
+    def get_value_from_phonenumber(self, phonenumber):
+        value = None
+        if isinstance(phonenumber, PhoneNumber):
+            region_code = phonenumber.region_code
+            calling_code = phonenumber.country_code
+            try:
+                value = CountryCode.objects.get_by_natural_key(region_code, calling_code)
+            except CountryCode.DoesNotExist:
+                pass
+        return value
     
     def get_country_code_choices(self):
         choices = []
@@ -137,7 +148,17 @@ class PhoneNumberWidget(MultiWidget):
         super(PhoneNumberWidget, self).__init__(widgets, attrs)
 
     def decompress(self, value):
-        return [self.country_code, self.national_number, self.extension]
+        data = [self.country_code, self.national_number, self.extension]
+        if not any(data):
+            if isinstance(value, string_types):
+                try:
+                    value = PhoneNumber.from_string(value)
+                except:
+                    pass
+            if isinstance(value, PhoneNumber):
+                country_code = self.country_code_widget.get_value_from_phonenumber(value)
+                data = [country_code, value.national_number, value.extension]
+        return data
     
     def value_from_datadict(self, data, files, name):
         country_code, national_number, extension = super(PhoneNumberWidget, self).value_from_datadict(data, files, name)
