@@ -6,7 +6,7 @@ from django.core import validators
 from django.utils.encoding import force_text
 from django.utils.six import string_types
 from json import dumps
-from phonenumbers.data import _AVAILABLE_REGION_CODES
+from phonenumbers.data import _AVAILABLE_REGION_CODES, _COUNTRY_CODE_TO_REGION_CODE
 from phonenumbers.phonenumberutil import NumberParseException
 
 
@@ -25,10 +25,19 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         'RFC3966': phonenumbers.PhoneNumberFormat.RFC3966,
     }
     
-    def __init__(self, **kwargs):
+    def __init__(self, region_code=None, **kwargs):
         raw = kwargs.get("raw_input", None)
         if raw:
-            self.region_code, kwargs["raw_input"] = self.parse_region_code(raw)
+            raw_region_code, kwargs["raw_input"] = self.parse_region_code(raw)
+            if not region_code:
+                region_code = raw_region_code
+        
+        self.region_code = region_code
+        if self.region_code and not "country_code" in kwargs:
+            for country_code, region_codes in _COUNTRY_CODE_TO_REGION_CODE.items():
+                if region_code in region_codes:
+                    kwargs["country_code"] = country_code
+                    break
         
         super(PhoneNumber, self).__init__(**kwargs)
     
