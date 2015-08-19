@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import phonenumbers
-from django.core import validators
-from phonenumbers.phonenumberutil import NumberParseException
 from django.conf import settings
-
-
-# Snippet from the `six` library to help with Python3 compatibility
-if sys.version_info[0] == 3:
-    string_types = str
-else:
-    string_types = basestring
+from django.core import validators
+from django.utils.encoding import force_text
+from django.utils.six import string_types
+from json import dumps
+from phonenumbers.data import _AVAILABLE_REGION_CODES, _COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers.phonenumberutil import NumberParseException
 
 
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
@@ -20,29 +16,77 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     some neat and more pythonic, easy to access methods. This makes using a
     PhoneNumber instance much easier, especially in templates and such.
     """
+    _region_code = None
+    region_code_sep = getattr(settings, 'PHONENUMBER_REGION_CODE_SEPARATOR', '|')
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
         'INTERNATIONAL': phonenumbers.PhoneNumberFormat.INTERNATIONAL,
         'NATIONAL': phonenumbers.PhoneNumberFormat.NATIONAL,
         'RFC3966': phonenumbers.PhoneNumberFormat.RFC3966,
     }
-
+    
+    def __init__(self, region_code=None, **kwargs):
+        raw = kwargs.get("raw_input", None)
+        if raw:
+            raw_region_code, kwargs["raw_input"] = self.parse_region_code(raw)
+            if not region_code:
+                region_code = raw_region_code
+        
+        self.region_code = region_code
+        if self.region_code and not "country_code" in kwargs:
+            for country_code, region_codes in _COUNTRY_CODE_TO_REGION_CODE.items():
+                if region_code in region_codes:
+                    kwargs["country_code"] = country_code
+                    break
+        
+        super(PhoneNumber, self).__init__(**kwargs)
+    
     @classmethod
     def from_string(cls, phone_number, region=None):
+        if not isinstance(phone_number, string_types):
+            raise TypeError("Supplied phone number was not a string")
+        
+        if not (isinstance(region, string_types) or region is None):
+            raise TypeError("Supplied region was not a string or None")
+        
         phone_number_obj = cls()
+        
+        region_code, phone_number = cls.parse_region_code(phone_number)
+        
         if region is None:
-            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
-                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
+            if region_code:
+                region = region_code
+            else:
+                region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+                          or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
         phonenumbers.parse(number=phone_number, region=region,
                            keep_raw_input=True, numobj=phone_number_obj)
+        
+        phone_number_obj.region_code = region
+        
         return phone_number_obj
+    
+    @classmethod
+    def parse_region_code(cls, value):
+        if not isinstance(value, string_types):
+            raise TypeError("Supplied value was not a string")
+        
+        result = value.split(cls.region_code_sep, 1)
+        len_result = len(result)
+        
+        if len_result == 1:
+            region_code, phone_number = (None, result[0])
+        elif len_result == 2:
+            region_code, phone_number = result
+        else:
+            region_code, phone_number = (None, "")
+        
+        return region_code, phone_number
 
     def __unicode__(self):
         format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
         fmt = self.format_map[format_string]
-        if self.is_valid():
-            return self.format_as(fmt)
-        return self.raw_input
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
@@ -50,11 +94,16 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, format):
+    def format_as(self, fmt, include_region_code=False):
         if self.is_valid():
-            return phonenumbers.format_number(self, format)
+            value = phonenumbers.format_number(self, fmt)
+            if self.extension and fmt == phonenumbers.PhoneNumberFormat.E164:
+                value = force_text("{}x{}").format(value, self.extension)
         else:
-            return self.raw_input
+            value = self.raw_input
+        if include_region_code and self.region_code:
+            value = force_text("{}{}{}").format(self.region_code, self.region_code_sep, value)
+        return value
 
     @property
     def as_international(self):
@@ -71,6 +120,24 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     @property
     def as_rfc3966(self):
         return self.format_as(phonenumbers.PhoneNumberFormat.RFC3966)
+    
+    @property
+    def region_code(self):
+        return self._region_code
+    
+    @region_code.setter
+    def region_code(self, value):
+        if value is None:
+            self._region_code = None
+        elif isinstance(value, string_types):
+            if not value in _AVAILABLE_REGION_CODES:
+                if value.upper() in _AVAILABLE_REGION_CODES:
+                    value = value.upper()
+                else:
+                    raise ValueError("Supplied value '%s' is invalid.  Value must be one of: %s" % (value, dumps(_AVAILABLE_REGION_CODES)))
+            self._region_code = value
+        else:
+            raise TypeError("Supplied value must be None or a string.  Value was of type: %s" % type(value))
 
     def __len__(self):
         return len(self.__unicode__())

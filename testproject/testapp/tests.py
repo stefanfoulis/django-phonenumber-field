@@ -7,7 +7,6 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 
-
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
         from testapp.models import TestModel
@@ -21,7 +20,21 @@ class PhonenumerFieldAppTest(TestCase):
         tm = TestModel.objects.get(pk=pk)
         self.assertTrue(isinstance(tm.phone, PhoneNumber))
         self.assertEqual(str(tm.phone), '+41524242424')
+        self.assertIsNone(tm.phone.region_code)
         
+        tm.phone = PhoneNumber.region_code_sep.join(["CH", str(tm.phone)])
+        tm.save()
+        
+        tm = TestModel.objects.get(pk=pk)
+        self.assertEqual(tm.phone.region_code, "CH")
+        
+        tm.phone.extension = "777"
+        tm.save()
+        
+        tm = TestModel.objects.get(pk=pk)
+        self.assertEqual(str(tm.phone.extension), "777")
+        self.assertEqual(str(tm.phone), '+41524242424x777')
+    
     def test_save_blank_phone_to_database(self):
         from testapp.models import TestModelBlankPhone
         from phonenumber_field.phonenumber import PhoneNumber

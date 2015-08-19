@@ -2,3 +2,4 @@
 pip install coveralls
 pip install $DJANGO
 python setup.py develop
+pip freeze

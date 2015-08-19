@@ -7,9 +7,11 @@ from django.forms.fields import CharField
 from django.core.exceptions import ValidationError
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field.phonenumber import to_python
+from phonenumber_field.widgets import PhoneNumberWidget
 
 
 class PhoneNumberField(CharField):
+    widget = PhoneNumberWidget
     default_error_messages = {
         'invalid': _('Enter a valid phone number.'),
     }

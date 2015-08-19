@@ -3,10 +3,12 @@
 from django.conf import settings
 from django.core import validators
 from django.db import models
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python, string_types
+from django.core.exceptions import ValidationError
 
 
 class PhoneNumberDescriptor(object):
@@ -34,7 +36,7 @@ class PhoneNumberDescriptor(object):
         return instance.__dict__[self.field.name]
 
     def __set__(self, instance, value):
-        instance.__dict__[self.field.name] = to_python(value)
+        instance.__dict__[self.field.name] = self.field.to_python(value)
 
 
 class PhoneNumberField(models.Field):
@@ -45,34 +47,35 @@ class PhoneNumberField(models.Field):
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = kwargs.get('max_length', 128)
+        kwargs['max_length'] = kwargs.get('max_length', 131)# 128 for longest phone number + 2 for region code + 1 for separator
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
+    
+    def contribute_to_class(self, cls, name, **kwargs):
+        super(PhoneNumberField, self).contribute_to_class(cls, name, **kwargs)
+        setattr(cls, self.name, self.descriptor_class(self))
 
     def get_internal_type(self):
         return "CharField"
 
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
-        if value is None or value == '':
-            if not self.blank:
-                return to_python(self.default)
-            elif self.blank:
-                return to_python(self.default) or ''
+        value = self.to_python(value)# PhoneNumber or None
+        if isinstance(value, PhoneNumber):
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            fmt = PhoneNumber.format_map[format_string]
+            value = value.format_as(fmt, include_region_code=True)
+        else:
+            if not self.null:
+                value = force_text("")
+        return value
 
-        if value != '':
-            value = to_python(value)
-        
+    def to_python(self, value):
         if isinstance(value, string_types):
-            # it is an invalid phone number
-            return value
-        format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
-        fmt = PhoneNumber.format_map[format_string]
-        return value.format_as(fmt)
-
-    def contribute_to_class(self, cls, name):
-        super(PhoneNumberField, self).contribute_to_class(cls, name)
-        setattr(cls, self.name, self.descriptor_class(self))
+            value = to_python(value)
+        if not (value is None or isinstance(value, PhoneNumber)):
+            raise ValidationError("'%s' is an invalid value." % value)
+        return value
 
     def formfield(self, **kwargs):
         defaults = {
