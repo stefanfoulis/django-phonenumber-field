@@ -1,18 +1,23 @@
 #-*- coding: utf-8 -*-
 import logging
+from django.core.cache import caches, DEFAULT_CACHE_ALIAS
 from django.core.management import call_command
 from django.db.models import Q
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.template import Context
 from django.template.loader import get_template
+from django.utils import translation
 from django.utils.encoding import force_text
 from django.utils.six import StringIO, string_types
 from json import dumps, loads
-from .models import CountryCode
+from hashlib import sha1
+from .models import CountryCode, get_cache_buster
 from .phonenumber import PhoneNumber
 
 logger = logging.getLogger(".".join(("django", __name__)))
+
+cache = caches[DEFAULT_CACHE_ALIAS]
 
 class CountryCodeSelectChoicesIterator(object):
     def __init__(self, widget):
@@ -30,7 +35,18 @@ class CountryCodeSelect(Select):
     def render(self, name, value, *args, **kwargs):
         if isinstance(value, CountryCode):
             value = self.country_code_to_choice(value)
-        return super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
+        
+        h = sha1()
+        for obj in (name, value, args, kwargs):
+            h.update(dumps(obj, sort_keys=True, separators=(',',':')))
+            
+        key = ";".join(["CountryCodeSelect.render", get_cache_buster(), translation.get_language(), h.hexdigest()])
+        html = cache.get(key)
+        if html is None:
+            html = super(CountryCodeSelect, self).render(name, value, *args, **kwargs)
+            cache.set(key, html, None)
+        
+        return html
     
     def value_from_datadict(self, *args, **kwargs):
         """
@@ -46,9 +62,13 @@ class CountryCodeSelect(Select):
         return code
     
     def get_choices(self):
-        choices = self.get_country_code_choices()
-        choices = self.sort_choices(choices)
-        choices = self.insert_empty_choice(choices)
+        key = ";".join(["CountryCodeSelect.get_choices", get_cache_buster(), translation.get_language()])
+        choices = cache.get(key)
+        if choices is None:
+            choices = self.get_country_code_choices()
+            choices = self.sort_choices(choices)
+            choices = self.insert_empty_choice(choices)
+            cache.set(key, choices, None)
         return choices
     
     def country_code_to_choice(self, country_code):

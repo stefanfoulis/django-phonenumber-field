@@ -1,11 +1,16 @@
 #-*- coding: utf-8 -*-
 from babel import Locale
-from django.db import models
 from django.core import validators
+from django.core.cache import caches, DEFAULT_CACHE_ALIAS
+from django.db import models
+from django.db.models.signals import post_save
 from django.utils.encoding import force_text
 from django.utils.functional import cached_property
 from django.utils import translation
+from uuid import uuid4
 from .fields.models.caseinsensitivecharfield import CaseInsensitiveCharField
+
+cache = caches[DEFAULT_CACHE_ALIAS]
 
 class RegionCode(models.Model):
     class Meta:
@@ -74,3 +79,19 @@ class CountryCode(models.Model):
     @cached_property
     def region_code(self):
         return self.region_code_obj.code if self.region_code_obj else None
+
+CACHE_BUSTER_KEY = ".".join(("django", __name__, "CACHE_BUSTER_KEY"))
+
+def set_cache_buster(**kwargs):
+    buster = uuid4().hex
+    cache.set(CACHE_BUSTER_KEY, buster, None)
+    return buster
+
+def get_cache_buster():
+    buster = cache.get(CACHE_BUSTER_KEY)
+    if buster is None:
+        buster = set_cache_buster()
+    return buster
+
+for cls in (RegionCode, CallingCode, CountryCode):
+    post_save.connect(set_cache_buster, sender=cls)
