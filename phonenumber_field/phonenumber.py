@@ -29,32 +29,38 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     @classmethod
     def from_string(cls, phone_number, region=None):
-        phone_number_obj = cls()
-        if region is None:
-            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
-                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
-        phonenumbers.parse(number=phone_number, region=region,
-                           keep_raw_input=True, numobj=phone_number_obj)
+        assert isinstance(phone_number, string_types)
+        if phone_number.strip() == '':
+            phone_number_obj = None
+        else:
+            phone_number_obj = cls()
+            if region is None:
+                region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+            phonenumbers.parse(number=phone_number, region=region,
+                               keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
 
     def __unicode__(self):
         format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
         fmt = self.format_map[format_string]
-        if self.is_valid():
-            return self.format_as(fmt)
-        return self.raw_input
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
         checks whether the number supplied is actually valid
+        (e.g. it's in an assigned exchange)
         """
         return phonenumbers.is_valid_number(self)
 
+    def is_possible(self):
+        """
+        checks whether the number supplied is actually possible
+        (e.g. it has the right number of digits)
+        """
+        return phonenumbers.is_possible_number(self)
+
     def format_as(self, format):
-        if self.is_valid():
-            return phonenumbers.format_number(self, format)
-        else:
-            return self.raw_input
+        return phonenumbers.format_number(self, format)
 
     @property
     def as_international(self):
@@ -74,6 +80,20 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     def __len__(self):
         return len(self.__unicode__())
+
+    def __eq__(self, other):
+        """
+        Override parent equality because we store only string representation
+        of phone number, so we must compare only this string representation
+        """
+        if (isinstance(other, PhoneNumber) or
+                isinstance(other, phonenumbers.phonenumber.PhoneNumber)):
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            fmt = self.format_map[format_string]
+            other_string = phonenumbers.format_number(other, fmt)
+            return self.format_as(fmt) == other_string
+        else:
+            return False
 
 
 def to_python(value):
