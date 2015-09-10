@@ -87,7 +87,8 @@ def to_python(value):
             phone_number = PhoneNumber(raw_input=value)
     elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
           not isinstance(value, PhoneNumber)):
-        phone_number = PhoneNumber(value)
+        phone_number = PhoneNumber()
+        phone_number.merge_from(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     else:
