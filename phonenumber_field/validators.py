@@ -8,6 +8,18 @@ from phonenumber_field.phonenumber import to_python
 
 
 def validate_international_phonenumber(value):
+    """
+    Check validity of phone number (e.g. it's in an assigned exchange)
+    """
     phone_number = to_python(value)
     if phone_number and not phone_number.is_valid():
         raise ValidationError(_('The phone number entered is not valid.'))
+
+
+def possible_international_phonenumber(value):
+    """
+    Check possibility of phone number (e.g. it has the right number of digits).
+    """
+    phone_number = to_python(value)
+    if phone_number and not phone_number.is_possible():
+        raise ValidationError(_('The phone number entered is not possible.'))
