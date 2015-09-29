@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+
 """
 WSGI config for testproject project.
 
@@ -13,6 +16,7 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
+
 import os
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
@@ -26,7 +30,3 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testproject.settings")
 # setting points here.
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
-
-# Apply WSGI middleware here.
-# from helloworld.wsgi import HelloWorldApplication
-# application = HelloWorldApplication(application)

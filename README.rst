@@ -7,8 +7,10 @@ django-phonenumber-field
 .. image:: https://coveralls.io/repos/GaretJax/django-phonenumber-field/badge.png?branch=develop
     :target: https://coveralls.io/r/GaretJax/django-phonenumber-field?branch=develop
 
-A Django library which interfaces with `python-phonenumbers`_ to validate, pretty print and convert
-phone numbers. ``python-phonenumbers`` is a port of Google's `libphonenumber`_ library, which powers Android's phone number handling.
+A Django library which interfaces with `python-phonenumbers`_ to validate,
+pretty print and convert phone numbers. ``python-phonenumbers`` is a port
+of Google's `libphonenumber`_ library, which powers Android's phone number
+handling.
 
 .. _`python-phonenumbers`: https://github.com/daviddrysdale/python-phonenumbers
 .. _`libphonenumber`: https://code.google.com/p/libphonenumber/
@@ -41,8 +43,8 @@ Use it like any regular model field::
         fax_number = PhoneNumberField(blank=True)
 
 Internally, PhoneNumberField is based upon ``CharField`` and by default
-represents the number as a string of an international phonenumber in the database (e.g
-``'+41524204242'``).
+represents the number as a string of an international phonenumber in the
+database (e.g ``'+41524204242'``).
 
 Representation can be set by ``PHONENUMBER_DB_FORMAT`` variable in django settings module.
 This variable must be one of  ``'E164'``, ``'INTERNATIONAL'``, ``'NATIONAL'`` or ``'RFC3966'``.
