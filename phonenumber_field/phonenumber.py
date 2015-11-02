@@ -75,6 +75,32 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __len__(self):
         return len(self.__unicode__())
 
+    def __eq__(self, other):
+        """
+        Override parent equality because we store only string representation
+        of phone number, so we must compare only this string representation
+        """
+        if (isinstance(other, PhoneNumber) or
+                isinstance(other, phonenumbers.phonenumber.PhoneNumber) or
+                isinstance(other, string_types)):
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            default_region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION',
+                                     None)
+            fmt = self.format_map[format_string]
+            if isinstance(other, string_types):
+                # convert string to phonenumbers.phonenumber.PhoneNumber
+                # instance
+                try:
+                    other = phonenumbers.phonenumberutil.parse(
+                        other, region=default_region)
+                except NumberParseException:
+                    # Conversion is not possible, thus not equal
+                    return False
+            other_string = phonenumbers.format_number(other, fmt)
+            return self.format_as(fmt) == other_string
+        else:
+            return False
+
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
