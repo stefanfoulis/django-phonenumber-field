@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
 from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from phonenumber_field.validators import validate_international_phonenumber
-from phonenumber_field import formfields
-from phonenumber_field.phonenumber import PhoneNumber, to_python, string_types
+
+from .validators import validate_international_phonenumber
+from .phonenumber import PhoneNumber, to_python, string_types
+from . import formfields
 
 
 class PhoneNumberDescriptor(object):
@@ -30,7 +32,8 @@ class PhoneNumberDescriptor(object):
         if instance is None:
             raise AttributeError(
                 "The '%s' attribute can only be accessed from %s instances."
-                % (self.field.name, owner.__name__))
+                % (self.field.name, owner.__name__)
+            )
         return instance.__dict__[self.field.name]
 
     def __set__(self, instance, value):
@@ -38,6 +41,7 @@ class PhoneNumberDescriptor(object):
 
 
 class PhoneNumberField(models.Field):
+
     attr_class = PhoneNumber
     descriptor_class = PhoneNumberDescriptor
     default_validators = [validate_international_phonenumber]
@@ -53,7 +57,9 @@ class PhoneNumberField(models.Field):
         return "CharField"
 
     def get_prep_value(self, value):
-        "Returns field's value prepared for saving into a database."
+        """
+        Returns field's value prepared for saving into a database.
+        """
         if value is None or value == '':
             if not self.blank:
                 return to_python(self.default)

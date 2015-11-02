@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
 import sys
+
 import phonenumbers
-from django.core import validators
-from phonenumbers.phonenumberutil import NumberParseException
+
 from django.conf import settings
+from django.core import validators
 
 
 # Snippet from the `six` library to help with Python3 compatibility
@@ -14,7 +16,7 @@ else:
     string_types = basestring
 
 
-class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
+class PhoneNumber(phonenumbers.PhoneNumber):
     """
     A extended version of phonenumbers.phonenumber.PhoneNumber that provides
     some neat and more pythonic, easy to access methods. This makes using a
@@ -29,12 +31,24 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
     @classmethod
     def from_string(cls, phone_number, region=None):
+
         phone_number_obj = cls()
+
         if region is None:
-            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
-                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
-        phonenumbers.parse(number=phone_number, region=region,
-                           keep_raw_input=True, numobj=phone_number_obj)
+            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+
+        # Backward compatibility for a spelling error
+        # See: https://github.com/stefanfoulis/django-phonenumber-field/pull/25
+        if region is None:
+            region = getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+
+        phonenumbers.parse(
+            number=phone_number,
+            region=region,
+            keep_raw_input=True,
+            numobj=phone_number_obj
+        )
+
         return phone_number_obj
 
     def __unicode__(self):
@@ -43,6 +57,12 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         if self.is_valid():
             return self.format_as(fmt)
         return self.raw_input
+
+    def __str__(self):
+        if sys.version_info[0] == 3:
+            return self.__unicode__()
+        else:
+            return self.__unicode__().encode('utf-8')
 
     def is_valid(self):
         """
@@ -77,20 +97,20 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
 
 
 def to_python(value):
-    if value in validators.EMPTY_VALUES:  # None or ''
+
+    if value in validators.EMPTY_VALUES:
         phone_number = value
-    elif value and isinstance(value, string_types):
+    elif isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
-        except NumberParseException:
-            # the string provided is not a valid PhoneNumber.
+        except phonenumbers.NumberParseException:
+            # The string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
-          not isinstance(value, PhoneNumber)):
-        phone_number = PhoneNumber()
-        phone_number.merge_from(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
+    elif isinstance(value, phonenumbers.PhoneNumber):
+        phone_number = PhoneNumber()
+        phone_number.merge_from(value)
     else:
         # TODO: this should somehow show that it has invalid data, but not
         #       completely die for bad data in the database.

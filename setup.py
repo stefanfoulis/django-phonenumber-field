@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from setuptools import setup, find_packages
+
 from phonenumber_field import __version__
 
 
@@ -10,6 +13,7 @@ setup(
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
     install_requires=[
+        'Django',
         'phonenumbers>=7.0.2',
         'babel',
     ],
@@ -19,7 +23,7 @@ setup(
     maintainer='Stefan Foulis',
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
-    package_data = {
+    package_data={
         'phonenumber_field': [
             'locale/*/LC_MESSAGES/*',
         ],
@@ -33,6 +37,12 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Internet :: WWW/HTTP',
     ]
 )

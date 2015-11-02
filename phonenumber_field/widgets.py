@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
 from babel import Locale
 
@@ -18,16 +19,17 @@ class PhonePrefixSelect(Select):
     def __init__(self, initial=None):
         choices = [('', '---------')]
         locale = Locale(translation.to_locale(translation.get_language()))
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
+        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
             prefix = '+%d' % prefix
             if initial and initial in values:
                 self.initial = prefix
             for country_code in values:
                 country_name = locale.territories.get(country_code)
                 if country_name:
-                    choices.append((prefix, u'%s %s' % (country_name, prefix)))
-        return super(PhonePrefixSelect, self).__init__(
-            choices=sorted(choices, key=lambda item: item[1]))
+                    choices.append((prefix, '%s %s' % (country_name, prefix)))
+        super(PhonePrefixSelect, self).__init__(
+            choices=sorted(choices, key=lambda item: item[1])
+        )
 
     def render(self, name, value, *args, **kwargs):
         return super(PhonePrefixSelect, self).render(
@@ -41,7 +43,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
     - an input for local phone number
     """
     def __init__(self, attrs=None, initial=None):
-        widgets = (PhonePrefixSelect(initial), TextInput(),)
+        widgets = (PhonePrefixSelect(initial), TextInput())
         super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
 
     def decompress(self, value):

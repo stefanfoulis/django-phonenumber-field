@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
-from __future__ import unicode_literals
-
-from django.utils.translation import ugettext_lazy as _
-from django.forms.fields import CharField
 from django.core.exceptions import ValidationError
-from phonenumber_field.validators import validate_international_phonenumber
-from phonenumber_field.phonenumber import to_python
+from django.forms.fields import CharField
+from django.utils.translation import ugettext_lazy as _
+
+from .validators import validate_international_phonenumber
+from .phonenumber import to_python
 
 
 class PhoneNumberField(CharField):
