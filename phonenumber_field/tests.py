@@ -31,8 +31,12 @@ class NullablePhoneNumber(models.Model):
 
 
 class PhoneNumberFieldTestCase(TestCase):
-    test_number_1 = '+414204242'
-    equal_number_strings = ['+44 113 8921113', '+441138921113']
+    test_number_1 = '+4930123456'
+    equal_number_strings = [
+        '+44 113 8921113',
+        '+441138921113',
+        'tel:+44-113-892-1113',
+    ]
     local_numbers = [
         ('GB', '01606 751 78'),
         ('DE', '0176/96842671'),
@@ -79,7 +83,7 @@ class PhoneNumberFieldTestCase(TestCase):
     def test_null_field_returns_none(self):
         model = NullablePhoneNumber()
         self.assertEqual(model.phone_number, None)
-        model.phone_number = '+49 176 96842671'
+        model.phone_number = self.test_number_1
         self.assertEqual(type(model.phone_number), PhoneNumber)
         model.phone_number = phonenumberutil.parse(
             self.test_number_1, keep_raw_input=True)
@@ -88,6 +92,13 @@ class PhoneNumberFieldTestCase(TestCase):
     def test_can_assign_string_phone_number(self):
         opt_phone = OptionalPhoneNumber()
         opt_phone.phone_number = self.test_number_1
+        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+        opt_phone.full_clean()
+        opt_phone.save()
+        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+        opt_phone_db = OptionalPhoneNumber.objects.get(id=opt_phone.id)
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
 
@@ -100,6 +111,13 @@ class PhoneNumberFieldTestCase(TestCase):
             self.test_number_1, keep_raw_input=True)
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+        opt_phone.full_clean()
+        opt_phone.save()
+        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+        opt_phone_db = OptionalPhoneNumber.objects.get(id=opt_phone.id)
+        self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
     def test_does_not_fail_on_invalid_values(self):
         # testcase for
