@@ -54,7 +54,7 @@ class PhoneNumberField(models.Field):
 
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
-        if value is None or value == '':
+        if not value:
             if not self.blank:
                 return to_python(self.default)
             elif self.blank:
