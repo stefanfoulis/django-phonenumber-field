@@ -1,18 +1,18 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.validators import validate_international_phonenumber
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python, string_types
-from phonenumbers.phonenumberutil import NumberParseException
-import phonenumbers
 
 
 class PhoneNumberDescriptor(object):
     """
-    The descriptor for the phone number attribute on the model instance. Returns a PhoneNumber when accessed so you can
-    do stuff like::
+    The descriptor for the phone number attribute on the model instance.
+    Returns a PhoneNumber when accessed so you can do stuff like::
 
         >>> instance.phone_number.as_international
 
@@ -54,17 +54,16 @@ class PhoneNumberField(models.Field):
 
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
-        value = to_python(value)
-        if value is None:
+        if not value:
             if not self.blank:
                 return to_python(self.default)
             elif self.blank:
-                return to_python(self.default) or ''
-
         if isinstance(value, string_types):
             # it is an invalid phone number
             return value
-        return value.as_e164
+        format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+        fmt = PhoneNumber.format_map[format_string]
+        return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name):
         super(PhoneNumberField, self).contribute_to_class(cls, name)

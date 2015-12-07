@@ -30,4 +30,4 @@ class PhonenumerFieldAppTest(TestCase):
         
         pk = tm.id
         tm = TestModelBlankPhone.objects.get(pk=pk)
-        self.assertIsNone(tm.phone)
+        self.assertEqual(tm.phone, '')

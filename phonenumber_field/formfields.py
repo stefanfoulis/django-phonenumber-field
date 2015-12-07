@@ -1,4 +1,7 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.utils.translation import ugettext_lazy as _
 from django.forms.fields import CharField
 from django.core.exceptions import ValidationError
@@ -8,7 +11,7 @@ from phonenumber_field.phonenumber import to_python
 
 class PhoneNumberField(CharField):
     default_error_messages = {
-        'invalid': _(u'Enter a valid phone number.'),
+        'invalid': _('Enter a valid phone number.'),
     }
     default_validators = [validate_international_phonenumber]
 

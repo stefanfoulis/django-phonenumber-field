@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 import sys
 import phonenumbers
 from django.core import validators
@@ -15,8 +16,9 @@ else:
 
 class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     """
-    A extended version of phonenumbers.phonenumber.PhoneNumber that provides some neat and more pythonic, easy
-    to access methods. This makes using a PhoneNumber instance much easier, especially in templates and such.
+    A extended version of phonenumbers.phonenumber.PhoneNumber that provides
+    some neat and more pythonic, easy to access methods. This makes using a
+    PhoneNumber instance much easier, especially in templates and such.
     """
     format_map = {
         'E164': phonenumbers.PhoneNumberFormat.E164,
@@ -29,7 +31,8 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def from_string(cls, phone_number, region=None):
         phone_number_obj = cls()
         if region is None:
-            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None) or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None)
+            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
         phonenumbers.parse(number=phone_number, region=region,
                            keep_raw_input=True, numobj=phone_number_obj)
         return phone_number_obj
@@ -73,28 +76,50 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         return len(self.__unicode__())
 
     def __eq__(self, other):
-        if type(other) == PhoneNumber:
-            return self.as_e164 == other.as_e164
+        """
+        Override parent equality because we store only string representation
+        of phone number, so we must compare only this string representation
+        """
+        if (isinstance(other, PhoneNumber) or
+                isinstance(other, phonenumbers.phonenumber.PhoneNumber) or
+                isinstance(other, string_types)):
+            format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+            default_region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION',
+                                     None)
+            fmt = self.format_map[format_string]
+            if isinstance(other, string_types):
+                # convert string to phonenumbers.phonenumber.PhoneNumber
+                # instance
+                try:
+                    other = phonenumbers.phonenumberutil.parse(
+                        other, region=default_region)
+                except NumberParseException:
+                    # Conversion is not possible, thus not equal
+                    return False
+            other_string = phonenumbers.format_number(other, fmt)
+            return self.format_as(fmt) == other_string
         else:
-            return super(PhoneNumber, self).__eq__(other)
+            return False
 
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
-        phone_number = None
+        phone_number = value
     elif value and isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif isinstance(value, phonenumbers.phonenumber.PhoneNumber) and \
-         not isinstance(value, PhoneNumber):
-        phone_number = PhoneNumber(value)
+    elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
+          not isinstance(value, PhoneNumber)):
+        phone_number = PhoneNumber()
+        phone_number.merge_from(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
     else:
-        # TODO: this should somehow show that it has invalid data, but not completely die for
-        #       bad data in the database. (Same for the NumberParseException above)
+        # TODO: this should somehow show that it has invalid data, but not
+        #       completely die for bad data in the database.
+        #       (Same for the NumberParseException above)
         phone_number = None
     return phone_number

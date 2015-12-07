@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
+from phonenumber_field import __version__
+
 
 setup(
     name="django-phonenumber-field",
-    version = ":versiontools:phonenumber_field:",
+    version=__version__,
     url='http://github.com/stefanfoulis/django-phonenumber-field',
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
-    setup_requires = [
-        'versiontools >= 1.4',
-    ],
-    install_requires = [
-        'phonenumbers >= 5.9b1',
+    install_requires=[
+        'phonenumbers>=7.0.2',
+        'babel',
     ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
@@ -19,15 +19,28 @@ setup(
     maintainer='Stefan Foulis',
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
+    package_data = {
+        'phonenumber_field': [
+            'locale/*/LC_MESSAGES/*',
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Internet :: WWW/HTTP',
     ]
 )
