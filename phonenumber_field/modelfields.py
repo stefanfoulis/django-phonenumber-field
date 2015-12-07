@@ -58,11 +58,6 @@ class PhoneNumberField(models.Field):
             if not self.blank:
                 return to_python(self.default)
             elif self.blank:
-                return to_python(self.default) or ''
-
-        if value != '':
-            value = to_python(value)
-        
         if isinstance(value, string_types):
             # it is an invalid phone number
             return value
