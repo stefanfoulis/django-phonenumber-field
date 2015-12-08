@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 01:32+0200\n"
+"POT-Creation-Date: 2015-07-06 17:09+0200\n"
 "PO-Revision-Date: 2011-10-19 14:10+0200\n"
 "Last-Translator: Ludovic Gasc <gmludo@gmail.com>\n"
 "Language-Team: French <gmludo@gmail.com>\n"
@@ -25,6 +25,10 @@ msgstr "Mettez un numéro de téléphone valide."
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: validators.py:13
+#: validators.py:16
 msgid "The phone number entered is not valid."
+msgstr ""
+
+#: validators.py:25
+msgid "The phone number entered is not possible."
 msgstr ""

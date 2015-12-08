@@ -46,7 +46,32 @@ class PhoneNumberFieldTestCase(TestCase):
         'RFC3966': ['+44 113 8921113', 'tel:+44-113-892-1113'],
         'INTERNATIONAL': ['+44 113 8921113', '+44 113 892 1113'],
     }
-    invalid_numbers = ['+44 113 892111', ]
+    invalid_numbers = ['+44 113 892111',
+                       '+49311234567890123',
+                       '+441112345678',
+                       '+439234567890']
+    possible_numbers = ['+49311234567890123',
+                        '+441112345678',
+                        '+439234567890']
+    inpossible_numbers = ['+493112345678901234',
+                          '+4411123456788',
+                          '+4392345678901234']
+
+    def test_possible_numbers_are_possible(self):
+        numbers = [PhoneNumber.from_string(number_string)
+                   for number_string in self.possible_numbers]
+        self.assertTrue(all([number.is_possible() for number in numbers]))
+        numbers = [PhoneNumber.from_string(number_string)
+                   for number_string in self.equal_number_strings]
+        self.assertTrue(all([number.is_possible() for number in numbers]))
+        numbers = [PhoneNumber.from_string(number_string, region=region)
+                   for region, number_string in self.local_numbers]
+        self.assertTrue(all([number.is_possible() for number in numbers]))
+
+    def test_inpossible_numbers_are_inpossible(self):
+        numbers = [PhoneNumber.from_string(number_string)
+                   for number_string in self.inpossible_numbers]
+        self.assertTrue(all([not number.is_possible() for number in numbers]))
 
     def test_valid_numbers_are_valid(self):
         numbers = [PhoneNumber.from_string(number_string)
