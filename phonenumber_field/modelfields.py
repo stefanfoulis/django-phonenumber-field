@@ -3,10 +3,12 @@
 from django.conf import settings
 from django.core import validators
 from django.db import models
+from django.db.models.fields import NOT_PROVIDED
 from django.utils.translation import ugettext_lazy as _
-from phonenumber_field.validators import validate_international_phonenumber
+
 from phonenumber_field import formfields
-from phonenumber_field.phonenumber import PhoneNumber, to_python, string_types
+from phonenumber_field.phonenumber import PhoneNumber, string_types, to_python
+from phonenumber_field.validators import validate_international_phonenumber
 
 
 class PhoneNumberDescriptor(object):
@@ -55,14 +57,17 @@ class PhoneNumberField(models.Field):
     def get_prep_value(self, value):
         "Returns field's value prepared for saving into a database."
         if not value:
-            if not self.blank:
+            if self.default is not NOT_PROVIDED:
                 return to_python(self.default)
-            elif self.blank:
-                return to_python(self.default) or ''
-
-        if value != '':
+            elif self.null:
+                return None
+            else:
+                # returns empty string even if blank is False
+                # blank should be handled at form level
+                return ''
+        else:
             value = to_python(value)
-        
+
         if isinstance(value, string_types):
             # it is an invalid phone number
             return value
