@@ -29,7 +29,6 @@ class PhonenumerFieldAppTest(TestCase):
         
     def test_save_blank_phone_to_database(self):
         from testapp.models import TestModelBlankPhone
-        from phonenumber_field.phonenumber import PhoneNumber
         tm = TestModelBlankPhone()
         tm.save()
         
