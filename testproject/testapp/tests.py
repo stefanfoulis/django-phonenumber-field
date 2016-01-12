@@ -6,16 +6,14 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from django.db import models
 
-from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import to_python
 
+from .models import TestModel, MandatoryPhoneNumber, OptionalPhoneNumber
 
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
-        from testapp.models import TestModel
         from phonenumber_field.phonenumber import PhoneNumber
         tm = TestModel()
         tm.phone = '+41 52 424 2424'
@@ -35,18 +33,6 @@ class PhonenumerFieldAppTest(TestCase):
         pk = tm.id
         tm = TestModelBlankPhone.objects.get(pk=pk)
         self.assertIsNone(tm.phone)
-
-
-###############
-# Test Models #
-###############
-
-class MandatoryPhoneNumber(models.Model):
-    phone_number = PhoneNumberField()
-
-
-class OptionalPhoneNumber(models.Model):
-    phone_number = PhoneNumberField(blank=True, default='')
 
 
 class PhoneNumberFieldTestCase(TestCase):
