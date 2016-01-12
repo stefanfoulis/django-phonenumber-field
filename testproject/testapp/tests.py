@@ -10,7 +10,7 @@ from django.test import TestCase
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import to_python
 
-from .models import TestModel, MandatoryPhoneNumber, OptionalPhoneNumber
+from .models import TestModel, TestModelBlankPhone, MandatoryPhoneNumber, OptionalPhoneNumber
 
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
@@ -26,7 +26,6 @@ class PhonenumerFieldAppTest(TestCase):
         self.assertEqual(str(tm.phone), '+41524242424')
         
     def test_save_blank_phone_to_database(self):
-        from testapp.models import TestModelBlankPhone
         tm = TestModelBlankPhone()
         tm.save()
         
