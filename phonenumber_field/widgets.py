@@ -19,7 +19,12 @@ class PhonePrefixSelect(Select):
         choices = [('', '---------')]
         region_choices = []
 
-        locale = Locale.parse(translation.get_language(), sep='-') 
+        lang_code = translation.get_language()
+        if not lang_code:
+            # if translations are temporarily deactivated or NA
+            lang_code = "en-us"
+
+        locale = Locale.parse(lang_code, sep='-')
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.iteritems():
             prefix = '+%d' % prefix
             

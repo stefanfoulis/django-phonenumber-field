@@ -11,3 +11,9 @@ class TestModel(models.Model):
 class TestModelBlankPhone(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField(blank=True)
+
+class MandatoryPhoneNumber(models.Model):
+    phone_number = PhoneNumberField()
+
+class OptionalPhoneNumber(models.Model):
+    phone_number = PhoneNumberField(blank=True, default='')
