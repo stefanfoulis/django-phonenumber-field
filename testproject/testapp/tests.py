@@ -31,3 +31,34 @@ class PhonenumerFieldAppTest(TestCase):
         pk = tm.id
         tm = TestModelBlankPhone.objects.get(pk=pk)
         self.assertEqual(tm.phone, '')
+
+    def test_save_phone_to_database_with_phone_number_prefix_widget(self):
+        from testapp.forms import TestFormWidget
+        from testapp.models import TestModelBlankPhone
+        tf = TestFormWidget(data={'phone_0': '+374', 'phone_1': '94123456'})
+        self.assertTrue(tf.is_valid())
+
+        tm = tf.save()
+
+        pk = tm.id
+        tm = TestModelBlankPhone.objects.get(pk=pk)
+        self.assertEqual(tm.phone, '+37494123456')
+
+    def test_wrong_phone_save_to_database_with_phone_number_prefix_widget_fail(self):
+        from testapp.forms import TestFormWidget
+        from testapp.models import TestModelBlankPhone
+        tf = TestFormWidget(data={'phone_0': '+3', 'phone_1': '94123456'})
+        self.assertFalse(tf.is_valid())
+
+    def test_save_blank_phone_to_database_with_phone_number_prefix_widget(self):
+        from testapp.forms import TestFormWidget
+        from testapp.models import TestModelBlankPhone
+        tf = TestFormWidget(data={'phone_0': '', 'phone_1': ''})
+        self.assertTrue(tf.is_valid())
+
+        tm = tf.save()
+
+        pk = tm.id
+        tm = TestModelBlankPhone.objects.get(pk=pk)
+        self.assertEqual(tm.phone, '')
+
