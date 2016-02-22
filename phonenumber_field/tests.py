@@ -53,15 +53,15 @@ class PhoneNumberFieldTestCase(TestCase):
     def test_valid_numbers_are_valid(self):
         numbers = [PhoneNumber.from_string(number_string)
                    for number_string in self.equal_number_strings]
-        self.assertTrue(all([number.is_valid() for number in numbers]))
+        self.assertTrue(all(number.is_valid() for number in numbers))
         numbers = [PhoneNumber.from_string(number_string, region=region)
                    for region, number_string in self.local_numbers]
-        self.assertTrue(all([number.is_valid() for number in numbers]))
+        self.assertTrue(all(number.is_valid() for number in numbers))
 
     def test_invalid_numbers_are_invalid(self):
         numbers = [PhoneNumber.from_string(number_string)
                    for number_string in self.invalid_numbers]
-        self.assertTrue(all([not number.is_valid() for number in numbers]))
+        self.assertTrue(all(not number.is_valid() for number in numbers))
 
     def test_objects_with_same_number_are_equal(self):
         numbers = [
