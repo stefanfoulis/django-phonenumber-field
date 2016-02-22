@@ -71,8 +71,8 @@ class PhoneNumberField(models.Field):
         fmt = PhoneNumber.format_map[format_string]
         return value.format_as(fmt)
 
-    def contribute_to_class(self, cls, name, virtual_only=False):
-        super(PhoneNumberField, self).contribute_to_class(cls, name, virtual_only)
+    def contribute_to_class(self, cls, name):
+        super(PhoneNumberField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, self.descriptor_class(self))
 
     def formfield(self, **kwargs):
