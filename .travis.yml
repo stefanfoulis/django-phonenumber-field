@@ -7,7 +7,8 @@ python:
   - "pypy"
   - "pypy3"
 install:
-  - ./.travis_setup
+  - pip install coveralls $DJANGO
+  - python setup.py develop
 env:
   - DJANGO="django>=1.5,<1.6"
   - DJANGO="django>=1.6,<1.7"
