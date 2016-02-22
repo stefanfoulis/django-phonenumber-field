@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
+import phonenumbers
 from django.conf import settings
 from django.db import models
 from django.test.testcases import TestCase
+from phonenumbers import phonenumberutil
+
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
-from phonenumbers import phonenumberutil
-import phonenumbers
 
 
 ###############
@@ -24,6 +25,7 @@ class OptionalPhoneNumber(models.Model):
 
 class NullablePhoneNumber(models.Model):
     phone_number = PhoneNumberField(null=True)
+
 
 ##############
 # Test Cases #
@@ -126,18 +128,18 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(phone, None)
 
     def _test_storage_formats(self):
-        '''
+        """
         Aggregate of tests to perform for db storage formats
-        '''
+        """
         self.test_objects_with_same_number_are_equal()
         self.test_blank_field_returns_empty_string()
         self.test_null_field_returns_none()
         self.test_can_assign_string_phone_number()
 
     def test_storage_formats(self):
-        '''
+        """
         Perform aggregate tests for all db storage formats
-        '''
+        """
         old_format = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
         for frmt in PhoneNumber.format_map:
             setattr(settings, 'PHONENUMBER_DB_FORMAT', frmt)
@@ -145,12 +147,12 @@ class PhoneNumberFieldTestCase(TestCase):
         setattr(settings, 'PHONENUMBER_DB_FORMAT', old_format)
 
     def test_prep_value(self):
-        '''
+        """
         Tests correct db storage value against different setting of
         PHONENUMBER_DB_FORMAT
         Required output format is set as string constant to guarantee
         consistent database storage values
-        '''
+        """
         number = PhoneNumberField()
         old_format = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
         for frmt in ['E164', 'RFC3966', 'INTERNATIONAL']:
