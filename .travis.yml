@@ -24,6 +24,8 @@ matrix:
       env: DJANGO="django>=1.7,<1.8"
     - python: "3.3"
       env: DJANGO="django>=1.9,<1.10"
+    - python: "pypy3"
+      env: DJANGO="django>=1.9,<1.10"
 script:
   - cd ./testproject; coverage run --source=phonenumber_field manage.py test phonenumber_field testapp
 after_success:
