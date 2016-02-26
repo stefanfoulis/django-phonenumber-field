@@ -2,13 +2,14 @@
 django-phonenumber-field
 ========================
 
-.. image:: https://travis-ci.org/stefanfoulis/django-phonenumber-field.svg?branch=develop
+.. image:: https://img.shields.io/travis/stefanfoulis/django-phonenumber-field/develop.svg
     :target: https://travis-ci.org/stefanfoulis/django-phonenumber-field
-.. image:: https://coveralls.io/repos/GaretJax/django-phonenumber-field/badge.png?branch=develop
-    :target: https://coveralls.io/r/GaretJax/django-phonenumber-field?branch=develop
+.. image:: https://img.shields.io/coveralls/stefanfoulis/django-phonenumber-field/develop.svg
+    :target: https://coveralls.io/github/stefanfoulis/django-phonenumber-field?branch=develop
 
 A Django library which interfaces with `python-phonenumbers`_ to validate, pretty print and convert
-phone numbers. ``python-phonenumbers`` is a port of Google's `libphonenumber`_ library, which powers Android's phone number handling.
+phone numbers. ``python-phonenumbers`` is a port of Google's `libphonenumber`_ library, which
+powers Android's phone number handling.
 
 .. _`python-phonenumbers`: https://github.com/daviddrysdale/python-phonenumbers
 .. _`libphonenumber`: https://code.google.com/p/libphonenumber/
