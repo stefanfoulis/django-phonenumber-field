@@ -16,6 +16,10 @@ class PhoneNumberField(CharField):
     }
     default_validators = [validate_international_phonenumber]
 
+    def __init__(self, *args, **kwargs):
+        super(PhoneNumberField, self).__init__(*args, **kwargs)
+        self.widget.input_type = 'tel'
+
     def to_python(self, value):
         phone_number = to_python(value)
         if phone_number and not phone_number.is_valid():
