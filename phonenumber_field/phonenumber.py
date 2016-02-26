@@ -40,9 +40,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
     def __unicode__(self):
         format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
         fmt = self.format_map[format_string]
-        if self.is_valid():
-            return self.format_as(fmt)
-        return self.raw_input
+        return self.format_as(fmt)
 
     def is_valid(self):
         """
@@ -51,10 +49,7 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         return phonenumbers.is_valid_number(self)
 
     def format_as(self, format):
-        if self.is_valid():
-            return phonenumbers.format_number(self, format)
-        else:
-            return self.raw_input
+        return phonenumbers.format_number(self, format)
 
     @property
     def as_international(self):
