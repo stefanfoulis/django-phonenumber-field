@@ -28,4 +28,4 @@ msgstr "Номер телефона"
 
 #: validators.py:13
 msgid "The phone number entered is not valid."
-msgstr ""
+msgstr "Введен некорректный номер телефона"
