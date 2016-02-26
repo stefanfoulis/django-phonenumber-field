@@ -1,4 +1,5 @@
 #!/bin/bash
+if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then pip install https://github.com/python-babel/babel/zipball/master; fi
 pip install coveralls
 pip install $DJANGO
 python setup.py develop

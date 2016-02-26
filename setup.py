@@ -19,7 +19,7 @@ setup(
     maintainer='Stefan Foulis',
     maintainer_email='stefan.foulis@gmail.com',
     packages=find_packages(),
-    package_data = {
+    package_data={
         'phonenumber_field': [
             'locale/*/LC_MESSAGES/*',
         ],
