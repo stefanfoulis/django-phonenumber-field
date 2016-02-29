@@ -55,7 +55,7 @@ class PhoneNumberField(models.Field):
         return "CharField"
 
     def get_prep_value(self, value):
-        "Returns field's value prepared for saving into a database."
+        """Returns field's value prepared for saving into a database."""
         if not value:
             if self.default is not NOT_PROVIDED:
                 return to_python(self.default)
