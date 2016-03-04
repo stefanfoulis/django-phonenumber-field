@@ -14,15 +14,17 @@ class PhonePrefixSelect(Select):
 
     def __init__(self, initial=None):
         choices = [('', '---------')]
-        locale = Locale(translation.to_locale(translation.get_language()))
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-            prefix = '+%d' % prefix
-            if initial and initial in values:
-                self.initial = prefix
-            for country_code in values:
-                country_name = locale.territories.get(country_code)
-                if country_name:
-                    choices.append((prefix, u'%s %s' % (country_name, prefix)))
+        language = translation.get_language()
+        if language:
+            locale = Locale(translation.to_locale(language))
+            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+                prefix = '+%d' % prefix
+                if initial and initial in values:
+                    self.initial = prefix
+                for country_code in values:
+                    country_name = locale.territories.get(country_code)
+                    if country_name:
+                        choices.append((prefix, u'%s %s' % (country_name, prefix)))
         super(PhonePrefixSelect, self).__init__(
             choices=sorted(choices, key=lambda item: item[1]))
 
