@@ -1,2 +1,3 @@
 include LICENSE
 include README.rst
+recursive-include phonenumber_field/locale django.mo django.po
