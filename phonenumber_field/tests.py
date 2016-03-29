@@ -9,6 +9,7 @@ from phonenumbers import phonenumberutil
 
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 
 ###############
@@ -163,3 +164,23 @@ class PhoneNumberFieldTestCase(TestCase):
                 ),
                 self.storage_numbers[frmt][1])
         setattr(settings, 'PHONENUMBER_DB_FORMAT', old_format)
+
+    def test_fallback_widget_switches_between_national_and_international(self):
+        region, number_string = self.local_numbers[0]
+        number = PhoneNumber.from_string(number_string, region=region)
+        gb_widget = PhoneNumberInternationalFallbackWidget(region='GB')
+        de_widget = PhoneNumberInternationalFallbackWidget(region='DE')
+        self.assertEqual(
+            gb_widget.render("number", number),
+            u'<input name="number" type="text" value="01606 75178" />'
+        )
+        self.assertEqual(
+            de_widget.render("number", number),
+            u'<input name="number" type="text" value="+44 1606 75178" />'
+        )
+
+        # If there's been a validation error, the value should be included verbatim
+        self.assertEqual(
+            gb_widget.render("number", "error"),
+            u'<input name="number" type="text" value="error" />'
+        )
