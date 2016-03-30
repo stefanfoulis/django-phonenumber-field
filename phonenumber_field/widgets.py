@@ -70,8 +70,7 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
 
     def __init__(self, region=None, attrs=None):
         if region is None:
-            region = (getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
-                      or getattr(settings, 'PHONENUMER_DEFAULT_REGION', None))
+            region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
         self.region = region
         super(PhoneNumberInternationalFallbackWidget, self).__init__(attrs)
 
