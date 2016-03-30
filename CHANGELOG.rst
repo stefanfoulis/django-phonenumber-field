@@ -13,3 +13,4 @@ CHANGELOG
 * new widget added: PhoneNumberInternationalFallbackWidget
 * new backward compatible requirement phonenumberslite instead of phonenumbers
 * lots of tests
+* dropped support for PHONENUMER_DEFAULT_REGION setting with typo
