@@ -22,6 +22,9 @@ Included are:
 * ``PhoneNumberPrefixWidget``, a form widget for selecting a region code and entering a national number
 * ``PhoneNumberInternationalFallbackWidget``, a form widget that uses national numbers unless an international number is entered
 
+*Note:* This package will by default install `phonenumberslite` if no
+ phonenumbers package has been installed already.
+
 Installation
 ============
 

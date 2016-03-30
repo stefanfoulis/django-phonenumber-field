@@ -1,6 +1,11 @@
 from setuptools import setup, find_packages
+import pkgutil
 
 from phonenumber_field import __version__
+
+install_requires = ['babel']
+if 'phonenumbers' not in [p[1] for p in pkgutil.iter_modules()]:
+    install_requires.append('phonenumberslite>=7.0.2')
 
 setup(
     name="django-phonenumber-field",
@@ -9,10 +14,7 @@ setup(
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
-    install_requires=[
-        'phonenumbers>=7.0.2',
-        'babel',
-    ],
+    install_requires=install_requires,
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
     author_email='stefan.foulis@gmail.com',
