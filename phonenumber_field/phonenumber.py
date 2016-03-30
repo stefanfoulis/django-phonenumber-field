@@ -5,7 +5,7 @@ import sys
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-from phonenumbers.phonenumberutil import NumberParseException
+from phonenumbers import NumberParseException
 
 # Snippet from the `six` library to help with Python3 compatibility
 if sys.version_info[0] == 3:
@@ -14,9 +14,9 @@ else:
     string_types = basestring
 
 
-class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
+class PhoneNumber(phonenumbers.PhoneNumber):
     """
-    A extended version of phonenumbers.phonenumber.PhoneNumber that provides
+    A extended version of phonenumbers.PhoneNumber that provides
     some neat and more pythonic, easy to access methods. This makes using a
     PhoneNumber instance much easier, especially in templates and such.
     """
@@ -76,17 +76,17 @@ class PhoneNumber(phonenumbers.phonenumber.PhoneNumber):
         of phone number, so we must compare only this string representation
         """
         if (isinstance(other, PhoneNumber) or
-                isinstance(other, phonenumbers.phonenumber.PhoneNumber) or
+                isinstance(other, phonenumbers.PhoneNumber) or
                 isinstance(other, string_types)):
             format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
             default_region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION',
                                      None)
             fmt = self.format_map[format_string]
             if isinstance(other, string_types):
-                # convert string to phonenumbers.phonenumber.PhoneNumber
+                # convert string to phonenumbers.PhoneNumber
                 # instance
                 try:
-                    other = phonenumbers.phonenumberutil.parse(
+                    other = phonenumbers.parse(
                         other, region=default_region)
                 except NumberParseException:
                     # Conversion is not possible, thus not equal
@@ -106,7 +106,7 @@ def to_python(value):
         except NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif (isinstance(value, phonenumbers.phonenumber.PhoneNumber) and
+    elif (isinstance(value, phonenumbers.PhoneNumber) and
           not isinstance(value, PhoneNumber)):
         phone_number = PhoneNumber()
         phone_number.merge_from(value)

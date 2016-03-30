@@ -9,7 +9,6 @@ from django.test import TestCase
 
 
 class PhonenumerFieldAppTest(TestCase):
-
     def test_save_field_to_database(self):
         """Basic Field Test"""
         from testapp.models import TestModel

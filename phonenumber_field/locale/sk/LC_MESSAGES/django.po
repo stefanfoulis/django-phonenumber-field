@@ -19,7 +19,7 @@ msgstr ""
 
 #: formfields.py:14
 msgid "Enter a valid phone number."
-msgstr "Vložte platné telefónne číslo"
+msgstr "Vložte platné telefónne číslo."
 
 #: modelfields.py:45
 msgid "Phone number"
@@ -27,4 +27,4 @@ msgstr "Telefónne číslo"
 
 #: validators.py:13
 msgid "The phone number entered is not valid."
-msgstr "Zadané telefónne číslo je neplatné"
+msgstr "Zadané telefónne číslo je neplatné."

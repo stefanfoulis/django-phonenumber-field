@@ -20,7 +20,7 @@ msgstr ""
 
 #: formfields.py:14
 msgid "Enter a valid phone number."
-msgstr "Введите корректный номер телефона"
+msgstr "Введите корректный номер телефона."
 
 #: modelfields.py:45
 msgid "Phone number"
@@ -28,4 +28,4 @@ msgstr "Номер телефона"
 
 #: validators.py:13
 msgid "The phone number entered is not valid."
-msgstr "Введен некорректный номер телефона"
+msgstr "Введен некорректный номер телефона."
