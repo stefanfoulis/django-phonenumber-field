@@ -73,6 +73,10 @@ class PhoneNumberField(models.Field):
             return value
         format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
         fmt = PhoneNumber.format_map[format_string]
+        
+        if value is None:
+            return ''
+        
         return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name):
@@ -85,6 +89,11 @@ class PhoneNumberField(models.Field):
         }
         defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
+        
+    def deconstruct(self):
+        name, path, args, kwargs = super(PhoneNumberField, self).deconstruct()
+        del kwargs["max_length"]
+        return name, path, args, kwargs
 
 
 try:
