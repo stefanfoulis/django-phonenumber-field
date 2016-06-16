@@ -20,7 +20,10 @@ Included are:
 * ``PhoneNumberField``, a model field
 * ``PhoneNumberField``, a form field
 * ``PhoneNumberPrefixWidget``, a form widget for selecting a region code and entering a national number
-* ``PhoneNumberInternationalFallbackWidget``, a form widget that uses national numbers unless an international number is entered
+* ``PhoneNumberInternationalFallbackWidget``, a form widget that uses national numbers unless an
+  international number is entered.  A ``PHONENUMBER_DEFAULT_REGION`` setting needs to be added
+  to your Django settings in order to know which national number format to recognize.  The
+  setting is a string containing an ISO-3166-1 two-letter country code.
 
 *Note:* This package will by default install `phonenumberslite` if no
  phonenumbers package has been installed already.
