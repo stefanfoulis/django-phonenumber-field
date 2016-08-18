@@ -1,0 +1,30 @@
+# Copyright (C) 2013
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Francesco Facconi <francesco@immediatic.it>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-04 01:32+0200\n"
+"PO-Revision-Date: 2011-10-19 14:10+0200\n"
+"Last-Translator: Francesco Facconi <francesco@immediatic.it>\n"
+"Language-Team: Italian <francesco@immediatic.it>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: formfields.py:14
+msgid "Enter a valid phone number."
+msgstr "Inserire un numero di telefono valido."
+
+#: modelfields.py:45
+msgid "Phone number"
+msgstr "Numero di telefono"
+
+#: validators.py:13
+msgid "The phone number entered is not valid."
+msgstr ""
