@@ -54,12 +54,15 @@ class PhoneNumberPrefixWidget(MultiWidget):
                     return ["+%d" % value.country_code, value.national_number]
             else:
                 return value.split('.')
-        return [None, None]
+        return [None, ""]
 
     def value_from_datadict(self, data, files, name):
         values = super(PhoneNumberPrefixWidget, self).value_from_datadict(
             data, files, name)
-        return '%s.%s' % tuple(values)
+        if all(values):
+            return '%s.%s' % tuple(values)
+        return ''
+
 
 
 class PhoneNumberInternationalFallbackWidget(TextInput):
