@@ -23,8 +23,8 @@ msgstr "Introduza um número de telefone válido."
 
 #: modelfields.py:45
 msgid "Phone number"
-msgstr "Numero de telefone"
+msgstr "Número de telefone"
 
 #: validators.py:13
 msgid "The phone number entered is not valid."
-msgstr ""
+msgstr "Este número de telefone não é válido."
