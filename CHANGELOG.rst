@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.2.0 (2017-03-17)
+------------------
+
+* Django 1.10 support
+* Bugfixes and cleanup
+* Translations: Brazilian Portuguese, Spanish, Norwegian, Dutch, Azerbaijani, Turkish and French
+
+
 1.1.0 (2016-03-30)
 ------------------
 
