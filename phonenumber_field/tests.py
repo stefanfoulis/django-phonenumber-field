@@ -77,6 +77,15 @@ class PhoneNumberFieldTestCase(TestCase):
             for number_string in self.equal_number_strings:
                 self.assertEqual(number, number_string)
 
+    def test_same_number_has_same_hash(self):
+        numbers = [PhoneNumber.from_string(number_string)
+                   for number_string in self.equal_number_strings]
+        numbers_set = set(numbers)
+        self.assertEqual(len(numbers_set), 1)
+        for number in numbers:
+            self.assertIn(number, numbers_set)
+        self.assertNotIn(self.test_number_1, numbers_set)
+
     def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
         self.assertEqual(model.phone_number, '')

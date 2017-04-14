@@ -95,6 +95,9 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         else:
             return False
 
+    def __hash__(self):
+        return hash(self.__unicode__())
+
 
 def to_python(value):
     if value in validators.EMPTY_VALUES:  # None or ''
