@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.3.0 (2017-04-15)
+------------------
+
+* Add rest_framework Serializer
+* Hashable phonenumber object
+* Various bugfixes and improvements
+
 1.2.0 (2017-03-17)
 ------------------
 
