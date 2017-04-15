@@ -15,7 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: \n"
-"X-Generator: Poedit 1.5.4\n"
 
 #: formfields.py:14
 msgid "Enter a valid phone number."
