@@ -63,6 +63,10 @@ class PhoneNumberField(models.Field):
             return value
         format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
         fmt = PhoneNumber.format_map[format_string]
+        
+		if value is None:
+			return ''
+
         return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name, *args, **kwargs):
