@@ -165,3 +165,8 @@ class PhonenumerFieldAppTest(TestCase):
         """Field Test for when Blank, Empty Default, Null & Unique"""
         from testapp.models import TestModelPhoneBEDNU as TestModel
         self.__test_nullable_empty_default_field_helper(TestModel)
+
+    def test_model_attribute_can_be_accessed_on_class(self):
+        from testapp.models import TestModel
+        from phonenumber_field.modelfields import PhoneNumberDescriptor
+        self.assertIsInstance(TestModel.phone, PhoneNumberDescriptor)
