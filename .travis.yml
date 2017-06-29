@@ -5,7 +5,8 @@ python:
   - "3.4"
   - "3.5"
   - "pypy"
-  - "pypy3"
+  # https://github.com/travis-ci/travis-ci/issues/6277
+  - "pypy3.3-5.5-alpha"  #- "pypy3" 
 install:
   - ./.travis_setup
 env:
