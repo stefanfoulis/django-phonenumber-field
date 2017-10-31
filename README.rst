@@ -2,7 +2,7 @@
 django-phonenumber-field
 ========================
 
-.. image:: https://img.shields.io/travis/stefanfoulis/django-phonenumber-field/develop.svg
+.. image:: https://travis-ci.org/stefanfoulis/django-phonenumber-field.svg?branch=master
     :target: https://travis-ci.org/stefanfoulis/django-phonenumber-field
 .. image:: https://img.shields.io/coveralls/stefanfoulis/django-phonenumber-field/develop.svg
     :target: https://coveralls.io/github/stefanfoulis/django-phonenumber-field?branch=develop
