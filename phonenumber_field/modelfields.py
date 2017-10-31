@@ -86,6 +86,6 @@ try:
             [],
             {},
         ),
-    ], ["^phonenumber_field\.modelfields\.PhoneNumberField"])
+    ], [r"^phonenumber_field\.modelfields\.PhoneNumberField"])
 except ImportError:
     pass
