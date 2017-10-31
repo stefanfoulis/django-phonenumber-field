@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 10:18+0100\n"
+"POT-Creation-Date: 2017-10-05 15:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:14
+#: formfields.py:15 serializerfields.py:13
 msgid "Enter a valid phone number."
 msgstr "Bitte eine gültige Telefonnummer eingeben."
 
-#: modelfields.py:45
+#: modelfields.py:46
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: validators.py:13
+#: validators.py:15
 msgid "The phone number entered is not valid."
 msgstr "Die eingegebene Telefonnummer ist ungültig."
