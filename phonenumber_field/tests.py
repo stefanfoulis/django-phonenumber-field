@@ -179,17 +179,17 @@ class PhoneNumberFieldTestCase(TestCase):
         number = PhoneNumber.from_string(number_string, region=region)
         gb_widget = PhoneNumberInternationalFallbackWidget(region='GB')
         de_widget = PhoneNumberInternationalFallbackWidget(region='DE')
-        self.assertEqual(
+        self.assertHTMLEqual(
             gb_widget.render("number", number),
             u'<input name="number" type="text" value="01606 75178" />'
         )
-        self.assertEqual(
+        self.assertHTMLEqual(
             de_widget.render("number", number),
             u'<input name="number" type="text" value="+44 1606 75178" />'
         )
 
         # If there's been a validation error, the value should be included verbatim
-        self.assertEqual(
+        self.assertHTMLEqual(
             gb_widget.render("number", "error"),
             u'<input name="number" type="text" value="error" />'
         )
