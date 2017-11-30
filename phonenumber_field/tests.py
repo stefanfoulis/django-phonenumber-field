@@ -2,12 +2,14 @@
 
 
 import phonenumbers
+from django import forms
 from django.conf import settings
 from django.db import models
-from django.test.testcases import TestCase
+from django.test import TestCase, override_settings
 from phonenumbers import phonenumberutil
 
 from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.formfields import PhoneNumberRegionFallbackField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
@@ -173,6 +175,43 @@ class PhoneNumberFieldTestCase(TestCase):
                 ),
                 self.storage_numbers[frmt][1])
         setattr(settings, 'PHONENUMBER_DB_FORMAT', old_format)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION='DE')
+    def test_fallback_field(self):
+        local_number = PhoneNumber.from_string(self.local_numbers[1][1], region='DE')
+        foreign_number = PhoneNumber.from_string(self.local_numbers[0][1], region='GB')
+
+        class FallbackForm(forms.Form):
+            local_number_field = PhoneNumberRegionFallbackField()
+            foreign_number_field = PhoneNumberRegionFallbackField(region='GB')
+
+        # Show and parse national numbers without region code.
+        form = FallbackForm({
+            'local_number_field': local_number,
+            'foreign_number_field': foreign_number,
+        })
+        self.assertIn('name="local_number_field" value="%s"' % local_number.as_national, form.as_p())
+        self.assertIn('name="foreign_number_field" value="%s"' % foreign_number.as_national, form.as_p())
+        self.assertEqual(local_number, form.cleaned_data['local_number_field'])
+        self.assertEqual(foreign_number, form.cleaned_data['foreign_number_field'])
+
+        # Show and parse international numbers with region code.
+        form = FallbackForm({
+            'local_number_field': foreign_number,
+            'foreign_number_field': local_number,
+        })
+        self.assertIn('name="local_number_field" value="%s"' % foreign_number.as_international, form.as_p())
+        self.assertIn('name="foreign_number_field" value="%s"' % local_number.as_international, form.as_p())
+        self.assertEqual(foreign_number, form.cleaned_data['local_number_field'])
+        self.assertEqual(local_number, form.cleaned_data['foreign_number_field'])
+
+        # Do not tamper with user input when re-displaying the form.
+        form = FallbackForm({
+            'local_number_field': 'foo',
+            'foreign_number_field': 'bar',
+        })
+        self.assertIn('name="local_number_field" value="foo"', form.as_p())
+        self.assertIn('name="foreign_number_field" value="bar"', form.as_p())
 
     def test_fallback_widget_switches_between_national_and_international(self):
         region, number_string = self.local_numbers[0]
