@@ -23,7 +23,7 @@ class MandatoryPhoneNumber(models.Model):
 
 
 class OptionalPhoneNumber(models.Model):
-    phone_number = PhoneNumberField(blank=True, default='')
+    phone_number = PhoneNumberField(blank=True)
 
 
 class NullablePhoneNumber(models.Model):
@@ -93,6 +93,11 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(model.phone_number, '')
         model.phone_number = '+49 176 96842671'
         self.assertEqual(type(model.phone_number), PhoneNumber)
+
+        form_class = forms.models.modelform_factory(OptionalPhoneNumber, fields=['phone_number'])
+        form = form_class({})
+        form.is_valid()
+        self.assertEqual('', form.cleaned_data['phone_number'])
 
     def test_null_field_returns_none(self):
         model = NullablePhoneNumber()
@@ -212,6 +217,11 @@ class PhoneNumberFieldTestCase(TestCase):
         })
         self.assertIn('name="local_number_field" value="foo"', form.as_p())
         self.assertIn('name="foreign_number_field" value="bar"', form.as_p())
+
+        form = FallbackForm({'local_number_field': ''})
+        form.fields['local_number_field'].required = False
+        form.is_valid()
+        self.assertEqual('', form.cleaned_data['local_number_field'])
 
     def test_fallback_widget_switches_between_national_and_international(self):
         region, number_string = self.local_numbers[0]

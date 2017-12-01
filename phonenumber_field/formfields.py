@@ -24,6 +24,8 @@ class PhoneNumberField(CharField):
         self.widget.input_type = 'tel'
 
     def to_python(self, value):
+        if value in self.empty_values:
+            return self.empty_value
         phone_number = to_python(value)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages['invalid'])
@@ -46,6 +48,8 @@ class PhoneNumberRegionFallbackField(PhoneNumberField):
 
     def to_python(self, value):
         """Consider numbers without region code numbers in 'default_region'."""
+        if value in self.empty_values:
+            return self.empty_value
         phone_number = to_python(value, self.default_region)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages['invalid'])
