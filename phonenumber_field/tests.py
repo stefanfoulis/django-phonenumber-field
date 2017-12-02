@@ -196,9 +196,9 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': local_number,
             'foreign_number_field': foreign_number,
         })
-        self.assertTrue(any('name="local_number_field" value="%s"' % local_number.as_national in l
+        self.assertTrue(any('local_number_field' in l and local_number.as_national in l
                             for l in form.as_p().splitlines()))
-        self.assertTrue(any('name="foreign_number_field" value="%s"' % foreign_number.as_national in l
+        self.assertTrue(any('foreign_number_field' in l and foreign_number.as_national in l
                             for l in form.as_p().splitlines()))
         self.assertEqual(local_number, form.cleaned_data['local_number_field'])
         self.assertEqual(foreign_number, form.cleaned_data['foreign_number_field'])
@@ -208,9 +208,9 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': foreign_number,
             'foreign_number_field': local_number,
         })
-        self.assertTrue(any('name="local_number_field" value="%s"' % foreign_number.as_international in l
+        self.assertTrue(any('local_number_field' in l and foreign_number.as_international in l
                             for l in form.as_p().splitlines()))
-        self.assertTrue(any('name="foreign_number_field" value="%s"' % local_number.as_international in l
+        self.assertTrue(any('foreign_number_field' in l and local_number.as_international in l
                             for l in form.as_p().splitlines()))
         self.assertEqual(foreign_number, form.cleaned_data['local_number_field'])
         self.assertEqual(local_number, form.cleaned_data['foreign_number_field'])
@@ -220,9 +220,9 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': 'foo',
             'foreign_number_field': 'bar',
         })
-        self.assertTrue(any('name="local_number_field" value="foo"' in l
+        self.assertTrue(any('local_number_field' in l and '"foo"' in l
                             for l in form.as_p().splitlines()))
-        self.assertTrue(any('name="foreign_number_field" value="bar"' in l
+        self.assertTrue(any('foreign_number_field' in l and '"bar"' in l
                             for l in form.as_p().splitlines()))
 
         form = FallbackForm({'local_number_field': ''})
