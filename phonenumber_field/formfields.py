@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
+from django.core.validators import EMPTY_VALUES
 from django.utils.translation import ugettext_lazy as _
 
 from phonenumbers import PhoneNumberFormat
@@ -24,8 +25,8 @@ class PhoneNumberField(CharField):
         self.widget.input_type = 'tel'
 
     def to_python(self, value):
-        if value in self.empty_values:
-            return ''
+        if value in getattr(self, 'empty_values', EMPTY_VALUES):  # Django < 1.6 compat
+            return getattr(self, 'empty_value', '')  # Django < 1.11 compat
         phone_number = to_python(value)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages['invalid'])
