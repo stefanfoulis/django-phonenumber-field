@@ -5,7 +5,8 @@ import phonenumbers
 from django import forms
 from django.conf import settings
 from django.db import models
-from django.test import TestCase, override_settings
+from django.test import TestCase
+from django.test.utils import override_settings
 from phonenumbers import phonenumberutil
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -195,8 +196,10 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': local_number,
             'foreign_number_field': foreign_number,
         })
-        self.assertIn('name="local_number_field" value="%s"' % local_number.as_national, form.as_p())
-        self.assertIn('name="foreign_number_field" value="%s"' % foreign_number.as_national, form.as_p())
+        self.assertTrue(any('name="local_number_field" value="%s"' % local_number.as_national in l
+                            for l in form.as_p().splitlines()))
+        self.assertTrue(any('name="foreign_number_field" value="%s"' % foreign_number.as_national in l
+                            for l in form.as_p().splitlines()))
         self.assertEqual(local_number, form.cleaned_data['local_number_field'])
         self.assertEqual(foreign_number, form.cleaned_data['foreign_number_field'])
 
@@ -205,8 +208,10 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': foreign_number,
             'foreign_number_field': local_number,
         })
-        self.assertIn('name="local_number_field" value="%s"' % foreign_number.as_international, form.as_p())
-        self.assertIn('name="foreign_number_field" value="%s"' % local_number.as_international, form.as_p())
+        self.assertTrue(any('name="local_number_field" value="%s"' % foreign_number.as_international in l
+                            for l in form.as_p().splitlines()))
+        self.assertTrue(any('name="foreign_number_field" value="%s"' % local_number.as_international in l
+                            for l in form.as_p().splitlines()))
         self.assertEqual(foreign_number, form.cleaned_data['local_number_field'])
         self.assertEqual(local_number, form.cleaned_data['foreign_number_field'])
 
@@ -215,8 +220,10 @@ class PhoneNumberFieldTestCase(TestCase):
             'local_number_field': 'foo',
             'foreign_number_field': 'bar',
         })
-        self.assertIn('name="local_number_field" value="foo"', form.as_p())
-        self.assertIn('name="foreign_number_field" value="bar"', form.as_p())
+        self.assertTrue(any('name="local_number_field" value="foo"' in l
+                            for l in form.as_p().splitlines()))
+        self.assertTrue(any('name="foreign_number_field" value="bar"' in l
+                            for l in form.as_p().splitlines()))
 
         form = FallbackForm({'local_number_field': ''})
         form.fields['local_number_field'].required = False
