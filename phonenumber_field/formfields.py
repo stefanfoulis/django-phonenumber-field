@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
 from django.utils.translation import ugettext_lazy as _
-
 from phonenumber_field.phonenumber import to_python
 from phonenumber_field.validators import validate_international_phonenumber
 

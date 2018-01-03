@@ -1,6 +1,6 @@
-from setuptools import setup, find_packages
-
+# -*- coding: utf-8 -*-
 from phonenumber_field import __version__
+from setuptools import find_packages, setup
 
 install_requires = ['Django>=1.11', 'babel', 'phonenumbers>=7.0.2']
 

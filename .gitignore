@@ -34,3 +34,5 @@ tests/tmp/
 *.coverage
 htmlcov/
 share/
+.coverage*
+.pytest_cache
