@@ -77,7 +77,7 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
         self.region = region
         super(PhoneNumberInternationalFallbackWidget, self).__init__(attrs)
 
-    def _format_value(self, value):
+    def format_value(self, value):
         if isinstance(value, PhoneNumber):
             number_region = region_code_for_number(value)
             if self.region != number_region:
@@ -85,4 +85,4 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
             else:
                 formatter = PhoneNumberFormat.NATIONAL
             return value.format_as(formatter)
-        return super(PhoneNumberInternationalFallbackWidget, self)._format_value(value)
+        return super(PhoneNumberInternationalFallbackWidget, self).format_value(value)
