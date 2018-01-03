@@ -75,17 +75,3 @@ class PhoneNumberField(models.Field):
         }
         defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
-
-
-try:
-    from south.modelsinspector import add_introspection_rules
-
-    add_introspection_rules([
-        (
-            [PhoneNumberField],
-            [],
-            {},
-        ),
-    ], [r"^phonenumber_field\.modelfields\.PhoneNumberField"])
-except ImportError:
-    pass
