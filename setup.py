@@ -3,7 +3,7 @@ import pkgutil
 
 from phonenumber_field import __version__
 
-install_requires = ['django>=1.5', 'babel']
+install_requires = ['Django>=1.11', 'babel']
 if 'phonenumbers' not in [p[1] for p in pkgutil.iter_modules()]:
     install_requires.append('phonenumberslite>=7.0.2')
 
