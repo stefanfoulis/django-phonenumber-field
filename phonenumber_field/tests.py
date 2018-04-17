@@ -2,11 +2,13 @@
 
 
 import phonenumbers
+from django import forms
 from django.conf import settings
 from django.db import models
 from django.test.testcases import TestCase
 from phonenumbers import phonenumberutil
 
+from phonenumber_field.formfields import PhoneNumberField as PhoneNumberFormField
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
@@ -31,6 +33,15 @@ class OptionalPhoneNumber(models.Model):
 
 class NullablePhoneNumber(models.Model):
     phone_number = PhoneNumberField(null=True)
+
+
+##############
+# Test Forms #
+##############
+
+
+class LocalizedPhoneNumberForm(forms.Form):
+    phone_number = PhoneNumberFormField(region='RU')
 
 
 ##############
@@ -98,6 +109,12 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(type(model.phone_number), PhoneNumber)
         self.assertTrue(model.phone_number.is_valid())
         self.assertEqual(model.phone_number.as_e164, '+79876543210')
+
+    def test_localized_phone_number_form_field(self):
+        phonenumber_ru = dict(self.local_numbers)['RU']
+        form = LocalizedPhoneNumberForm(data={'phone_number': phonenumber_ru})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['phone_number'].as_e164, '+79876543210')
 
     def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
