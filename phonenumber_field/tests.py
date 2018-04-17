@@ -97,7 +97,7 @@ class PhoneNumberFieldTestCase(TestCase):
         model = LocalizedPhoneNumber(phone_number=phonenumber_ru)
         self.assertEqual(type(model.phone_number), PhoneNumber)
         self.assertTrue(model.phone_number.is_valid())
-        self.assertEqual(model.phone_number.as_e164, '+{}'.format(phonenumber_ru))
+        self.assertEqual(model.phone_number.as_e164, '+79876543210')
 
     def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
