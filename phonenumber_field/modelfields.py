@@ -52,6 +52,7 @@ class PhoneNumberField(models.CharField):
 
     description = _("Phone number")
 
+<<<<<<< HEAD
     def __init__(self, *args, region=None, **kwargs):
         kwargs.setdefault("max_length", 128)
         super().__init__(*args, **kwargs)
