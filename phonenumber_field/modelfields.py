@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
+import functools
 
 
 class PhoneNumberDescriptor:
@@ -48,18 +49,16 @@ class PhoneNumberDescriptor:
 class PhoneNumberField(models.CharField):
     attr_class = PhoneNumber
     descriptor_class = PhoneNumberDescriptor
-    default_validators = [validate_international_phonenumber]
 
     description = _("Phone number")
 
     def __init__(self, *args, region=None, **kwargs):
         kwargs.setdefault("max_length", 128)
         super().__init__(*args, **kwargs)
-        self._region = region
-
-    @property
-    def region(self):
-        return self._region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
+        self.region = kwarge.pop('region', None)
+        self.validators.append(validators.MaxLengthValidator(self.max_length))
+        region_validator = functools.partial(validate_international_phonenumber, region=self.region)
+        self.validators.append(region_validator)
 
     def check(self, **kwargs):
         errors = super().check(**kwargs)
@@ -77,25 +76,13 @@ class PhoneNumberField(models.CharField):
         """
         Perform preliminary non-db specific value checks and conversions.
         """
-        if not value:
-            return super().get_prep_value(value)
-
-        if isinstance(value, PhoneNumber):
-            parsed_value = value
-        else:
-            # Convert the string to a PhoneNumber object.
-            parsed_value = to_python(value)
-
-        if parsed_value.is_valid():
-            # A valid phone number. Normalize it for storage.
-            format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
-            fmt = PhoneNumber.format_map[format_string]
-            value = parsed_value.format_as(fmt)
-        else:
-            # Not a valid phone number. Store the raw string.
-            value = parsed_value.raw_input
-
-        return super().get_prep_value(value)
+        value = super().get_prep_value(value)
+        value = to_python(value, region=self.region)
+        if not isinstance(value, PhoneNumber):
+            return value
+        format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+        fmt = PhoneNumber.format_map[format_string]
+        return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name, *args, **kwargs):
         super().contribute_to_class(cls, name, *args, **kwargs)

@@ -64,6 +64,7 @@ Then, you can use it like any regular model field::
         name = models.CharField(max_length=255)
         phone_number = PhoneNumberField()
         fax_number = PhoneNumberField(blank=True)
+        phone_number_ru = PhoneNumberField(region='ru')
 
 Use as formfield::
 
