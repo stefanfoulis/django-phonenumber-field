@@ -52,8 +52,8 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         """
         return phonenumbers.is_valid_number(self)
 
-    def format_as(self, format):
-        return phonenumbers.format_number(self, format)
+    def format_as(self, fmt):
+        return phonenumbers.format_number(self, fmt)
 
     @property
     def as_international(self):
