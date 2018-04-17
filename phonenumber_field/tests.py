@@ -18,7 +18,7 @@ from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 
 class LocalizedPhoneNumber(models.Model):
-    phone_number = PhoneNumberField(region='ru')
+    phone_number = PhoneNumberField(region='RU')
 
 
 class MandatoryPhoneNumber(models.Model):
@@ -96,6 +96,7 @@ class PhoneNumberFieldTestCase(TestCase):
         phonenumber_ru = dict(self.local_numbers)['RU']
         model = LocalizedPhoneNumber(phone_number=phonenumber_ru)
         self.assertEqual(type(model.phone_number), PhoneNumber)
+        self.assertTrue(model.phone_number.is_valid())
         self.assertEqual(model.phone_number.as_e164, '+{}'.format(phonenumber_ru))
 
     def test_blank_field_returns_empty_string(self):

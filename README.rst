@@ -64,7 +64,7 @@ Then, you can use it like any regular model field::
         name = models.CharField(max_length=255)
         phone_number = PhoneNumberField()
         fax_number = PhoneNumberField(blank=True)
-        phone_number_ru = PhoneNumberField(region='ru')
+        phone_number_ru = PhoneNumberField(region='RU')
 
 Use as formfield::
 
@@ -72,7 +72,7 @@ Use as formfield::
 
     class MyForm(forms.Form):
         phone_number = PhoneNumberField()
-        phone_number_ru = PhoneNumberField(region='ru')
+        phone_number_ru = PhoneNumberField(region='RU')
 
 Internally, PhoneNumberField is based upon ``CharField`` and by default
 represents the number as a string of an international phonenumber in the database (e.g
