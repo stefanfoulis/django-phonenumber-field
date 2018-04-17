@@ -65,6 +65,14 @@ Then, you can use it like any regular model field::
         phone_number = PhoneNumberField()
         fax_number = PhoneNumberField(blank=True)
 
+Use as formfield::
+
+    from phonenumber_field.formfields import PhoneNumberField
+
+    class MyForm(forms.Form):
+        phone_number = PhoneNumberField()
+        phone_number_ru = PhoneNumberField(region='ru')
+
 Internally, PhoneNumberField is based upon ``CharField`` and by default
 represents the number as a string of an international phonenumber in the database (e.g
 ``'+41524204242'``).

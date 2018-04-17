@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 
 from phonenumber_field.phonenumber import to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
+import functools
 
 
 class PhoneNumberField(CharField):
@@ -16,7 +17,7 @@ class PhoneNumberField(CharField):
         self.widget.input_type = "tel"
 
         validate_region(region)
-        self.region = region
+        self._set_region(region)
 
         if "invalid" not in self.error_messages:
             if region:
@@ -40,8 +41,19 @@ class PhoneNumberField(CharField):
 
         if phone_number in validators.EMPTY_VALUES:
             return self.empty_value
-
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages["invalid"])
 
         return phone_number
+
+    def _get_region(self):
+        return self._region
+
+    def _set_region(self, region):
+        self._region = region
+        if hasattr(self, '_region_validator') and self._region_validator in self.validators:
+            self.validators.remove(self._region_validator)
+        self._region_validator = functools.partial(validate_international_phonenumber, region=region)
+        self.validators.append(self._region_validator)
+
+    region = property(_get_region, _set_region)

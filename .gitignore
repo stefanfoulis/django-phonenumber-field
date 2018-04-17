@@ -34,4 +34,7 @@ tests/tmp/
 *.coverage
 htmlcov/
 share/
+<<<<<<< HEAD
 .coverage*
+*.wpr
+*.wpu
