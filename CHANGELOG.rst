@@ -1,12 +1,21 @@
 CHANGELOG
 =========
 
+2.0.0 (2018-01-04)
+------------------
+
+* Add Django 2.0 support
+* Drop Support for Django<1.11
+* Translations: Swedish
+
+
 1.3.0 (2017-04-15)
 ------------------
 
 * Add rest_framework Serializer
 * Hashable phonenumber object
 * Various bugfixes and improvements
+
 
 1.2.0 (2017-03-17)
 ------------------

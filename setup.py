@@ -3,7 +3,7 @@ import pkgutil
 
 from phonenumber_field import __version__
 
-install_requires = ['django>=1.5', 'babel']
+install_requires = ['Django>=1.11', 'babel']
 if 'phonenumbers' not in [p[1] for p in pkgutil.iter_modules()]:
     install_requires.append('phonenumberslite>=7.0.2')
 
@@ -17,9 +17,9 @@ setup(
     install_requires=install_requires,
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
-    author_email='stefan.foulis@gmail.com',
+    author_email='stefan@foulis.ch',
     maintainer='Stefan Foulis',
-    maintainer_email='stefan.foulis@gmail.com',
+    maintainer_email='stefan@foulis.ch',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -33,9 +33,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Internet :: WWW/HTTP',
