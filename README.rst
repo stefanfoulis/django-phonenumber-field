@@ -26,8 +26,7 @@ Included are:
   to your Django settings in order to know which national number format to recognize.  The
   setting is a string containing an ISO-3166-1 two-letter country code.
 
-*Note:* This package will by default install `phonenumberslite` if no
- phonenumbers package has been installed already.
+*Note:* This package will by default install ``phonenumberslite`` if no phonenumbers package has been installed already.
 
 Installation
 ============
