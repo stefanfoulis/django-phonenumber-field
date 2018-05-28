@@ -5,7 +5,7 @@ django-phonenumber-field
 .. image:: https://travis-ci.org/stefanfoulis/django-phonenumber-field.svg?branch=master
     :target: https://travis-ci.org/stefanfoulis/django-phonenumber-field
 .. image:: https://img.shields.io/coveralls/stefanfoulis/django-phonenumber-field/develop.svg
-    :target: https://coveralls.io/github/stefanfoulis/django-phonenumber-field?branch=develop
+    :target: https://coveralls.io/github/stefanfoulis/django-phonenumber-field?branch=master
 
 A Django library which interfaces with `python-phonenumbers`_ to validate, pretty print and convert
 phone numbers. ``python-phonenumbers`` is a port of Google's `libphonenumber`_ library, which
@@ -70,3 +70,23 @@ As with ``CharField``'s, it is discouraged to use ``null=True``.
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
+
+
+Running tests
+=============
+
+tox needs to be installed.
+To run the whole test matrix with the locally available python interpreters and generate a combined coverage report::
+
+    tox
+    open htmlcov/index.html
+
+
+run a specific combination::
+
+    tox -e py36-dj21,py36-dj111
+
+run a specific combination and generate a coverage report::
+
+    tox -e begin,py36-dj21,py36-dj111,end
+    open htmlcov/index.html

@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 
 import phonenumbers
 from django.conf import settings
 from django.db import models
 from django.test.testcases import TestCase
-from phonenumbers import phonenumberutil
-
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-
+from phonenumbers import phonenumberutil
 
 ###############
 # Test Models #
 ###############
+
 
 class MandatoryPhoneNumber(models.Model):
     phone_number = PhoneNumberField()
@@ -111,8 +110,8 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
         opt_phone_db = OptionalPhoneNumber.objects.get(id=opt_phone.id)
-        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
-        self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
+        self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
+        self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
     def test_can_assign_phonenumber(self):
         """
@@ -151,10 +150,13 @@ class PhoneNumberFieldTestCase(TestCase):
         Perform aggregate tests for all db storage formats
         """
         old_format = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+        old_default_region = getattr(settings, 'PHONENUMBER_DEFAULT_REGION', None)
+        setattr(settings, 'PHONENUMBER_DEFAULT_REGION', 'DE')
         for frmt in PhoneNumber.format_map:
             setattr(settings, 'PHONENUMBER_DB_FORMAT', frmt)
             self._test_storage_formats()
         setattr(settings, 'PHONENUMBER_DB_FORMAT', old_format)
+        setattr(settings, 'PHONENUMBER_DEFAULT_REGION', old_default_region)
 
     def test_prep_value(self):
         """
