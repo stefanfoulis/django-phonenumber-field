@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+next
+----
+
+* Statically depend on phonenumbers
+  Previously the phonenumberslight dependency was used dynamically in setup.py
+  if it already was installed, causing problems with building wheels and
+  with pipenv.
+
+
 2.0.0 (2018-01-04)
 ------------------
 

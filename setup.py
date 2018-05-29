@@ -1,11 +1,8 @@
-from setuptools import setup, find_packages
-import pkgutil
-
+# -*- coding: utf-8 -*-
 from phonenumber_field import __version__
+from setuptools import find_packages, setup
 
-install_requires = ['Django>=1.11', 'babel']
-if 'phonenumbers' not in [p[1] for p in pkgutil.iter_modules()]:
-    install_requires.append('phonenumberslite>=7.0.2')
+install_requires = ['Django>=1.11', 'babel', 'phonenumbers>=7.0.2']
 
 setup(
     name="django-phonenumber-field",
