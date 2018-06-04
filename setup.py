@@ -2,7 +2,6 @@
 from phonenumber_field import __version__
 from setuptools import find_packages, setup
 
-install_requires = ['Django>=1.11', 'babel', 'phonenumbers>=7.0.2']
 
 setup(
     name="django-phonenumber-field",
@@ -11,7 +10,11 @@ setup(
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
-    install_requires=install_requires,
+    install_requires=[
+        'Django>=1.11.3',
+        'babel',
+        'phonenumbers>=7.0.2',
+    ],
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
     author_email='stefan@foulis.ch',
