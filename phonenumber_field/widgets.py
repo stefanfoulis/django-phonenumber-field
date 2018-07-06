@@ -51,7 +51,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
         if value:
             if type(value) == PhoneNumber:
                 if value.country_code and value.national_number:
-                    return ["+%d" % value.country_code, value.national_number]
+                    return ["+%d" % value.country_code, national_significant_number(value)]
             else:
                 return value.split('.')
         return [None, ""]
