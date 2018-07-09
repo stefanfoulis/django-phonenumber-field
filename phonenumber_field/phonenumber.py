@@ -46,6 +46,13 @@ class PhoneNumber(phonenumbers.PhoneNumber):
             )
         return super().__repr__()
 
+    def __json__(self):
+        format_string = getattr(settings, 'PHONENUMBER_DEFAULT_FORMAT', 'E164')
+        fmt = self.format_map[format_string]
+        return self.format_as(fmt)
+
+    for_json = __json__  # supported by simplejson
+
     def is_valid(self):
         """
         checks whether the number supplied is actually valid
