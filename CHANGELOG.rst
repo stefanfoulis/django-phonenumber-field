@@ -1,13 +1,15 @@
 CHANGELOG
 =========
 
-next
-----
+2.0.1 (2018-08-19)
+------------------
 
 * Statically depend on phonenumbers
   Previously the phonenumberslight dependency was used dynamically in setup.py
   if it already was installed, causing problems with building wheels and
   with pipenv.
+* Added Ukrainian locale
+* Added Simplified Chinese locale
 
 
 2.0.0 (2018-01-04)
