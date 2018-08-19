@@ -33,12 +33,10 @@ class TestModelPhoneNDNU(models.Model):
     phone = PhoneNumberField(default=models.NOT_PROVIDED, null=True, unique=True)
 
 
-
 class TestModelPhoneBNDNU(models.Model):
     """Field Test for when Blank, No Default, Null & Unique"""
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField(blank=True, default=models.NOT_PROVIDED, null=True, unique=True)
-
 
 
 class TestModelPhoneDNU(models.Model):
