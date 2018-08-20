@@ -85,6 +85,17 @@ class PhoneNumberFieldTestCase(TestCase):
             self.assertIn(number, numbers_set)
         self.assertNotIn(self.test_number_1, numbers_set)
 
+    def test_eq_and_ne(self):
+        number_1 = '+411111111'
+        number_2 = '+412222222'
+        one = PhoneNumber.from_string('+411111111')
+        two = PhoneNumber.from_string('+412222222')
+        self.assertNotEqual(one, two)
+        self.assertNotEqual(one, number_2)
+        self.assertNotEqual(number_2, one)
+        self.assertEqual(one, number_1)
+        self.assertEqual(number_1, one)
+
     def test_blank_field_returns_empty_string(self):
         model = OptionalPhoneNumber()
         self.assertEqual(model.phone_number, '')

@@ -6,7 +6,6 @@ import sys
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-from phonenumbers import NumberParseException
 
 # Snippet from the `six` library to help with Python3 compatibility
 if sys.version_info[0] == 3:
@@ -88,13 +87,16 @@ class PhoneNumber(phonenumbers.PhoneNumber):
                 try:
                     other = phonenumbers.parse(
                         other, region=default_region)
-                except NumberParseException:
+                except phonenumbers.NumberParseException:
                     # Conversion is not possible, thus not equal
                     return False
             other_string = phonenumbers.format_number(other, fmt)
             return self.format_as(fmt) == other_string
         else:
             return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __hash__(self):
         return hash(self.__unicode__())
@@ -106,7 +108,7 @@ def to_python(value):
     elif value and isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value)
-        except NumberParseException:
+        except phonenumbers.NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
     elif (isinstance(value, phonenumbers.PhoneNumber) and
@@ -118,6 +120,6 @@ def to_python(value):
     else:
         # TODO: this should somehow show that it has invalid data, but not
         #       completely die for bad data in the database.
-        #       (Same for the NumberParseException above)
+        #       (Same for the phonenumbers.NumberParseException above)
         phone_number = None
     return phone_number
