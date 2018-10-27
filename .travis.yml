@@ -12,6 +12,14 @@ matrix:
   include:
     - python: 2.7
       env: DJANGO="1.11"
+    - python: 3.7
+      env: DJANGO="2.0"
+      dist: xenial
+      sudo: true
+    - python: 3.7
+      env: DJANGO="2.1"
+      dist: xenial
+      sudo: true
 branches:
   only:
     - master
