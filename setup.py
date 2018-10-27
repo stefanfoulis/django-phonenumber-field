@@ -13,8 +13,11 @@ setup(
     install_requires=[
         'Django>=1.11.3',
         'babel',
-        'phonenumbers>=7.0.2',
     ],
+    extras_require={
+        'phonenumbers': ['phonenumbers>=7.0.2'],
+        'phonenumberslite': ['phonenumberslite>=7.0.2'],
+    },
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
     author_email='stefan@foulis.ch',

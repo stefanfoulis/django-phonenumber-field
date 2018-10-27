@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+next
+----
+
+* Removed hardcoded dependency to phonenumbers library. Now developers have to
+  manually install either honenumbers or phonenumberslite.
+
+
 2.0.1 (2018-08-19)
 ------------------
 
