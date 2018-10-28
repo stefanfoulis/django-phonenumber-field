@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  tox:
+    build:
+      context: "."
+      dockerfile: Dockerfile-tox
+      args:
+        SKIP_TOX: "false"
+    volumes:
+      - "./dist:/app/dist:delegated"
+      - "./htmlcov:/app/htmlcov:delegated"
+      - "./phonenumber_field:/app/phonenumber_field:delegated"
+      - "./testproject:/app/testproject:delegated"
+      - "./MANIFEST.in:/app/MANIFEST.in:delegated"
+      - "./README.rst:/app/README.rst:delegated"
+      - "./setup.cfg:/app/setup.cfg:delegated"
+      - "./setup.py:/app/setup.py:delegated"
+      - "./tox.ini:/app/tox.ini:delegated"
