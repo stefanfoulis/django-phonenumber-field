@@ -1,0 +1,11 @@
+FROM themattrix/tox-base
+
+COPY MANIFEST.in README.rst setup.cfg setup.py tox.ini /app/
+COPY phonenumber_field /app/phonenumber_field
+COPY testproject /app/testproject
+# Initiate all the venvs
+RUN tox --notest
+
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["tox"]
