@@ -1,11 +1,15 @@
 CHANGELOG
 =========
 
-next
-----
+2.1.0 (2018-10-28)
+------------------
 
 * Removed hardcoded dependency to phonenumbers library. Now developers have to
-  manually install either honenumbers or phonenumberslite.
+  manually install either phonenumbers or phonenumberslite.
+* Added Romanian locale
+* Added Bangla locale
+* Update French locale
+* Update Italian locale
 
 
 2.0.1 (2018-08-19)
