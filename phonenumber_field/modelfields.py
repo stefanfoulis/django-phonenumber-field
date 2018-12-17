@@ -57,6 +57,8 @@ class PhoneNumberField(models.Field):
         """
         value = super(PhoneNumberField, self).get_prep_value(value)
         value = to_python(value)
+        if (value in validators.EMPTY_VALUES) and (self.null is True):
+            return None
         if not isinstance(value, PhoneNumber):
             return value
         format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
