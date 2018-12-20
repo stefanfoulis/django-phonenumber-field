@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import phonenumbers
 from django.conf import settings
 from django.db import models
+from django import forms
 from django.test.testcases import TestCase
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
@@ -24,7 +25,13 @@ class OptionalPhoneNumber(models.Model):
 
 
 class NullablePhoneNumber(models.Model):
-    phone_number = PhoneNumberField(null=True)
+    phone_number = PhoneNumberField(blank=True, null=True)
+
+
+class PhoneNumberForm(forms.ModelForm):
+    class Meta:
+        model = NullablePhoneNumber
+        fields = ('phone_number',)
 
 
 ##############
@@ -206,3 +213,9 @@ class PhoneNumberFieldTestCase(TestCase):
             gb_widget.render("number", "error"),
             u'<input name="number" type="text" value="error" />'
         )
+
+    def test_phone_number_form_empty_value(self):
+        form = PhoneNumberForm({'phone_number': ''})
+
+        self.assertTrue(form.is_valid())
+        self.assertDictEqual({'phone_number': None}, form.cleaned_data)
