@@ -49,6 +49,11 @@ class PhoneNumberFieldTestCase(TestCase):
     local_numbers = [
         ('GB', '01606 751 78'),
         ('DE', '0176/96842671'),
+        ('US', '202-555-0123'),
+        ('IT', '0346 3368300'),
+        ('CA', '613-555-0107'),
+        ('KZ', '7172 72-17-05'),
+        ('RU', '495 606-98-88'),
     ]
     storage_numbers = {
         'E164': ['+44 113 8921113', '+441138921113'],
@@ -82,6 +87,30 @@ class PhoneNumberFieldTestCase(TestCase):
             self.assertEqual(number, numbers[0])
             for number_string in self.equal_number_strings:
                 self.assertEqual(number, number_string)
+
+    def test_lookup_region(self):
+        numbers = {
+            region: MandatoryPhoneNumber.objects.create(
+                phone_number=PhoneNumber.from_string(number_string,
+                                                     region=region)
+            ) for region, number_string in self.local_numbers
+        }
+        self.assertFalse(
+            MandatoryPhoneNumber.objects.filter(phone_number__region='FR')
+        )
+
+        for region, number in numbers.items():
+            item = MandatoryPhoneNumber.objects.get(
+                phone_number__region=region
+            )
+            self.assertEqual(item, number)
+            qs = MandatoryPhoneNumber.objects.exclude(
+                phone_number__region=region
+            )
+            self.assertNotIn(
+                number,
+                [n.phone_number for n in qs]
+            )
 
     def test_same_number_has_same_hash(self):
         numbers = [PhoneNumber.from_string(number_string)

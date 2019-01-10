@@ -43,7 +43,7 @@ As a an alternative to the ``phonenumbers`` package it is possible to install th
 Basic usage
 ===========
 
-First, add ``phonenumber_field`` to the list of the installed apps in 
+First, add ``phonenumber_field`` to the list of the installed apps in
 your ``settings.py`` file::
 
     INSTALLED_APPS = [
@@ -75,6 +75,14 @@ As with ``CharField``'s, it is discouraged to use ``null=True``.
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
+
+
+Lookup by region
+----------------
+
+It's possible to lookup numbers using region like 'US', 'UK', etc::
+
+    MyModel.objects.filter(phone_number__region='UK')
 
 
 Running tests
@@ -111,4 +119,3 @@ re-create the virtual environments.
 
 After a full test run the coverage report will be available at
 ``htmlcov/index.html``.
-

@@ -4,10 +4,37 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core import validators
 from django.db import models, connection
+from django.db.models.lookups import Regex
 from django.utils.translation import ugettext_lazy as _
+from phonenumbers import PhoneMetadata
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.validators import validate_international_phonenumber
+
+
+class ByRegion(Regex):
+    lookup_name = 'region'
+
+    def get_rhs_op(self, connection, rhs):
+        return connection.operators['regex'] % rhs
+
+    def as_sql(self, compiler, connection):
+        self.lookup_name = 'regex'
+        return super(ByRegion, self).as_sql(compiler, connection)
+
+    def process_rhs(self, compiler, connection):
+        rhs, params = super(ByRegion, self).process_rhs(compiler, connection)
+        region = params[0][:2].upper()
+        meta_data = PhoneMetadata.metadata_for_region(region)
+        if not meta_data:
+            raise Exception(
+                'No metadata are available to {} region'.format(region)
+            )
+        regex = r'^\+{country_code}({number_pattern})$'.format(
+            country_code=meta_data.country_code,
+            number_pattern=meta_data.general_desc.national_number_pattern
+        )
+        return rhs, [regex]
 
 
 class PhoneNumberDescriptor(object):
@@ -79,3 +106,6 @@ class PhoneNumberField(models.Field):
 
         defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
+
+
+PhoneNumberField.register_lookup(ByRegion)
