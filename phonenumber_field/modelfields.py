@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core import validators
-from django.db import models
+from django.db import models, connection
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
@@ -73,5 +73,9 @@ class PhoneNumberField(models.Field):
             'form_class': formfields.PhoneNumberField,
             'error_messages': self.error_messages,
         }
+
+        if self.null and not connection.features.interprets_empty_strings_as_nulls:
+            defaults['empty_value'] = None
+
         defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
