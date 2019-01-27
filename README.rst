@@ -70,8 +70,6 @@ This variable must be one of  ``'E164'``, ``'INTERNATIONAL'``, ``'NATIONAL'`` or
 Recommended is one of the globally meaningful formats  ``'E164'``, ``'INTERNATIONAL'`` or
 ``'RFC3966'``. ``'NATIONAL'`` format require to set up ``PHONENUMBER_DEFAULT_REGION`` variable.
 
-As with ``CharField``'s, it is discouraged to use ``null=True``.
-
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
