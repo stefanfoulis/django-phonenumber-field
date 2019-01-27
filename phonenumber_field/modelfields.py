@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core import validators
-from django.db import models, connection
+from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
+
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.validators import validate_international_phonenumber
@@ -27,7 +28,9 @@ class PhoneNumberDescriptor(object):
     def __init__(self, field):
         self.field = field
 
-    def __get__(self, instance=None, owner=None):  # lgtm [py/special-method-wrong-signature]
+    def __get__(
+        self, instance=None, owner=None
+    ):  # lgtm [py/special-method-wrong-signature]
         if instance is None:
             return self
         return instance.__dict__[self.field.name]
@@ -44,7 +47,7 @@ class PhoneNumberField(models.Field):
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = kwargs.get('max_length', 128)
+        kwargs["max_length"] = kwargs.get("max_length", 128)
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
 
@@ -59,23 +62,22 @@ class PhoneNumberField(models.Field):
         value = to_python(value)
         if not isinstance(value, PhoneNumber):
             return value
-        format_string = getattr(settings, 'PHONENUMBER_DB_FORMAT', 'E164')
+        format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
         fmt = PhoneNumber.format_map[format_string]
         return value.format_as(fmt)
 
     def contribute_to_class(self, cls, name, *args, **kwargs):
-        super(PhoneNumberField, self).contribute_to_class(cls, name, *args,
-                                                          **kwargs)
+        super(PhoneNumberField, self).contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, self.name, self.descriptor_class(self))
 
     def formfield(self, **kwargs):
         defaults = {
-            'form_class': formfields.PhoneNumberField,
-            'error_messages': self.error_messages,
+            "form_class": formfields.PhoneNumberField,
+            "error_messages": self.error_messages,
         }
 
         if self.null and not connection.features.interprets_empty_strings_as_nulls:
-            defaults['empty_value'] = None
+            defaults["empty_value"] = None
 
         defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
