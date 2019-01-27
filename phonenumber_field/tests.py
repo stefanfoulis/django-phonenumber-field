@@ -4,11 +4,13 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from django.db import models
+from django.test import override_settings
 from django.test.testcases import TestCase
 
 import phonenumbers
 from phonenumbers import phonenumberutil
 
+from phonenumber_field.formfields import PhoneNumberRegionFallbackField
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
@@ -23,7 +25,7 @@ class MandatoryPhoneNumber(models.Model):
 
 
 class OptionalPhoneNumber(models.Model):
-    phone_number = PhoneNumberField(blank=True, default="")
+    phone_number = PhoneNumberField(blank=True)
 
 
 class NullablePhoneNumber(models.Model):
@@ -116,6 +118,13 @@ class PhoneNumberFieldTestCase(TestCase):
         model.phone_number = "+49 176 96842671"
         self.assertEqual(type(model.phone_number), PhoneNumber)
 
+        form_class = forms.models.modelform_factory(
+            OptionalPhoneNumber, fields=["phone_number"]
+        )
+        form = form_class({})
+        form.is_valid()
+        self.assertEqual("", form.cleaned_data["phone_number"])
+
     def test_null_field_returns_none(self):
         model = NullablePhoneNumber()
         self.assertEqual(model.phone_number, None)
@@ -201,6 +210,77 @@ class PhoneNumberFieldTestCase(TestCase):
                 self.storage_numbers[frmt][1],
             )
         setattr(settings, "PHONENUMBER_DB_FORMAT", old_format)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="DE")
+    def test_fallback_field(self):
+        local_number = PhoneNumber.from_string(self.local_numbers[1][1], region="DE")
+        foreign_number = PhoneNumber.from_string(self.local_numbers[0][1], region="GB")
+
+        class FallbackForm(forms.Form):
+            local_number_field = PhoneNumberRegionFallbackField()
+            foreign_number_field = PhoneNumberRegionFallbackField(region="GB")
+
+        # Show and parse national numbers without region code.
+
+        form = FallbackForm(
+            {"local_number_field": local_number, "foreign_number_field": foreign_number}
+        )
+        self.assertTrue(
+            any(
+                "local_number_field" in l and local_number.as_national in l
+                for l in form.as_p().splitlines()
+            )
+        )
+        self.assertTrue(
+            any(
+                "foreign_number_field" in l and foreign_number.as_national in l
+                for l in form.as_p().splitlines()
+            )
+        )
+        self.assertEqual(local_number, form.cleaned_data["local_number_field"])
+        self.assertEqual(foreign_number, form.cleaned_data["foreign_number_field"])
+
+        # Show and parse international numbers with region code.
+        form = FallbackForm(
+            {"local_number_field": foreign_number, "foreign_number_field": local_number}
+        )
+        self.assertTrue(
+            any(
+                "local_number_field" in l and foreign_number.as_international in l
+                for l in form.as_p().splitlines()
+            )
+        )
+        self.assertTrue(
+            any(
+                "foreign_number_field" in l and local_number.as_international in l
+                for l in form.as_p().splitlines()
+            )
+        )
+        self.assertEqual(foreign_number, form.cleaned_data["local_number_field"])
+        self.assertEqual(local_number, form.cleaned_data["foreign_number_field"])
+
+        # Do not tamper with user input when re-displaying the form.
+        form = FallbackForm(
+            {"local_number_field": "foo", "foreign_number_field": "bar"}
+        )
+        self.assertTrue(
+            any(
+                "local_number_field" in l and '"foo"' in l
+                for l in form.as_p().splitlines()
+            )
+        )
+        self.assertTrue(
+            any(
+                "foreign_number_field" in l and '"bar"' in l
+                for l in form.as_p().splitlines()
+            )
+        )
+
+        form = FallbackForm({"local_number_field": ""})
+
+        form.fields["local_number_field"].required = False
+        form.is_valid()
+        self.assertEqual("", form.cleaned_data["local_number_field"])
 
     def test_fallback_widget_switches_between_national_and_international(self):
         region, number_string = self.local_numbers[0]

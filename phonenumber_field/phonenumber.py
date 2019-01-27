@@ -108,12 +108,14 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         return hash(self.__unicode__())
 
 
-def to_python(value):
+def to_python(value, default_region=None):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = value
     elif value and isinstance(value, string_types):
         try:
-            phone_number = PhoneNumber.from_string(phone_number=value)
+            phone_number = PhoneNumber.from_string(
+                phone_number=value, region=default_region
+            )
         except phonenumbers.NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
