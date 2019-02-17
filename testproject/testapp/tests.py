@@ -10,9 +10,9 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.core import checks
-from django.db.models import Model, Q
-from django.utils.encoding import force_text
+from django.db.models import Model
 from django.test import TestCase, override_settings
+from django.utils.encoding import force_text
 
 import phonenumbers
 from phonenumbers import phonenumberutil
@@ -217,8 +217,9 @@ class PhonenumerFieldAppTest(TestCase):
         """Basic Field Test"""
         from testapp.models import TestModel
         from phonenumber_field.phonenumber import PhoneNumber
+
         tm = TestModel()
-        tm.phone = '+41 52 424 2424'
+        tm.phone = "+41 52 424 2424"
         tm.full_clean()
         tm.save()
         pk = tm.id
@@ -234,13 +235,14 @@ class PhonenumerFieldAppTest(TestCase):
     def test_save_blank_phone_to_database(self):
         """Field Test for when Blank"""
         from testapp.models import TestModelPhoneB as TestModel
+
         tm = TestModel()
         tm.save()
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
         self.assertQuerysetEqual(
-            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform,
+            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
         )
 
     def __test_nullable_field_helper(self, TestModel):
@@ -252,7 +254,7 @@ class PhonenumerFieldAppTest(TestCase):
         tm = TestModel.objects.get(pk=pk)
         self.assertIsNone(tm.phone)
         self.assertQuerysetEqual(
-            TestModel.objects.all(), [(tm.pk, "", None)], transform=phone_transform,
+            TestModel.objects.all(), [(tm.pk, "", None)], transform=phone_transform
         )
 
         # ensure that null values do not cause uniqueness conflicts
@@ -262,21 +264,25 @@ class PhonenumerFieldAppTest(TestCase):
     def test_save_unique_null_phone_to_database(self):
         """Field Test for when Null & Unique"""
         from testapp.models import TestModelPhoneNU as TestModel
+
         self.__test_nullable_field_helper(TestModel)
 
     def test_save_unique_null_blank_phone_to_database(self):
         """Field Test for when Blank, Null & Unique"""
         from testapp.models import TestModelPhoneBNU as TestModel
+
         self.__test_nullable_field_helper(TestModel)
 
     def test_save_unique_null_none_phone_to_database(self):
         """Field Test for when No Default, Null & Unique"""
         from testapp.models import TestModelPhoneNDNU as TestModel
+
         self.__test_nullable_field_helper(TestModel)
 
     def test_save_unique_null_blank_none_phone_to_database(self):
         """Field Test for when Blank, No Default, Null & Unique"""
         from testapp.models import TestModelPhoneBNDNU as TestModel
+
         self.__test_nullable_field_helper(TestModel)
 
     def __test_nullable_default_field_helper(self, TestModel):
@@ -295,11 +301,13 @@ class PhonenumerFieldAppTest(TestCase):
     def test_save_unique_null_default_phone_to_database(self):
         """Field Test for when Default, Null & Unique"""
         from testapp.models import TestModelPhoneDNU as TestModel
+
         self.__test_nullable_default_field_helper(TestModel)
 
     def test_save_unique_null_blank_default_phone_to_database(self):
         """Field Test for when Blank, Default, Null & Unique"""
         from testapp.models import TestModelPhoneBDNU as TestModel
+
         self.__test_nullable_default_field_helper(TestModel)
 
     def __test_nullable_empty_default_field_helper(self, TestModel):
@@ -310,22 +318,25 @@ class PhonenumerFieldAppTest(TestCase):
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
         self.assertQuerysetEqual(
-            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform,
+            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
         )
 
     def test_save_unique_null_default_empty_phone_to_database(self):
         """Field Test for when Empty Default, Null & Unique"""
         from testapp.models import TestModelPhoneEDNU as TestModel
+
         self.__test_nullable_empty_default_field_helper(TestModel)
 
     def test_save_unique_null_blank_default_empty_phone_to_database(self):
         """Field Test for when Blank, Empty Default, Null & Unique"""
         from testapp.models import TestModelPhoneBEDNU as TestModel
+
         self.__test_nullable_empty_default_field_helper(TestModel)
 
     def test_model_attribute_can_be_accessed_on_class(self):
         from testapp.models import TestModel
         from phonenumber_field.modelfields import PhoneNumberDescriptor
+
         self.assertIsInstance(TestModel.phone, PhoneNumberDescriptor)
 
 
