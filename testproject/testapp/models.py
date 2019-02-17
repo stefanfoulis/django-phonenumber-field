@@ -3,6 +3,18 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+class MandatoryPhoneNumber(models.Model):
+    phone_number = PhoneNumberField()
+
+
+class OptionalPhoneNumber(models.Model):
+    phone_number = PhoneNumberField(blank=True, default="")
+
+
+class NullablePhoneNumber(models.Model):
+    phone_number = PhoneNumberField(blank=True, null=True)
+
+
 class TestModel(models.Model):
     """Basic Field Test"""
     name = models.CharField(max_length=255, blank=True, default='')
