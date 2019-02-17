@@ -224,7 +224,7 @@ class PhonenumerFieldAppTest(TestCase):
         pk = tm.id
 
         tm = TestModel.objects.get(pk=pk)
-        self.assertTrue(isinstance(tm.phone, PhoneNumber))
+        self.assertIsInstance(tm.phone, PhoneNumber)
         self.assertQuerysetEqual(
             TestModel.objects.all(),
             [(tm.pk, "", "+41524242424")],
