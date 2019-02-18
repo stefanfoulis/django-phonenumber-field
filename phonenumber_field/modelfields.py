@@ -2,12 +2,13 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.core import validators
+from django.core import checks, validators
 from django.db import connection, models
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from phonenumber_field import formfields
-from phonenumber_field.phonenumber import PhoneNumber, to_python
+from phonenumber_field.phonenumber import PhoneNumber, to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
 
 
@@ -36,7 +37,7 @@ class PhoneNumberDescriptor(object):
         return instance.__dict__[self.field.name]
 
     def __set__(self, instance, value):
-        instance.__dict__[self.field.name] = to_python(value)
+        instance.__dict__[self.field.name] = to_python(value, region=self.field.region)
 
 
 class PhoneNumberField(models.Field):
@@ -48,8 +49,21 @@ class PhoneNumberField(models.Field):
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("max_length", 128)
+        self.region = kwargs.pop("region", None)
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
+
+    def check(self, **kwargs):
+        errors = super(PhoneNumberField, self).check(**kwargs)
+        errors.extend(self._check_region())
+        return errors
+
+    def _check_region(self):
+        try:
+            validate_region(self.region)
+        except ValueError as e:
+            return [checks.Error(force_text(e), obj=self)]
+        return []
 
     def get_internal_type(self):
         return "CharField"
@@ -70,9 +84,15 @@ class PhoneNumberField(models.Field):
         super(PhoneNumberField, self).contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, self.name, self.descriptor_class(self))
 
+    def deconstruct(self):
+        name, path, args, kwargs = super(PhoneNumberField, self).deconstruct()
+        kwargs["region"] = self.region
+        return name, path, args, kwargs
+
     def formfield(self, **kwargs):
         defaults = {
             "form_class": formfields.PhoneNumberField,
+            "region": self.region,
             "error_messages": self.error_messages,
         }
 
