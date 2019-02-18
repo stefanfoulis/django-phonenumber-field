@@ -59,7 +59,6 @@ class PhoneNumberField(models.Field):
         Perform preliminary non-db specific value checks and conversions.
         """
         value = super(PhoneNumberField, self).get_prep_value(value)
-        value = to_python(value)
         if not isinstance(value, PhoneNumber):
             return value
         format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
