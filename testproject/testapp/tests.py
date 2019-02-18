@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".
@@ -5,8 +6,18 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 
-from django.db.models import Q
+from __future__ import unicode_literals
+
+from django import forms
+from django.core import checks
+from django.db.models import Model, Q
+from django.utils.encoding import force_text
 from django.test import TestCase
+
+import phonenumbers
+
+from . import models
+from phonenumber_field import formfields, modelfields
 
 
 class PhonenumerFieldAppTest(TestCase):
@@ -170,3 +181,71 @@ class PhonenumerFieldAppTest(TestCase):
         from testapp.models import TestModel
         from phonenumber_field.modelfields import PhoneNumberDescriptor
         self.assertIsInstance(TestModel.phone, PhoneNumberDescriptor)
+
+
+class RegionPhoneNumberFormFieldTest(TestCase):
+    def test_regional_phone(self):
+        class PhoneNumberForm(forms.Form):
+            canadian_number = formfields.PhoneNumberField(region="CA")
+            french_number = formfields.PhoneNumberField(region="FR")
+
+        form = PhoneNumberForm(
+            {"canadian_number": "604-686-2877", "french_number": "06 12 34 56 78"}
+        )
+
+        self.assertIs(form.is_valid(), True)
+        self.assertEqual("+16046862877", form.cleaned_data["canadian_number"])
+        self.assertEqual("+33612345678", form.cleaned_data["french_number"])
+
+    def test_invalid_region(self):
+        with self.assertRaises(ValueError) as cm:
+            formfields.PhoneNumberField(region="invalid")
+
+        self.assertTrue(
+            force_text(cm.exception).startswith("“invalid” is not a valid region code.")
+        )
+
+
+class RegionPhoneNumberModelFieldTest(TestCase):
+    def test_uses_region(self):
+        m = models.FrenchPhoneOwner(cell_number="06 12 34 56 78")
+        self.assertEqual(phonenumbers.parse("+33612345678"), m.cell_number)
+
+    def test_accepts_international_numbers(self):
+        num = "+16041234567"
+        m = models.FrenchPhoneOwner(cell_number=num)
+        self.assertEqual(phonenumbers.parse(num), m.cell_number)
+
+    def test_formfield_uses_region(self):
+        class FrenchPhoneForm(forms.ModelForm):
+            class Meta:
+                model = models.FrenchPhoneOwner
+                fields = ["cell_number"]
+
+        form = FrenchPhoneForm()
+        self.assertEqual("FR", form.fields["cell_number"].region)
+
+    def test_deconstruct_region(self):
+        phone_field = modelfields.PhoneNumberField(region="CH")
+        _name, path, args, kwargs = phone_field.deconstruct()
+        self.assertEqual("phonenumber_field.modelfields.PhoneNumberField", path)
+        self.assertEqual([], args)
+        self.assertEqual({"max_length": 128, "region": "CH"}, kwargs)
+
+    def test_deconstruct_no_region(self):
+        phone_field = modelfields.PhoneNumberField()
+        _name, path, args, kwargs = phone_field.deconstruct()
+        self.assertEqual("phonenumber_field.modelfields.PhoneNumberField", path)
+        self.assertEqual([], args)
+        self.assertEqual({"max_length": 128, "region": None}, kwargs)
+
+    def test_check_region(self):
+        class InvalidRegionModel(Model):
+            phone_field = modelfields.PhoneNumberField(region="invalid")
+
+        errors = InvalidRegionModel.check()
+        self.assertEqual(1, len(errors))
+        error = errors[0]
+        self.assertIsInstance(error, checks.Error)
+        self.assertTrue(error.msg.startswith("“invalid” is not a valid region code."))
+        self.assertEqual(error.obj, InvalidRegionModel._meta.get_field("phone_field"))

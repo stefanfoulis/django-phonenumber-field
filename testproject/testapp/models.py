@@ -65,3 +65,7 @@ class TestModelPhoneBEDNU(models.Model):
     name = models.CharField(max_length=255, blank=True, default='')
     phone = PhoneNumberField(
         blank=True, default='', null=True, unique=True)
+
+
+class FrenchPhoneOwner(models.Model):
+    cell_number = PhoneNumberField(region="FR")
