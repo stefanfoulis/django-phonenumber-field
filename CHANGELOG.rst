@@ -1,6 +1,8 @@
 CHANGELOG
 =========
 
+* Remove recommendation to add ``phonenumber_field`` to the ``INSTALLED_APPS``.
+
 2.2.0 (2019-01-27)
 ------------------
 

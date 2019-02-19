@@ -43,16 +43,7 @@ As a an alternative to the ``phonenumbers`` package it is possible to install th
 Basic usage
 ===========
 
-First, add ``phonenumber_field`` to the list of the installed apps in 
-your ``settings.py`` file::
-
-    INSTALLED_APPS = [
-        ...
-        'phonenumber_field',
-        ...
-    ]
-
-Then, you can use it like any regular model field::
+Just like any regular model field::
 
     from phonenumber_field.modelfields import PhoneNumberField
 
