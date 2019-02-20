@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.core import checks, validators
-from django.db import connection, models
+from django.core import checks
+from django.db import models
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
@@ -40,7 +40,7 @@ class PhoneNumberDescriptor(object):
         instance.__dict__[self.field.name] = to_python(value, region=self.field.region)
 
 
-class PhoneNumberField(models.Field):
+class PhoneNumberField(models.CharField):
     attr_class = PhoneNumber
     descriptor_class = PhoneNumberDescriptor
     default_validators = [validate_international_phonenumber]
@@ -51,7 +51,6 @@ class PhoneNumberField(models.Field):
         kwargs.setdefault("max_length", 128)
         self.region = kwargs.pop("region", None)
         super(PhoneNumberField, self).__init__(*args, **kwargs)
-        self.validators.append(validators.MaxLengthValidator(self.max_length))
 
     def check(self, **kwargs):
         errors = super(PhoneNumberField, self).check(**kwargs)
@@ -64,9 +63,6 @@ class PhoneNumberField(models.Field):
         except ValueError as e:
             return [checks.Error(force_text(e), obj=self)]
         return []
-
-    def get_internal_type(self):
-        return "CharField"
 
     def get_prep_value(self, value):
         """
@@ -98,9 +94,4 @@ class PhoneNumberField(models.Field):
             "region": self.region,
             "error_messages": self.error_messages,
         }
-
-        if self.null and not connection.features.interprets_empty_strings_as_nulls:
-            defaults["empty_value"] = None
-
-        defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)
