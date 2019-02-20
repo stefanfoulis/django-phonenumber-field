@@ -35,7 +35,7 @@ Installation
     pip install django-phonenumber-field
     pip install phonenumbers
 
-As a an alternative to the ``phonenumbers`` package it is possible to install the
+As an alternative to the ``phonenumbers`` package it is possible to install the
 ``phonenumberslite`` package which has
 `a lower memory footprint <https://github.com/daviddrysdale/python-phonenumbers#memory-usage>`_.
 
@@ -43,7 +43,7 @@ As a an alternative to the ``phonenumbers`` package it is possible to install th
 Basic usage
 ===========
 
-First, add ``phonenumber_field`` to the list of the installed apps in 
+First, add ``phonenumber_field`` to the list of the installed apps in
 your ``settings.py`` file::
 
     INSTALLED_APPS = [
@@ -103,7 +103,7 @@ versions on your development machine, you can use the docker image.::
     docker-compose run --rm tox
 
 Initial build will take a while because tox will setup all the virtual
-environemnts. Just re-run ``docker-compose run --rm tox`` again to re-run tests.
+environments. Just re-run ``docker-compose run --rm tox`` again to re-run tests.
 If you make changes to dependencies, run ``docker-compose build tox`` to
 re-create the virtual environments.
 
