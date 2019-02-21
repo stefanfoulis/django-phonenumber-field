@@ -2,6 +2,19 @@ CHANGELOG
 =========
 
 * Added the ``region`` keyword argument to ``PhoneNumberField``.
+* Fix representation of invalid phone numbers in the database, previously
+  stored as ``+NoneNone``. Now, invalid phone numbers are represented as:
+
+  1. the field's `default`_ when it is specified, or
+  2. empty ``str`` if the field is `blank`_ and not `null`_, or
+  3. null.
+
+  Existing database records can be upgraded with a `data migration`_.
+
+.. _default: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.default
+.. _blank: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.blank
+.. _null: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.null
+.. _data migration: https://docs.djangoproject.com/en/dev/topics/migrations/#data-migrations
 
 2.2.0 (2019-01-27)
 ------------------
