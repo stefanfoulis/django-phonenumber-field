@@ -47,7 +47,7 @@ class PhoneNumberField(models.Field):
     description = _("Phone number")
 
     def __init__(self, *args, **kwargs):
-        kwargs["max_length"] = kwargs.get("max_length", 128)
+        kwargs.setdefault("max_length", 128)
         super(PhoneNumberField, self).__init__(*args, **kwargs)
         self.validators.append(validators.MaxLengthValidator(self.max_length))
 
