@@ -20,6 +20,10 @@ from . import models
 from phonenumber_field import formfields, modelfields
 
 
+def phone_transform(obj):
+    return (obj.pk, obj.name, obj.phone)
+
+
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
         """Basic Field Test"""
@@ -33,19 +37,11 @@ class PhonenumerFieldAppTest(TestCase):
 
         tm = TestModel.objects.get(pk=pk)
         self.assertTrue(isinstance(tm.phone, PhoneNumber))
-        self.assertEqual(str(tm.phone), '+41524242424')
-        self.assertEqual(
-            1,
-            TestModel.objects
-                .exclude(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
-        self.assertEqual(
-            0,
-            TestModel.objects
-                .filter(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
+        self.assertQuerysetEqual(
+            TestModel.objects.all(),
+            [(tm.pk, "", "+41524242424")],
+            transform=phone_transform,
+        )
 
     def test_save_blank_phone_to_database(self):
         """Field Test for when Blank"""
@@ -55,19 +51,9 @@ class PhonenumerFieldAppTest(TestCase):
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
-        self.assertEqual(tm.phone, '')
-        self.assertEqual(
-            0,
-            TestModel.objects
-                .exclude(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
-        self.assertEqual(
-            1,
-            TestModel.objects
-                .filter(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
+        self.assertQuerysetEqual(
+            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform,
+        )
 
     def __test_nullable_field_helper(self, TestModel):
         """Helper method for the next four tests."""
@@ -77,21 +63,11 @@ class PhonenumerFieldAppTest(TestCase):
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
         self.assertIsNone(tm.phone)
-        self.assertEqual(
-            0,
-            TestModel.objects
-                .exclude(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
-        self.assertEqual(
-            1,
-            TestModel.objects
-                .filter(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
+        self.assertQuerysetEqual(
+            TestModel.objects.all(), [(tm.pk, "", None)], transform=phone_transform,
+        )
 
         # ensure that null values do not cause uniqueness conflicts
-        self.assertEqual(TestModel.objects.count(), 1)
         TestModel.objects.create()
         self.assertEqual(TestModel.objects.count(), 2)
 
@@ -122,19 +98,11 @@ class PhonenumerFieldAppTest(TestCase):
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
-        self.assertEqual(str(tm.phone), '+41524242424')
-        self.assertEqual(
-            1,
-            TestModel.objects
-                .exclude(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
-        self.assertEqual(
-            0,
-            TestModel.objects
-                .filter(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
+        self.assertQuerysetEqual(
+            TestModel.objects.all(),
+            [(tm.pk, "", "+41524242424")],
+            transform=phone_transform,
+        )
 
     def test_save_unique_null_default_phone_to_database(self):
         """Field Test for when Default, Null & Unique"""
@@ -153,19 +121,9 @@ class PhonenumerFieldAppTest(TestCase):
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
-        self.assertEqual(tm.phone, '')
-        self.assertEqual(
-            0,
-            TestModel.objects
-                .exclude(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
-        self.assertEqual(
-            1,
-            TestModel.objects
-                .filter(Q(phone__isnull=True) | Q(phone=''))
-                .filter(pk=pk)
-                .count())
+        self.assertQuerysetEqual(
+            TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform,
+        )
 
     def test_save_unique_null_default_empty_phone_to_database(self):
         """Field Test for when Empty Default, Null & Unique"""
