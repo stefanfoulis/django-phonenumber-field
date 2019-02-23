@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 setup(
     name="django-phonenumber-field",
     version=__version__,
-    url='http://github.com/stefanfoulis/django-phonenumber-field',
+    url='https://github.com/stefanfoulis/django-phonenumber-field',
     license='BSD',
     platforms=['OS Independent'],
     description="An international phone number field for django models.",
