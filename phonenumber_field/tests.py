@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.conf import settings
 from django.db import models
+from django.test import override_settings
 from django.test.testcases import TestCase
 
 import phonenumbers
@@ -172,18 +172,14 @@ class PhoneNumberFieldTestCase(TestCase):
         self.test_null_field_returns_none()
         self.test_can_assign_string_phone_number()
 
+    @override_settings(PHONENUMBER_DEFAULT_REGION="DE")
     def test_storage_formats(self):
         """
         Perform aggregate tests for all db storage formats
         """
-        old_format = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
-        old_default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-        setattr(settings, "PHONENUMBER_DEFAULT_REGION", "DE")
         for frmt in PhoneNumber.format_map:
-            setattr(settings, "PHONENUMBER_DB_FORMAT", frmt)
-            self._test_storage_formats()
-        setattr(settings, "PHONENUMBER_DB_FORMAT", old_format)
-        setattr(settings, "PHONENUMBER_DEFAULT_REGION", old_default_region)
+            with override_settings(PHONENUMBER_DB_FORMAT=frmt):
+                self._test_storage_formats()
 
     def test_prep_value(self):
         """
@@ -193,14 +189,12 @@ class PhoneNumberFieldTestCase(TestCase):
         consistent database storage values
         """
         number = PhoneNumberField()
-        old_format = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
         for frmt in ["E164", "RFC3966", "INTERNATIONAL"]:
-            setattr(settings, "PHONENUMBER_DB_FORMAT", frmt)
-            self.assertEqual(
-                number.get_prep_value(to_python(self.storage_numbers[frmt][0])),
-                self.storage_numbers[frmt][1],
-            )
-        setattr(settings, "PHONENUMBER_DB_FORMAT", old_format)
+            with override_settings(PHONENUMBER_DB_FORMAT=frmt):
+                self.assertEqual(
+                    number.get_prep_value(to_python(self.storage_numbers[frmt][0])),
+                    self.storage_numbers[frmt][1],
+                )
 
     def test_fallback_widget_switches_between_national_and_international(self):
         region, number_string = self.local_numbers[0]
