@@ -1,6 +1,7 @@
 dist: xenial
 sudo: false
 language: python
+cache: pip
 python:
   - "3.5"
   - "3.6"
@@ -10,6 +11,7 @@ env:
   - DJANGO="1.11"
   - DJANGO="2.0"
   - DJANGO="2.1"
+  - DJANGO="2.2"
 matrix:
   include:
     - python: 2.7

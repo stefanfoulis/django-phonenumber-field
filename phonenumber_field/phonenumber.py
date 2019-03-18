@@ -108,12 +108,12 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         return hash(self.__unicode__())
 
 
-def to_python(value):
+def to_python(value, region=None):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = value
     elif value and isinstance(value, string_types):
         try:
-            phone_number = PhoneNumber.from_string(phone_number=value)
+            phone_number = PhoneNumber.from_string(phone_number=value, region=region)
         except phonenumbers.NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
@@ -130,3 +130,14 @@ def to_python(value):
         #       (Same for the phonenumbers.NumberParseException above)
         phone_number = None
     return phone_number
+
+
+def validate_region(region):
+    if (
+        region is not None
+        and region not in phonenumbers.shortdata._AVAILABLE_REGION_CODES
+    ):
+        raise ValueError(
+            "“%s” is not a valid region code. Choices are %r"
+            % (region, phonenumbers.shortdata._AVAILABLE_REGION_CODES)
+        )
