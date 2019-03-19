@@ -10,6 +10,7 @@ CHANGELOG
   3. null.
 
   Existing database records can be upgraded with a `data migration`_.
+* Added support for Django 2.2.
 
 .. _default: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.default
 .. _blank: https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.blank
