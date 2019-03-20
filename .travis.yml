@@ -2,25 +2,53 @@ dist: xenial
 sudo: false
 language: python
 cache: pip
-python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
-env:
-  - DJANGO="1.11"
-  - DJANGO="2.0"
-  - DJANGO="2.1"
-  - DJANGO="2.2"
+
 matrix:
+  fast_finish: true
   include:
+    - env: TOXENV=flake8
     - python: 2.7
-      env: DJANGO="1.11"
-branches:
-  only:
-    - master
+      env: TOXENV=py27-dj111
+    - python: 3.4
+      env: TOXENV=py34-dj111
+    - python: 3.5
+      env: TOXENV=py35-dj111
+    - python: 3.6
+      env: TOXENV=py36-dj111
+    - python: 3.7
+      env: TOXENV=py37-dj111
+    - python: 3.5
+      env: TOXENV=py35-dj20
+    - python: 3.6
+      env: TOXENV=py36-dj20
+    - python: 3.7
+      env: TOXENV=py37-dj20
+    - python: 3.5
+      env: TOXENV=py35-dj21
+    - python: 3.6
+      env: TOXENV=py36-dj21
+    - python: 3.7
+      env: TOXENV=py37-dj21
+    - python: 3.5
+      env: TOXENV=py35-dj22
+    - python: 3.6
+      env: TOXENV=py36-dj22
+    - python: 3.7
+      env: TOXENV=py37-dj22
+    - python: 3.6
+      env: TOXENV=py36-djmaster
+    - python: 3.7
+      env: TOXENV=py37-djmaster
+  allow_failures:
+    - env: TOXENV=py36-djmaster
+    - env: TOXENV=py37-djmaster
+
 install:
-  - ./.travis_setup
+  - pip install tox
+
 script:
-  - tox -- --cov
+  - tox
+
 after_success:
-  coveralls
+  - pip install coveralls
+  - coveralls
