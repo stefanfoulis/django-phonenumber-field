@@ -3,10 +3,9 @@ from __future__ import unicode_literals
 
 import sys
 
+import phonenumbers
 from django.conf import settings
 from django.core import validators
-
-import phonenumbers
 
 # Snippet from the `six` library to help with Python3 compatibility
 if sys.version_info[0] == 3:

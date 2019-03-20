@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import phonenumbers
 from django import forms
 from django.core import checks
 from django.db.models import Model
 from django.test import TestCase, override_settings
 from django.utils.encoding import force_text
-
-import phonenumbers
 from phonenumbers import phonenumberutil
 
-from . import models
-from .forms import PhoneNumberForm
-from .models import MandatoryPhoneNumber, NullablePhoneNumber, OptionalPhoneNumber
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+
+from . import models
+from .forms import PhoneNumberForm
+from .models import MandatoryPhoneNumber, NullablePhoneNumber, OptionalPhoneNumber
 
 
 def phone_transform(obj):
