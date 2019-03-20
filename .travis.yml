@@ -6,7 +6,10 @@ cache: pip
 matrix:
   fast_finish: true
   include:
+    - env: TOXENV=black
+      python: 3.6
     - env: TOXENV=flake8
+    - env: TOXENV=isort
     - python: 2.7
       env: TOXENV=py27-dj111
     - python: 3.4
