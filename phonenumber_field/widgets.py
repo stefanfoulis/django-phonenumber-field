@@ -7,7 +7,6 @@ from django.forms.widgets import MultiWidget
 from django.utils import translation
 
 from babel import Locale
-
 from phonenumbers import PhoneNumberFormat
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 from phonenumbers.phonenumberutil import region_code_for_number
