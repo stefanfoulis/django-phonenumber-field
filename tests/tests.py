@@ -16,7 +16,6 @@ from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from . import models
 from .forms import PhoneNumberForm
-from .models import MandatoryPhoneNumber, NullablePhoneNumber, OptionalPhoneNumber
 
 
 def phone_transform(obj):
@@ -55,7 +54,9 @@ class PhoneNumberFieldTestCase(TestCase):
 
     def test_objects_with_same_number_are_equal(self):
         numbers = [
-            MandatoryPhoneNumber.objects.create(phone_number=number_string).phone_number
+            models.MandatoryPhoneNumber.objects.create(
+                phone_number=number_string
+            ).phone_number
             for number_string in self.equal_number_strings
         ]
         self.assertTrue(
@@ -93,13 +94,13 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(number_1, one)
 
     def test_blank_field_returns_empty_string(self):
-        model = OptionalPhoneNumber()
+        model = models.OptionalPhoneNumber()
         self.assertEqual(model.phone_number, "")
         model.phone_number = "+49 176 96842671"
         self.assertEqual(type(model.phone_number), PhoneNumber)
 
     def test_null_field_returns_none(self):
-        model = NullablePhoneNumber()
+        model = models.NullablePhoneNumber()
         self.assertEqual(model.phone_number, None)
         model.phone_number = self.test_number_1
         self.assertEqual(type(model.phone_number), PhoneNumber)
@@ -109,7 +110,7 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertEqual(type(model.phone_number), PhoneNumber)
 
     def test_can_assign_string_phone_number(self):
-        opt_phone = OptionalPhoneNumber()
+        opt_phone = models.OptionalPhoneNumber()
         opt_phone.phone_number = self.test_number_1
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
@@ -117,7 +118,7 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.save()
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
-        opt_phone_db = OptionalPhoneNumber.objects.get(id=opt_phone.id)
+        opt_phone_db = models.OptionalPhoneNumber.objects.get(id=opt_phone.id)
         self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
         self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
@@ -125,7 +126,7 @@ class PhoneNumberFieldTestCase(TestCase):
         """
         Tests assignment phonenumberutil.PhoneNumber to field
         """
-        opt_phone = OptionalPhoneNumber()
+        opt_phone = models.OptionalPhoneNumber()
         opt_phone.phone_number = phonenumberutil.parse(
             self.test_number_1, keep_raw_input=True
         )
@@ -135,7 +136,7 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.save()
         self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
-        opt_phone_db = OptionalPhoneNumber.objects.get(id=opt_phone.id)
+        opt_phone_db = models.OptionalPhoneNumber.objects.get(id=opt_phone.id)
         self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
         self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
