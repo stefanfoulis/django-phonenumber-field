@@ -93,20 +93,3 @@ run a specific combination and generate a coverage report::
 
     tox -e begin,py36-dj21,py36-dj111,end
     open htmlcov/index.html
-
-Running the full test matrix with Docker
-----------------------------------------
-
-If you don't want to bother with installing tox and lots of different python
-versions on your development machine, you can use the docker image.::
-
-    docker-compose run --rm tox
-
-Initial build will take a while because tox will setup all the virtual
-environments. Just re-run ``docker-compose run --rm tox`` again to re-run tests.
-If you make changes to dependencies, run ``docker-compose build tox`` to
-re-create the virtual environments.
-
-After a full test run the coverage report will be available at
-``htmlcov/index.html``.
-

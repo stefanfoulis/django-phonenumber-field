@@ -1,6 +1,3 @@
-test:
-	docker-compose run --rm tox
-
 isort:
 	isort -rc
 
