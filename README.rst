@@ -82,14 +82,7 @@ tox needs to be installed.
 To run the whole test matrix with the locally available python interpreters and generate a combined coverage report::
 
     tox
-    open htmlcov/index.html
-
 
 run a specific combination::
 
     tox -e py36-dj21,py36-dj111
-
-run a specific combination and generate a coverage report::
-
-    tox -e begin,py36-dj21,py36-dj111,end
-    open htmlcov/index.html
