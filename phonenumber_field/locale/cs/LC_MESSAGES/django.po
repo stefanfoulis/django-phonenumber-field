@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 01:32+0200\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: formfields.py:14
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "Vložte platné telefonní číslo."
 
-#: modelfields.py:45
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "Telefonní číslo"
 
-#: validators.py:13
+#: validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "Zadané telefonní číslo není platné."

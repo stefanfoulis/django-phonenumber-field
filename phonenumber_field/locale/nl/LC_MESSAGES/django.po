@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 10:18+0100\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Folkert de Vries <info@fdev.nl>\n"
 "Language: nl\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:14
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "Vul een geldig telefoonnummer in."
 
-#: modelfields.py:45
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
-#: validators.py:13
+#: validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "Het ingevulde telefoonnummer is niet geldig."
