@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-2.2.0 (2019-03-26)
+2.3.0 (2019-03-26)
 ------------------
 
 * Added the ``region`` keyword argument to ``PhoneNumberField``.
