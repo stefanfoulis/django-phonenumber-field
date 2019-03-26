@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from setuptools import find_packages, setup
+from setuptools import setup
 
 from phonenumber_field import __version__
 
@@ -21,7 +21,7 @@ setup(
     author_email="stefan@foulis.ch",
     maintainer="Stefan Foulis",
     maintainer_email="stefan@foulis.ch",
-    packages=find_packages(),
+    packages=["phonenumber_field"],
     include_package_data=True,
     zip_safe=False,
     classifiers=[
