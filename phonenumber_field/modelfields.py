@@ -94,4 +94,5 @@ class PhoneNumberField(models.CharField):
             "region": self.region,
             "error_messages": self.error_messages,
         }
+        defaults.update(kwargs)
         return super(PhoneNumberField, self).formfield(**defaults)

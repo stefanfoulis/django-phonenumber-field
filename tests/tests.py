@@ -15,7 +15,7 @@ from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from . import models
-from .forms import PhoneNumberForm
+from .forms import CustomPhoneNumberFormField, PhoneNumberForm
 
 
 def phone_transform(obj):
@@ -413,3 +413,8 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         self.assertIsInstance(error, checks.Error)
         self.assertTrue(error.msg.startswith("“invalid” is not a valid region code."))
         self.assertEqual(error.obj, InvalidRegionModel._meta.get_field("phone_field"))
+
+    def test_override_form_field(self):
+        phone_number = models.CustomPhoneNumber()
+        model_field = phone_number._meta.get_field("phone_number")
+        self.assertIsInstance(model_field.formfield(), CustomPhoneNumberFormField)
