@@ -78,8 +78,8 @@ with country code.
 Running tests
 =============
 
-tox needs to be installed.
-To run the whole test matrix with the locally available python interpreters and generate a combined coverage report::
+tox needs to be installed. To run the whole test matrix with the locally
+available Python interpreters and generate a combined coverage report::
 
     tox
 
