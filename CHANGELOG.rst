@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+2.3.1 (2019-03-26)
+------------------
+
+* Fixed a regression to re-allow the model field to override the default form
+  field.
+
 2.3.0 (2019-03-26)
 ------------------
 
