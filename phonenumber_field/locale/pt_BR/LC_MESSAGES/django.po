@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-04 14:59-0300\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: 2013-02-26 14:10-0300\n"
 "Last-Translator: Fábio Thomaz <fabio_thz@yahoo.com.br>\n"
 "Language-Team: Portuguese - Brazil <fabio_thz@yahoo.com.br>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "X-Generator: Lokalize 1.2\n"
 
-#: formfields.py:14
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "Informe um número de telefone válido."
 
-#: modelfields.py:45
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "Número de telefone"
 
-#: validators.py:13
+#: validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "Este número de telefone não é válido."

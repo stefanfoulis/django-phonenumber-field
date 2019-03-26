@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-08 15:20-0300\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Joao Lopez <jslopez@csrg.inf.utfsm.cl>\n"
 "Language-Team: \n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:15
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "Ingrese un número de teléfono válido."
 
-#: modelfields.py:47
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "Número de teléfono"
 

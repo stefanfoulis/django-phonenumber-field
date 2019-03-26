@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-14 22:52+0800\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Wentao Han <wentao.han@gmail.com>\n"
 "Language-Team: \n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: formfields.py:15 serializerfields.py:13
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "输入一个合法的电话号码。"
 
-#: modelfields.py:44
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "电话号码"
 
-#: validators.py:15
+#: validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "输入的电话号码不合法。"

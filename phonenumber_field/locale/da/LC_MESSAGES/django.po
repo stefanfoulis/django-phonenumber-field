@@ -7,24 +7,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 10:18+0100\n"
+"POT-Creation-Date: 2019-03-26 10:15-0700\n"
 "PO-Revision-Date: 2016-03-14 12:50+0100\n"
-"Language: da\n"
 "Last-Translator: René Tronsgaard <tronsgaard@gmail.com>\n"
+"Language-Team: \n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language-Team: \n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: formfields.py:14
+#: formfields.py:14 serializerfields.py:12
 msgid "Enter a valid phone number."
 msgstr "Indtast et gyldigt telefonnummer."
 
-#: modelfields.py:45
+#: modelfields.py:48
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: validators.py:13
+#: validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "Det indtastede telefonnummer er ugyldigt."
