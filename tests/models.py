@@ -15,6 +15,19 @@ class NullablePhoneNumber(models.Model):
     phone_number = PhoneNumberField(blank=True, null=True)
 
 
+class CustomPhoneNumberModelField(PhoneNumberField):
+    def formfield(self, **kwargs):
+        from .forms import CustomPhoneNumberFormField
+
+        return super(CustomPhoneNumberModelField, self).formfield(
+            form_class=CustomPhoneNumberFormField
+        )
+
+
+class CustomPhoneNumber(models.Model):
+    phone_number = CustomPhoneNumberModelField()
+
+
 class TestModel(models.Model):
     """Basic Field Test"""
 
