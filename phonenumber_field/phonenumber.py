@@ -100,9 +100,6 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         else:
             return False
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __hash__(self):
         return hash(self.__unicode__())
 
