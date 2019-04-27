@@ -32,7 +32,7 @@ CHANGELOG
 2.2.0 (2019-01-27)
 ------------------
 
-* Added support for null=True
+* Added support for ``null=True``
 
 
 2.1.0 (2018-10-28)
@@ -89,8 +89,8 @@ CHANGELOG
 * support for HTML5.0 tel input type added
 * locale files are now included
 * new translations: Danish, Esperanto, Polish, all translations reformatted, Russian translation expanded
-* PhoneNumberField.get_prep_value changed to enable setting null=True
-* new widget added: PhoneNumberInternationalFallbackWidget
+* PhoneNumberField.get_prep_value changed to enable setting ``null=True``
+* new widget added: ``PhoneNumberInternationalFallbackWidget``
 * new backward compatible requirement phonenumberslite instead of phonenumbers
 * lots of tests
-* dropped support for PHONENUMER_DEFAULT_REGION setting with typo
+* dropped support for ``PHONENUMER_DEFAULT_REGION`` setting with typo
