@@ -124,10 +124,7 @@ def to_python(value, region=None):
     elif isinstance(value, PhoneNumber):
         phone_number = value
     else:
-        # TODO: this should somehow show that it has invalid data, but not
-        #       completely die for bad data in the database.
-        #       (Same for the phonenumbers.NumberParseException above)
-        phone_number = None
+        raise TypeError("Can't convert %s to PhoneNumber." % type(value).__name__)
     return phone_number
 
 

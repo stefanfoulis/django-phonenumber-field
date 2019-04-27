@@ -140,11 +140,17 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertIsInstance(opt_phone_db.phone_number, PhoneNumber)
         self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
-    def test_does_not_fail_on_invalid_values(self):
-        # testcase for
-        # https://github.com/stefanfoulis/django-phonenumber-field/issues/11
-        phone = to_python(42)
-        self.assertIsNone(phone)
+    def test_raise_on_invalid_values(self):
+        msg = "Can't convert int to PhoneNumber."
+        with self.assertRaisesMessage(TypeError, msg):
+            to_python(42)
+
+    def test_create_with_int(self):
+        msg = "Can't convert int to PhoneNumber."
+        with self.assertRaisesMessage(TypeError, msg):
+            models.MandatoryPhoneNumber.objects.create(
+                phone_number=int(self.test_number_1)
+            )
 
     def _test_storage_formats(self):
         """
@@ -210,6 +216,22 @@ class PhoneNumberFieldTestCase(TestCase):
         m = models.MandatoryPhoneNumber.objects.defer("phone_number").get(pk=m.pk)
         self.assertEqual(m.phone_number, self.test_number_1)
 
+    def test_filter_invalid(self):
+        models.NullablePhoneNumber.objects.create(phone_number=self.test_number_1)
+        models.NullablePhoneNumber.objects.create(phone_number="")
+        models.NullablePhoneNumber.objects.create(phone_number=None)
+        with self.assertRaises(ValueError) as cm:
+            models.NullablePhoneNumber.objects.filter(phone_number="123").exists()
+        self.assertEqual(force_text(cm.exception), "“123” is not a valid phone number.")
+
+    def test_filter_int(self):
+        models.NullablePhoneNumber.objects.create(phone_number=self.test_number_1)
+        models.NullablePhoneNumber.objects.create(phone_number="")
+        models.NullablePhoneNumber.objects.create(phone_number=None)
+        msg = "Can't convert int to PhoneNumber"
+        with self.assertRaisesMessage(TypeError, msg):
+            models.NullablePhoneNumber.objects.filter(phone_number=123).exists()
+
 
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
@@ -229,38 +251,35 @@ class PhonenumerFieldAppTest(TestCase):
         )
 
     def test_create_invalid_number(self):
-        tm = models.TestModel.objects.create(phone="invalid")
-        self.assertQuerysetEqual(
-            models.TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
+        with self.assertRaises(ValueError) as cm:
+            models.TestModel.objects.create(phone="invalid")
+        self.assertEqual(
+            force_text(cm.exception), "“invalid” is not a valid phone number."
         )
 
     def test_save_invalid_number(self):
         tm = models.TestModel.objects.create(phone="+1 604-333-4444")
-
         tm.phone = "invalid"
-        tm.save()
-
-        self.assertQuerysetEqual(
-            models.TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
+        with self.assertRaises(ValueError) as cm:
+            tm.save()
+        self.assertEqual(
+            force_text(cm.exception), "“invalid” is not a valid phone number."
         )
 
     def test_save_update_field_invalid_number(self):
         tm = models.TestModel.objects.create(phone="+1 604-333-4444")
-
         tm.phone = "invalid"
-        tm.save(update_fields=["phone"])
-
-        self.assertQuerysetEqual(
-            models.TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
+        with self.assertRaises(ValueError) as cm:
+            tm.save(update_fields=["phone"])
+        self.assertEqual(
+            force_text(cm.exception), "“invalid” is not a valid phone number."
         )
 
     def test_update_to_invalid_number(self):
-        tm = models.TestModel.objects.create(phone="+1 604-333-4444")
-
-        models.TestModel.objects.update(phone="invalid")
-
-        self.assertQuerysetEqual(
-            models.TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
+        with self.assertRaises(ValueError) as cm:
+            models.TestModel.objects.update(phone="invalid")
+        self.assertEqual(
+            force_text(cm.exception), "“invalid” is not a valid phone number."
         )
 
     def test_save_blank_phone_to_database(self):
