@@ -29,9 +29,7 @@ class PhoneNumberDescriptor(object):
     def __init__(self, field):
         self.field = field
 
-    def __get__(
-        self, instance=None, owner=None
-    ):  # lgtm [py/special-method-wrong-signature]
+    def __get__(self, instance, owner):
         if instance is None:
             return self
         return instance.__dict__[self.field.name]
