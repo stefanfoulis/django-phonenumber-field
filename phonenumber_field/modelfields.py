@@ -55,8 +55,12 @@ class PhoneNumberField(models.CharField):
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("max_length", 128)
-        self.region = kwargs.pop("region", None)
+        self._region = kwargs.pop("region", None)
         super(PhoneNumberField, self).__init__(*args, **kwargs)
+
+    @property
+    def region(self):
+        return self._region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 
     def check(self, **kwargs):
         errors = super(PhoneNumberField, self).check(**kwargs)
@@ -92,7 +96,7 @@ class PhoneNumberField(models.CharField):
 
     def deconstruct(self):
         name, path, args, kwargs = super(PhoneNumberField, self).deconstruct()
-        kwargs["region"] = self.region
+        kwargs["region"] = self._region
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):
