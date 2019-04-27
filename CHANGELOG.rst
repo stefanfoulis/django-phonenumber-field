@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+* A ``PhoneNumberField`` can now be deferred with ``QuerySet.defer()``.
+
 2.3.1 (2019-03-26)
 ------------------
 
