@@ -7,6 +7,8 @@ UNRELEASED
 * A ``PhoneNumberField`` can now be deferred with ``QuerySet.defer()``.
 * Saving or filtering by an invalid phone number will now raise a
   ``ValueError``.
+* The model field attribute ``PhoneNumberField.region`` now uses
+  ``PHONENUMBER_DEFAULT_REGION`` if not specified.
 
 2.3.1 (2019-03-26)
 ------------------

@@ -442,3 +442,35 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         phone_number = models.CustomPhoneNumber()
         model_field = phone_number._meta.get_field("phone_number")
         self.assertIsInstance(model_field.formfield(), CustomPhoneNumberFormField)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
+    def test_uses_default_region(self):
+        m = models.MandatoryPhoneNumber.objects.create(phone_number="06 12 34 56 78")
+        self.assertEqual(phonenumbers.parse("+33612345678"), m.phone_number)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
+    def test_formfield_uses_default_region(self):
+        class PhoneForm(forms.ModelForm):
+            class Meta:
+                model = models.MandatoryPhoneNumber
+                fields = ["phone_number"]
+
+        form = PhoneForm()
+        self.assertEqual("FR", form.fields["phone_number"].region)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
+    def test_desconstruct_does_not_use_default_region(self):
+        field = modelfields.PhoneNumberField()
+        _name, path, args, kwargs = field.deconstruct()
+        self.assertEqual("phonenumber_field.modelfields.PhoneNumberField", path)
+        self.assertEqual([], args)
+        self.assertEqual({"max_length": 128, "region": None}, kwargs)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
+    def test_region_uses_default_region(self):
+        field = modelfields.PhoneNumberField()
+        self.assertEqual("FR", field.region)
+
+    def test_region_none(self):
+        field = modelfields.PhoneNumberField()
+        self.assertIsNone(field.region)
