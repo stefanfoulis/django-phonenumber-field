@@ -6,7 +6,6 @@ from django import forms
 from django.core import checks
 from django.db.models import Model
 from django.test import TestCase, override_settings
-from django.utils.encoding import force_text
 from phonenumbers import phonenumberutil
 
 from phonenumber_field import formfields, modelfields
@@ -367,12 +366,9 @@ class RegionPhoneNumberFormFieldTest(TestCase):
         self.assertEqual("+33612345678", form.cleaned_data["french_number"])
 
     def test_invalid_region(self):
-        with self.assertRaises(ValueError) as cm:
+        msg = "“invalid” is not a valid region code."
+        with self.assertRaisesMessage(ValueError, msg):
             formfields.PhoneNumberField(region="invalid")
-
-        self.assertTrue(
-            force_text(cm.exception).startswith("“invalid” is not a valid region code.")
-        )
 
 
 class RegionPhoneNumberModelFieldTest(TestCase):
