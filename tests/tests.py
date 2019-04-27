@@ -205,6 +205,11 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertTrue(form.is_valid())
         self.assertDictEqual({"phone_number": None}, form.cleaned_data)
 
+    def test_defer_phone_number_field(self):
+        m = models.MandatoryPhoneNumber.objects.create(phone_number=self.test_number_1)
+        m = models.MandatoryPhoneNumber.objects.defer("phone_number").get(pk=m.pk)
+        self.assertEqual(m.phone_number, self.test_number_1)
+
 
 class PhonenumerFieldAppTest(TestCase):
     def test_save_field_to_database(self):
