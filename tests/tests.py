@@ -97,29 +97,29 @@ class PhoneNumberFieldTestCase(TestCase):
         model = models.OptionalPhoneNumber()
         self.assertEqual(model.phone_number, "")
         model.phone_number = "+49 176 96842671"
-        self.assertEqual(type(model.phone_number), PhoneNumber)
+        self.assertIsInstance(model.phone_number, PhoneNumber)
 
     def test_null_field_returns_none(self):
         model = models.NullablePhoneNumber()
-        self.assertEqual(model.phone_number, None)
+        self.assertIsNone(model.phone_number)
         model.phone_number = self.test_number_1
-        self.assertEqual(type(model.phone_number), PhoneNumber)
+        self.assertIsInstance(model.phone_number, PhoneNumber)
         model.phone_number = phonenumberutil.parse(
             self.test_number_1, keep_raw_input=True
         )
-        self.assertEqual(type(model.phone_number), PhoneNumber)
+        self.assertIsInstance(model.phone_number, PhoneNumber)
 
     def test_can_assign_string_phone_number(self):
         opt_phone = models.OptionalPhoneNumber()
         opt_phone.phone_number = self.test_number_1
-        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone.phone_number, PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
         opt_phone.full_clean()
         opt_phone.save()
-        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone.phone_number, PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
         opt_phone_db = models.OptionalPhoneNumber.objects.get(id=opt_phone.id)
-        self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone_db.phone_number, PhoneNumber)
         self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
     def test_can_assign_phonenumber(self):
@@ -130,21 +130,21 @@ class PhoneNumberFieldTestCase(TestCase):
         opt_phone.phone_number = phonenumberutil.parse(
             self.test_number_1, keep_raw_input=True
         )
-        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone.phone_number, PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
         opt_phone.full_clean()
         opt_phone.save()
-        self.assertEqual(type(opt_phone.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone.phone_number, PhoneNumber)
         self.assertEqual(opt_phone.phone_number.as_e164, self.test_number_1)
         opt_phone_db = models.OptionalPhoneNumber.objects.get(id=opt_phone.id)
-        self.assertEqual(type(opt_phone_db.phone_number), PhoneNumber)
+        self.assertIsInstance(opt_phone_db.phone_number, PhoneNumber)
         self.assertEqual(opt_phone_db.phone_number.as_e164, self.test_number_1)
 
     def test_does_not_fail_on_invalid_values(self):
         # testcase for
         # https://github.com/stefanfoulis/django-phonenumber-field/issues/11
         phone = to_python(42)
-        self.assertEqual(phone, None)
+        self.assertIsNone(phone)
 
     def _test_storage_formats(self):
         """
