@@ -5,6 +5,8 @@ UNRELEASED
 ----------
 
 * A ``PhoneNumberField`` can now be deferred with ``QuerySet.defer()``.
+* Saving or filtering by an invalid phone number will now raise a
+  ``ValueError``.
 
 2.3.1 (2019-03-26)
 ------------------
