@@ -79,11 +79,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         Override parent equality because we store only string representation
         of phone number, so we must compare only this string representation
         """
-        if (
-            isinstance(other, PhoneNumber)
-            or isinstance(other, phonenumbers.PhoneNumber)
-            or isinstance(other, string_types)
-        ):
+        if isinstance(other, (string_types, phonenumbers.PhoneNumber)):
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
             fmt = self.format_map[format_string]
