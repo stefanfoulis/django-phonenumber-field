@@ -110,19 +110,17 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 def to_python(value, region=None):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = value
-    elif value and isinstance(value, string_types):
+    elif isinstance(value, string_types):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value, region=region)
         except phonenumbers.NumberParseException:
             # the string provided is not a valid PhoneNumber.
             phone_number = PhoneNumber(raw_input=value)
-    elif isinstance(value, phonenumbers.PhoneNumber) and not isinstance(
-        value, PhoneNumber
-    ):
-        phone_number = PhoneNumber()
-        phone_number.merge_from(value)
     elif isinstance(value, PhoneNumber):
         phone_number = value
+    elif isinstance(value, phonenumbers.PhoneNumber):
+        phone_number = PhoneNumber()
+        phone_number.merge_from(value)
     else:
         raise TypeError("Can't convert %s to PhoneNumber." % type(value).__name__)
     return phone_number
