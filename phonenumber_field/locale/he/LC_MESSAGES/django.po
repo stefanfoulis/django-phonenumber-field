@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-26 10:15-0700\n"
+"POT-Creation-Date: 2019-05-01 13:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:14 serializerfields.py:12
+#: phonenumber_field/formfields.py:14 phonenumber_field/serializerfields.py:12
 msgid "Enter a valid phone number."
-msgstr "זהן מספר טלפון חוקי"
+msgstr "הזן מספר טלפון חוקי"
 
-#: modelfields.py:48
+#: phonenumber_field/modelfields.py:54
 msgid "Phone number"
 msgstr "מספר טלפון"
 
-#: validators.py:14
+#: phonenumber_field/validators.py:14
 msgid "The phone number entered is not valid."
 msgstr "מספר הטלפון שהוזן אינו חוקי"
