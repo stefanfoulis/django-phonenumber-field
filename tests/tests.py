@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import phonenumbers
 from django import forms
 from django.core import checks

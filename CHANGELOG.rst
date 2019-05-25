@@ -5,8 +5,12 @@ UNRELEASED
 ----------
 
 * Update French and Hebrew translations.
-* Drop support for Django 2.0.
 * Add a valid phone number example to invalid phone number error messages.
+
+**Backwards incompatible changes**
+
+* Drop support for Django 2.0.
+* Drop support for Python 2.7 and 3.4.
 
 2.4.0 (2019-05-06)
 ------------------

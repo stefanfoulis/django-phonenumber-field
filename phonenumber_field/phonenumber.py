@@ -1,17 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import sys
-
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-
-# Snippet from the `six` library to help with Python3 compatibility
-if sys.version_info[0] == 3:
-    string_types = str
-else:
-    string_types = basestring  # noqa: F821
 
 
 class PhoneNumber(phonenumbers.PhoneNumber):
@@ -41,7 +30,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         )
         return phone_number_obj
 
-    def __unicode__(self):
+    def __str__(self):
         format_string = getattr(settings, "PHONENUMBER_DEFAULT_FORMAT", "E164")
         fmt = self.format_map[format_string]
         return self.format_as(fmt)
@@ -72,18 +61,18 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         return self.format_as(phonenumbers.PhoneNumberFormat.RFC3966)
 
     def __len__(self):
-        return len(self.__unicode__())
+        return len(str(self))
 
     def __eq__(self, other):
         """
         Override parent equality because we store only string representation
         of phone number, so we must compare only this string representation
         """
-        if isinstance(other, (string_types, phonenumbers.PhoneNumber)):
+        if isinstance(other, (str, phonenumbers.PhoneNumber)):
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
             fmt = self.format_map[format_string]
-            if isinstance(other, string_types):
+            if isinstance(other, str):
                 # convert string to phonenumbers.PhoneNumber
                 # instance
                 try:
@@ -96,17 +85,14 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         else:
             return False
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __hash__(self):
-        return hash(self.__unicode__())
+        return hash(str(self))
 
 
 def to_python(value, region=None):
     if value in validators.EMPTY_VALUES:  # None or ''
         phone_number = value
-    elif isinstance(value, string_types):
+    elif isinstance(value, str):
         try:
             phone_number = PhoneNumber.from_string(phone_number=value, region=region)
         except phonenumbers.NumberParseException:

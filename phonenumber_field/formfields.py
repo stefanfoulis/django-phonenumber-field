@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import phonenumbers
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from phonenumber_field.phonenumber import to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
@@ -15,12 +12,12 @@ class PhoneNumberField(CharField):
     default_error_messages = {}
     default_validators = [validate_international_phonenumber]
 
-    def __init__(self, *args, **kwargs):
-        self.region = kwargs.pop("region", None)
-        validate_region(self.region)
+    def __init__(self, *args, region=None, **kwargs):
+        validate_region(region)
+        self.region = region
 
-        if self.region:
-            number = phonenumbers.example_number(self.region)
+        if region:
+            number = phonenumbers.example_number(region)
             example_number = to_python(number).as_national
             # Translators: {example_number} is a national phone number.
             error_message = _(
@@ -35,7 +32,7 @@ class PhoneNumberField(CharField):
             example_number=example_number
         )
 
-        super(PhoneNumberField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.widget.input_type = "tel"
 
     def to_python(self, value):
