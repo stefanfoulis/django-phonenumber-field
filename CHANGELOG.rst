@@ -5,6 +5,7 @@ UNRELEASED
 ----------
 
 * Improve Hebrew translation.
+* Drop support for Django 2.0.
 
 2.4.0 (2019-05-06)
 ------------------
