@@ -6,6 +6,7 @@ UNRELEASED
 
 * Improve Hebrew translation.
 * Drop support for Django 2.0.
+* Add a valid phone number example to invalid phone number error messages.
 
 2.4.0 (2019-05-06)
 ------------------
