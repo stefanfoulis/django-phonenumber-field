@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 10:39-0700\n"
+"POT-Creation-Date: 2019-05-28 13:04-0700\n"
 "PO-Revision-Date: 2011-10-19 14:10+0200\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: French <gmludo@gmail.com>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: formfields.py:24
+#: formfields.py:27
 #, python-brace-format
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -27,7 +27,7 @@ msgstr ""
 "numéro avec un indicatif international."
 
 #. Translators: {example_number} is an international phone number.
-#: formfields.py:30
+#: formfields.py:33
 #, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Saisissez un numéro de téléphone valide, par exemple {example_number}."

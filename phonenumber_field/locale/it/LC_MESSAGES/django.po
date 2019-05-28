@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 10:39-0700\n"
+"POT-Creation-Date: 2019-05-28 13:04-0700\n"
 "PO-Revision-Date: 2018-02-28 20:23+0100\n"
 "Last-Translator: Paolo Melchiorre <paolo@melchiorre.org>\n"
 "Language-Team: Italian <paolo@melchiorre.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: formfields.py:24
+#: formfields.py:27
 #, python-brace-format
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 
 #. Translators: {example_number} is an international phone number.
-#: formfields.py:30
+#: formfields.py:33
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."

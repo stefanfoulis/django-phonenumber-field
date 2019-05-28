@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-3.0.1 (UNRELEASED)
+3.0.1 (2019-05-28)
 ------------------
 
 * Allow overriding the default invalid phone number message.
