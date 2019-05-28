@@ -379,6 +379,27 @@ class PhoneNumberFormFieldTest(TestCase):
             form.errors, {"number": ["Enter a valid phone number (e.g. +12125552368)."]}
         )
 
+    def test_override_error_message(self):
+        class MyPhoneNumberField(formfields.PhoneNumberField):
+            default_error_messages = {"invalid": "MY INVALID MESSAGE!"}
+
+        class PhoneNumberForm(forms.Form):
+            number = MyPhoneNumberField()
+
+        form = PhoneNumberForm({"number": "invalid"})
+        self.assertIs(form.is_valid(), False)
+        self.assertEqual(form.errors, {"number": ["MY INVALID MESSAGE!"]})
+
+    def test_override_error_message_inline(self):
+        class PhoneNumberForm(forms.Form):
+            number = formfields.PhoneNumberField(
+                error_messages={"invalid": "MY INLINE INVALID MESSAGE!"}
+            )
+
+        form = PhoneNumberForm({"number": "invalid"})
+        self.assertIs(form.is_valid(), False)
+        self.assertEqual(form.errors, {"number": ["MY INLINE INVALID MESSAGE!"]})
+
 
 class RegionPhoneNumberFormFieldTest(TestCase):
     def test_regional_phone(self):
