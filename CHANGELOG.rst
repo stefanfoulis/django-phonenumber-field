@@ -5,6 +5,7 @@ UNRELEASED
 ----------
 
 * Improve Hebrew translation.
+* Drop support for Python 3.4.
 
 2.4.0 (2019-05-06)
 ------------------
