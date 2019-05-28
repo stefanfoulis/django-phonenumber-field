@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 17:35+0200\n"
+"POT-Creation-Date: 2019-05-28 10:39-0700\n"
 "PO-Revision-Date: 2016-01-31 20:07+0100\n"
 "Last-Translator: Meiyer <interDist@users.noreply.github.com>\n"
 "Language-Team: Esperanto\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:27
+#: formfields.py:24
 #, python-brace-format
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -22,20 +22,20 @@ msgid ""
 msgstr ""
 
 #. Translators: {example_number} is an international phone number.
-#: formfields.py:33
+#: formfields.py:30
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Bv. enigu ĝustan telefon-numeron."
 
-#: modelfields.py:54
+#: modelfields.py:51
 msgid "Phone number"
 msgstr "Telefona numero"
 
-#: serializerfields.py:12
+#: serializerfields.py:9
 msgid "Enter a valid phone number."
 msgstr "Bv. enigu ĝustan telefon-numeron."
 
-#: validators.py:14
+#: validators.py:11
 msgid "The phone number entered is not valid."
 msgstr "La provizita numero ne estas en akceptebla formato."

@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+3.0.0 (2019-05-28)
+------------------
 
 * Update French and Hebrew translations.
 * Add a valid phone number example to invalid phone number error messages.
