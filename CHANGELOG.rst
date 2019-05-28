@@ -5,6 +5,7 @@ UNRELEASED
 ----------
 
 * Improve Hebrew translation.
+* Add a valid phone number example to invalid phone number error messages.
 
 2.4.0 (2019-05-06)
 ------------------

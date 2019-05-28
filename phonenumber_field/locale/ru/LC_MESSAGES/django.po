@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-26 10:15-0700\n"
+"POT-Creation-Date: 2019-05-28 17:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: formfields.py:14 serializerfields.py:12
-msgid "Enter a valid phone number."
+#: formfields.py:27
+#, python-brace-format
+msgid ""
+"Enter a valid phone number (e.g. {example_number}) or a number with an "
+"international call prefix."
+msgstr ""
+
+#. Translators: {example_number} is an international phone number.
+#: formfields.py:33
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Введите корректный номер телефона."
 
-#: modelfields.py:48
+#: modelfields.py:54
 msgid "Phone number"
 msgstr "Номер телефона"
+
+#: serializerfields.py:12
+msgid "Enter a valid phone number."
+msgstr "Введите корректный номер телефона."
 
 #: validators.py:14
 msgid "The phone number entered is not valid."
