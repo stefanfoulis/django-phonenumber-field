@@ -4,7 +4,7 @@ CHANGELOG
 UNRELEASED
 ----------
 
-* Improve Hebrew translation.
+* Update French and Hebrew translations.
 * Drop support for Django 2.0.
 * Add a valid phone number example to invalid phone number error messages.
 
