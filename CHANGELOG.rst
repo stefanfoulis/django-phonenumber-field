@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+* Add Armenian translation.
+
 3.0.1 (2019-05-28)
 ------------------
 
