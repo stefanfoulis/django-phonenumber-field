@@ -50,7 +50,14 @@ install:
 
 script:
   - tox
+  - sonar-scanner -X
 
 after_success:
   - pip install coveralls
   - coveralls
+
+addons:
+  sonarcloud:
+    organisation: "stefanfoulis"
+    token:
+      secure: "XkN5QseD4sAPBZ1qpsNnNN3mVpyS1hJidGu5C5uv+0GEgQ7vj2ipt0h5L64225LOkcqmb4OfYcslOo0SwaOvme8U26c5+e/TymNmy4lr1TQFFXSjM0IJ3iPymi9i4SjL9E1K5zUwJ5+xWnl3KRV7i8IPG0Kqp7PzxBXmSJVI3pM="
