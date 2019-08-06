@@ -47,3 +47,10 @@ script:
 after_success:
   - pip install coveralls
   - coveralls
+  - coverage xml -o coverage-reports/coverage.xml
+  - pip install codacy-coverage
+  - python-codacy-coverage -r coverage-reports/coverage.xml
+
+env:
+  global:
+    secure: A7G/dvr15P0QxHoZsfqjvezns+T008J7fZ7mvMqzml+dNvM5J6X7a7WZx0I0XOvr9KTWUgez+ybYWlzRK3HOue+CYka/QoB2fNhLEQMgfpS4vwQqMkCKTN5fC6hQtcIlawuQGxItvhyYn5X6txBAiRknBRlNPBqi6d7jkFLKQdg=
