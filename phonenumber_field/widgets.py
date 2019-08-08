@@ -9,7 +9,7 @@ from django.utils import translation
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumbers import PhoneNumberFormat
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
-from phonenumbers.phonenumberutil import region_code_for_number
+from phonenumbers.phonenumberutil import region_code_for_number, national_significant_number
 
 
 class PhonePrefixSelect(Select):
