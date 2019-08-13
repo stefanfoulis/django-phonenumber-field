@@ -35,11 +35,11 @@ class PhonePrefixSelect(Select):
             selected = False
         if not self.has_selected_value and self.initial is not None and value == self.initial:
             selected = True
-        return super(PhonePrefixSelect, self).create_option(name, value, label, selected, index, subindex, attrs)
+        return super().create_option(name, value, label, selected, index, subindex, attrs)
 
     def optgroups(self, name, value, attrs=None):
         self.has_selected_value = any(value)
-        return super(PhonePrefixSelect, self).optgroups(name, value, attrs)
+        return super().optgroups(name, value, attrs)
 
 
 class PhoneNumberPrefixWidget(MultiWidget):
