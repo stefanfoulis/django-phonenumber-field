@@ -12,7 +12,8 @@ from phonenumbers import phonenumberutil
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
-from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+from phonenumber_field.widgets import (PhoneNumberInternationalFallbackWidget,
+                                       PhoneNumberPrefixWidget)
 
 from . import models
 from .forms import CustomPhoneNumberFormField, PhoneNumberForm
@@ -474,3 +475,9 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_none(self):
         field = modelfields.PhoneNumberField()
         self.assertIsNone(field.region)
+
+    def test_initial_for_PhoneNumberPrefixWidget(self):
+        self.assertIn(
+            '<option value="+7" selected>',
+            PhoneNumberPrefixWidget(initial='RU').render('', '')
+        )
