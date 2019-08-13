@@ -14,7 +14,9 @@ from phonenumber_field.phonenumber import PhoneNumber
 
 
 class PhonePrefixSelect(Select):
+
     initial = None
+    has_selected_value = False
 
     def __init__(self, initial=None):
         choices = [("", "---------")]
@@ -33,10 +35,16 @@ class PhonePrefixSelect(Select):
             choices=sorted(choices, key=lambda item: item[1])
         )
 
-    def render(self, name, value, *args, **kwargs):
-        return super(PhonePrefixSelect, self).render(
-            name, value or self.initial, *args, **kwargs
-        )
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        if not value:
+            selected = False
+        if not self.has_selected_value and self.initial is not None and value == self.initial:
+            selected = True
+        return super(PhonePrefixSelect, self).create_option(name, value, label, selected, index, subindex, attrs)
+
+    def optgroups(self, name, value, attrs=None):
+        self.has_selected_value = any(value)
+        return super(PhonePrefixSelect, self).optgroups(name, value, attrs)
 
 
 class PhoneNumberPrefixWidget(MultiWidget):
