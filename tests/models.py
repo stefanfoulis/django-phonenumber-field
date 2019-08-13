@@ -19,9 +19,7 @@ class CustomPhoneNumberModelField(PhoneNumberField):
     def formfield(self, **kwargs):
         from .forms import CustomPhoneNumberFormField
 
-        return super(CustomPhoneNumberModelField, self).formfield(
-            form_class=CustomPhoneNumberFormField
-        )
+        return super().formfield(form_class=CustomPhoneNumberFormField)
 
 
 class CustomPhoneNumber(models.Model):

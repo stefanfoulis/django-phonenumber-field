@@ -1,18 +1,15 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.core import checks
 from django.db import models
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field import formfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
 
 
-class PhoneNumberDescriptor(object):
+class PhoneNumberDescriptor:
     """
     The descriptor for the phone number attribute on the model instance.
     Returns a PhoneNumber when accessed so you can do stuff like::
@@ -53,17 +50,17 @@ class PhoneNumberField(models.CharField):
 
     description = _("Phone number")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, region=None, **kwargs):
         kwargs.setdefault("max_length", 128)
-        self._region = kwargs.pop("region", None)
-        super(PhoneNumberField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self._region = region
 
     @property
     def region(self):
         return self._region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 
     def check(self, **kwargs):
-        errors = super(PhoneNumberField, self).check(**kwargs)
+        errors = super().check(**kwargs)
         errors.extend(self._check_region())
         return errors
 
@@ -88,14 +85,14 @@ class PhoneNumberField(models.CharField):
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             fmt = PhoneNumber.format_map[format_string]
             value = value.format_as(fmt)
-        return super(PhoneNumberField, self).get_prep_value(value)
+        return super().get_prep_value(value)
 
     def contribute_to_class(self, cls, name, *args, **kwargs):
-        super(PhoneNumberField, self).contribute_to_class(cls, name, *args, **kwargs)
+        super().contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, self.name, self.descriptor_class(self))
 
     def deconstruct(self):
-        name, path, args, kwargs = super(PhoneNumberField, self).deconstruct()
+        name, path, args, kwargs = super().deconstruct()
         kwargs["region"] = self._region
         return name, path, args, kwargs
 
@@ -106,4 +103,4 @@ class PhoneNumberField(models.CharField):
             "error_messages": self.error_messages,
         }
         defaults.update(kwargs)
-        return super(PhoneNumberField, self).formfield(**defaults)
+        return super().formfield(**defaults)

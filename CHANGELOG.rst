@@ -1,6 +1,27 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+* Add Armenian translation.
+
+3.0.1 (2019-05-28)
+------------------
+
+* Allow overriding the default invalid phone number message.
+
+3.0.0 (2019-05-28)
+------------------
+
+* Update French and Hebrew translations.
+* Add a valid phone number example to invalid phone number error messages.
+
+**Backwards incompatible changes**
+
+* Drop support for Django 2.0.
+* Drop support for Python 2.7 and 3.4.
+
 2.4.0 (2019-05-06)
 ------------------
 

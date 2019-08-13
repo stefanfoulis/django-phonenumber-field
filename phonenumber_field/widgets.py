@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from babel import Locale
 from django.conf import settings
 from django.forms import Select, TextInput
@@ -30,10 +27,8 @@ class PhonePrefixSelect(Select):
                 for country_code in values:
                     country_name = locale.territories.get(country_code)
                     if country_name:
-                        choices.append((prefix, "%s %s" % (country_name, prefix)))
-        super(PhonePrefixSelect, self).__init__(
-            choices=sorted(choices, key=lambda item: item[1])
-        )
+                        choices.append((prefix, "{} {}".format(country_name, prefix)))
+        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
         if not value:
@@ -56,7 +51,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
 
     def __init__(self, attrs=None, initial=None):
         widgets = (PhonePrefixSelect(initial), TextInput())
-        super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
+        super().__init__(widgets, attrs)
 
     def decompress(self, value):
         if value:
@@ -68,9 +63,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
         return [None, ""]
 
     def value_from_datadict(self, data, files, name):
-        values = super(PhoneNumberPrefixWidget, self).value_from_datadict(
-            data, files, name
-        )
+        values = super().value_from_datadict(data, files, name)
         if all(values):
             return "%s.%s" % tuple(values)
         return ""
@@ -86,7 +79,7 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
         if region is None:
             region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
         self.region = region
-        super(PhoneNumberInternationalFallbackWidget, self).__init__(attrs)
+        super().__init__(attrs)
 
     def format_value(self, value):
         if isinstance(value, PhoneNumber):
@@ -96,4 +89,4 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
             else:
                 formatter = PhoneNumberFormat.NATIONAL
             return value.format_as(formatter)
-        return super(PhoneNumberInternationalFallbackWidget, self).format_value(value)
+        return super().format_value(value)
