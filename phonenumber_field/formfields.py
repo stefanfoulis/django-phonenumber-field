@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
 from django.utils.translation import gettext as _
 
-from phonenumber_field.phonenumber import to_python, validate_region
+from phonenumber_field.phonenumber import to_python, validate_region, PhoneNumber
 from phonenumber_field.validators import validate_international_phonenumber
 
 
@@ -21,7 +21,7 @@ class PhoneNumberField(CharField):
         if "invalid" not in self.error_messages:
             if region:
                 number = phonenumbers.example_number(region)
-                example_number = to_python(number).as_national
+                example_number = PhoneNumber.__str__(to_python(number))
                 # Translators: {example_number} is a national phone number.
                 error_message = _(
                     "Enter a valid phone number (e.g. {example_number}) "
