@@ -19,7 +19,9 @@ class PhoneNumberDescriptor:
     Assigns a phone number object on assignment so you can do::
 
         >>> instance.phone_number = PhoneNumber(...)
-    or
+
+    or,
+
         >>> instance.phone_number = '+414204242'
     """
 
