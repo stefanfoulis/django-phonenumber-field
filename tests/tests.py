@@ -369,6 +369,7 @@ class PhonenumerFieldAppTest(TestCase):
 
 
 class PhoneNumberFormFieldTest(TestCase):
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
     def test_error_message(self):
         class PhoneNumberForm(forms.Form):
             number = formfields.PhoneNumberField()
@@ -376,7 +377,13 @@ class PhoneNumberFormFieldTest(TestCase):
         form = PhoneNumberForm({"number": "invalid"})
         self.assertIs(form.is_valid(), False)
         self.assertEqual(
-            form.errors, {"number": ["Enter a valid phone number (e.g. +12125552368)."]}
+            form.errors,
+            {
+                "number": [
+                    "Enter a valid phone number (e.g. 01 23 45 67 89) "
+                    "or a number with an international call prefix."
+                ]
+            },
         )
 
     def test_override_error_message(self):
