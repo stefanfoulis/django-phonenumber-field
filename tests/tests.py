@@ -520,3 +520,15 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_none(self):
         field = modelfields.PhoneNumberField()
         self.assertIsNone(field.region)
+
+    @override_settings(
+        PHONENUMBER_DEFAULT_REGION="US", PHONENUMBER_DEFAULT_FORMAT="NATIONAL"
+    )
+    def test_international_phone_is_valid(self):
+        class PhoneNumberForm(forms.ModelForm):
+            class Meta:
+                model = models.TestModel
+                fields = "__all__"
+
+        form = PhoneNumberForm({"phone": "+79261234567"})  # russian phone
+        self.assertTrue(form.is_valid())
