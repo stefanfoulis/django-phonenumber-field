@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core import checks
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.encoding import force_text
 from django.utils.translation import gettext_lazy as _
@@ -80,9 +81,6 @@ class PhoneNumberField(models.CharField):
         if value:
             if not isinstance(value, PhoneNumber):
                 value = to_python(value)
-
-            if not value.is_valid():
-                raise ValueError("“%s” is not a valid phone number." % value.raw_input)
 
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             fmt = PhoneNumber.format_map[format_string]

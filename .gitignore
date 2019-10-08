@@ -9,6 +9,7 @@ downloads
 eggs
 parts
 build
+venv
 *.egg-info
 *.egg
 .DS_Store
