@@ -81,9 +81,6 @@ class PhoneNumberField(models.CharField):
             if not isinstance(value, PhoneNumber):
                 value = to_python(value)
 
-            if not value.is_valid():
-                raise ValueError("“%s” is not a valid phone number." % value.raw_input)
-
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             fmt = PhoneNumber.format_map[format_string]
             value = value.format_as(fmt)
