@@ -14,6 +14,8 @@ from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 from . import models
 from .forms import CustomPhoneNumberFormField, PhoneNumberForm
 
+ALGERIAN_PHONE_NUMBER = "+213799136332"
+
 
 def phone_transform(obj):
     return (obj.pk, obj.name, obj.phone)
@@ -441,6 +443,14 @@ class PhoneNumberFormFieldTest(TestCase):
         self.assertIs(form.is_valid(), False)
         self.assertEqual(form.errors, {"number": ["MY INLINE INVALID MESSAGE!"]})
 
+    def test_algerian_phone_number_in_form(self):
+        class PhoneNumberForm(forms.Form):
+            number = formfields.PhoneNumberField()
+
+        form = PhoneNumberForm({"number": ALGERIAN_PHONE_NUMBER})
+        self.assertTrue(form.is_valid())
+        self.assertEqual(ALGERIAN_PHONE_NUMBER, form.cleaned_data["number"])
+
 
 class RegionPhoneNumberFormFieldTest(TestCase):
     def test_regional_phone(self):
@@ -561,3 +571,10 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_none(self):
         field = modelfields.PhoneNumberField()
         self.assertIsNone(field.region)
+
+    def test_algerian_phone_number_in_model(self):
+        m = models.MandatoryPhoneNumber.objects.create(
+            phone_number=ALGERIAN_PHONE_NUMBER
+        )
+        self.assertEqual(phonenumbers.parse(ALGERIAN_PHONE_NUMBER), m.phone_number)
+        self.assertEqual(ALGERIAN_PHONE_NUMBER, m.phone_number)
