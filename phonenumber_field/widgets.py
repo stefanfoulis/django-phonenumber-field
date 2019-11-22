@@ -5,7 +5,10 @@ from django.forms.widgets import MultiWidget
 from django.utils import translation
 from phonenumbers import PhoneNumberFormat
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
-from phonenumbers.phonenumberutil import region_code_for_number, national_significant_number
+from phonenumbers.phonenumberutil import (
+    national_significant_number,
+    region_code_for_number,
+)
 
 from phonenumber_field.phonenumber import PhoneNumber
 
@@ -47,7 +50,10 @@ class PhoneNumberPrefixWidget(MultiWidget):
         if value:
             if type(value) == PhoneNumber:
                 if value.country_code and value.national_number:
-                    return ["+%d" % value.country_code, national_significant_number(value)]
+                    return [
+                        "+%d" % value.country_code,
+                        national_significant_number(value),
+                    ]
             else:
                 return value.split(".")
         return [None, ""]
