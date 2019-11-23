@@ -31,9 +31,12 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         return phone_number_obj
 
     def __str__(self):
-        format_string = getattr(settings, "PHONENUMBER_DEFAULT_FORMAT", "E164")
-        fmt = self.format_map[format_string]
-        return self.format_as(fmt)
+        if self.is_valid():
+            format_string = getattr(settings, "PHONENUMBER_DEFAULT_FORMAT", "E164")
+            fmt = self.format_map[format_string]
+            return self.format_as(fmt)
+        else:
+            return self.raw_input
 
     def is_valid(self):
         """
