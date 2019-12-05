@@ -77,16 +77,24 @@ class PhoneNumberField(models.CharField):
         """
         Perform preliminary non-db specific value checks and conversions.
         """
-        if value:
-            if not isinstance(value, PhoneNumber):
-                value = to_python(value)
+        if not value:
+            return super().get_prep_value(value)
 
-            if not value.is_valid():
-                raise ValueError("“%s” is not a valid phone number." % value.raw_input)
+        if isinstance(value, PhoneNumber):
+            parsed_value = value
+        else:
+            # Convert the string to a PhoneNumber object.
+            parsed_value = to_python(value)
 
+        if parsed_value.is_valid():
+            # A valid phone number. Normalize it for storage.
             format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             fmt = PhoneNumber.format_map[format_string]
-            value = value.format_as(fmt)
+            value = parsed_value.format_as(fmt)
+        else:
+            # Not a valid phone number. Store the raw string.
+            value = parsed_value.raw_input
+
         return super().get_prep_value(value)
 
     def contribute_to_class(self, cls, name, *args, **kwargs):

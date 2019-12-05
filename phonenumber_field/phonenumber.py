@@ -1,6 +1,7 @@
 import phonenumbers
 from django.conf import settings
 from django.core import validators
+from phonenumbers.util import unicod
 
 
 class PhoneNumber(phonenumbers.PhoneNumber):
@@ -31,9 +32,19 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         return phone_number_obj
 
     def __str__(self):
-        format_string = getattr(settings, "PHONENUMBER_DEFAULT_FORMAT", "E164")
-        fmt = self.format_map[format_string]
-        return self.format_as(fmt)
+        if self.is_valid():
+            format_string = getattr(settings, "PHONENUMBER_DEFAULT_FORMAT", "E164")
+            fmt = self.format_map[format_string]
+            return self.format_as(fmt)
+        else:
+            return self.raw_input
+
+    def __repr__(self):
+        if not self.is_valid():
+            return unicod(
+                "Invalid{}(raw_input={})".format(type(self).__name__, self.raw_input)
+            )
+        return super().__repr__()
 
     def is_valid(self):
         """
@@ -68,22 +79,28 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         Override parent equality because we store only string representation
         of phone number, so we must compare only this string representation
         """
-        if isinstance(other, (str, phonenumbers.PhoneNumber)):
-            format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
+        if other in validators.EMPTY_VALUES:
+            return False
+        elif isinstance(other, str):
             default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-            fmt = self.format_map[format_string]
-            if isinstance(other, str):
-                # convert string to phonenumbers.PhoneNumber
-                # instance
-                try:
-                    other = phonenumbers.parse(other, region=default_region)
-                except phonenumbers.NumberParseException:
-                    # Conversion is not possible, thus not equal
-                    return False
-            other_string = phonenumbers.format_number(other, fmt)
-            return self.format_as(fmt) == other_string
+            other = to_python(other, region=default_region)
+        elif isinstance(other, self.__class__):
+            # Nothing to do. Good to compare.
+            pass
+        elif isinstance(other, phonenumbers.PhoneNumber):
+            # The parent class of PhoneNumber does not have .is_valid().
+            # We need to make it match ours.
+            old_other = other
+            other = self.__class__()
+            other.merge_from(old_other)
         else:
             return False
+
+        format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
+        fmt = self.format_map[format_string]
+        self_str = self.format_as(fmt) if self.is_valid() else self.raw_input
+        other_str = other.format_as(fmt) if other.is_valid() else other.raw_input
+        return self_str == other_str
 
     def __hash__(self):
         return hash(str(self))
