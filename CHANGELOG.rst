@@ -1,10 +1,20 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+4.0.0 (2019-12-06)
+------------------
 
-* Add Armenian translation.
+The big version bump is due to the change in how invalid phone numbers are handled.
+Starting with ``2.4.0`` we added very aggressive validation, which raised ``ValueError``
+for invalid numbers. This caused problems in unexpected places (like when filtering a
+queryset). Starting with ``4.0.0`` we acknowledge that we can not completely prevent
+invalid numbers from entering the system. Changes directly to the database, validation
+changes in the upstream phonenumbers library, changes in the django settings may all
+lead to invalid numbers in the database. Now it is possible to save an invalid number
+to the database and ``__str__`` and ``__repr__`` clearly indicate invalid numbers.
+
+* Less aggressive raising of ``ValueError`` and better support for invalid phone numbers.
+* Various translation updates
 
 3.0.1 (2019-05-28)
 ------------------
