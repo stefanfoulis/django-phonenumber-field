@@ -13,7 +13,8 @@ changes in the upstream phonenumbers library, changes in the django settings may
 lead to invalid numbers in the database. Now it is possible to save an invalid number
 to the database and ``__str__`` and ``__repr__`` clearly indicate invalid numbers.
 
-* Less aggressive raising of ``ValueError`` and better support for invalid phone numbers.
+* Don’t raise ``ValueError`` on invalid phone numbers - ``__str__`` and ``__repr__``
+  updated to report invalid phone numbers correctly if detected.
 * Various translation updates
 
 3.0.1 (2019-05-28)
