@@ -50,7 +50,6 @@ install:
 
 script:
   - tox
-  - sonar-scanner -X
 
 after_success:
   - pip install coveralls
