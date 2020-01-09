@@ -9,7 +9,10 @@ from phonenumbers import phonenumberutil
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
-from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+from phonenumber_field.widgets import (
+    PhoneNumberInternationalFallbackWidget,
+    PhoneNumberPrefixWidget,
+)
 
 from . import models
 from .forms import CustomPhoneNumberFormField, PhoneNumberForm
@@ -578,3 +581,20 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         )
         self.assertEqual(phonenumbers.parse(ALGERIAN_PHONE_NUMBER), m.phone_number)
         self.assertEqual(ALGERIAN_PHONE_NUMBER, m.phone_number)
+
+    def test_initial_for_PhoneNumberPrefixWidget(self):
+        self.assertIn(
+            '<option value="+86" selected>',
+            PhoneNumberPrefixWidget(initial="CN").render("", ""),
+        )
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="CN")
+    def test_uses_default_region_as_initial_for_PhoneNumberPrefixWidget(self):
+        self.assertIn(
+            '<option value="+86" selected>', PhoneNumberPrefixWidget().render("", ""),
+        )
+
+    def test_no_initial_for_PhoneNumberPrefixWidget(self):
+        self.assertIn(
+            '<option value="" selected>', PhoneNumberPrefixWidget().render("", ""),
+        )
