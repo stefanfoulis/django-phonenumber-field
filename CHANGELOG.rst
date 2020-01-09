@@ -5,6 +5,8 @@ UNRELEASED
 ----------
 
 * Add support for Django 3.1.
+* Fix rendering ``PhonePrefixSelect`` with ``initial`` passed to the
+  constructor.
 
 **Backwards incompatible changes**
 

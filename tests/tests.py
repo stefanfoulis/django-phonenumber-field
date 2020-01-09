@@ -2,14 +2,17 @@ import phonenumbers
 from django import forms
 from django.core import checks
 from django.db.models import Model
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_text
 from phonenumbers import phonenumberutil
 
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
-from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+from phonenumber_field.widgets import (
+    PhoneNumberInternationalFallbackWidget,
+    PhoneNumberPrefixWidget,
+)
 
 from . import models
 from .forms import CustomPhoneNumberFormField, PhoneNumberForm
@@ -578,3 +581,21 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         )
         self.assertEqual(phonenumbers.parse(ALGERIAN_PHONE_NUMBER), m.phone_number)
         self.assertEqual(ALGERIAN_PHONE_NUMBER, m.phone_number)
+
+
+class PhoneNumberPrefixWidgetTest(SimpleTestCase):
+    def test_initial_for_PhoneNumberPrefixWidget(self):
+        rendered = PhoneNumberPrefixWidget(initial="CN").render("", "")
+        self.assertIn('<option value="">---------</option>', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+
+    @override_settings(PHONENUMBER_DEFAULT_REGION="CN")
+    def test_uses_default_region_as_initial_for_PhoneNumberPrefixWidget(self):
+        rendered = PhoneNumberPrefixWidget().render("", "")
+        self.assertIn('<option value="">---------</option>', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+
+    def test_no_initial_for_PhoneNumberPrefixWidget(self):
+        rendered = PhoneNumberPrefixWidget().render("", "")
+        self.assertIn('<option value="" selected>---------</option>', rendered)
+        self.assertIn('<option value="+86">China +86</option', rendered)

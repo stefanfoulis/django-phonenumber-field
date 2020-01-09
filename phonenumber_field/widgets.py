@@ -21,6 +21,9 @@ class PhonePrefixSelect(Select):
         language = translation.get_language() or settings.LANGUAGE_CODE
         if language:
             locale = Locale(translation.to_locale(language))
+            if not initial:
+                region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
+                initial = region
             for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
                 prefix = "+%d" % prefix
                 if initial and initial in values:
@@ -31,8 +34,8 @@ class PhonePrefixSelect(Select):
                         choices.append((prefix, "{} {}".format(country_name, prefix)))
         super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
-    def render(self, name, value, *args, **kwargs):
-        return super().render(name, value or self.initial, *args, **kwargs)
+    def get_context(self, name, value, attrs):
+        return super().get_context(name, value or self.initial, attrs)
 
 
 class PhoneNumberPrefixWidget(MultiWidget):
