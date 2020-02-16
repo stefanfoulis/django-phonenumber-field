@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+**Backwards incompatible changes**
+
+* Drop support for end-of-life Django 1.11 and 2.2.
+
 4.0.0 (2019-12-06)
 ------------------
 
