@@ -32,13 +32,15 @@ Installation
 
 ::
 
-    pip install django-phonenumber-field
-    pip install phonenumbers
+    pip install django-phonenumber-field[phonenumbers]
 
-As an alternative to the ``phonenumbers`` package it is possible to install the
-``phonenumberslite`` package which has
-`a lower memory footprint <https://github.com/daviddrysdale/python-phonenumbers#memory-usage>`_.
+As an alternative to the ``phonenumbers`` package, it is possible to install
+the ``phonenumberslite`` package which has `a lower memory footprint
+<https://github.com/daviddrysdale/python-phonenumbers#memory-usage>`_.
 
+::
+
+    pip install django-phonenumber-field[phonenumberslite]
 
 Basic usage
 ===========
