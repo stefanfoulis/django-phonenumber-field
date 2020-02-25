@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2020-02-25 09:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Wentao Han <wentao.han@gmail.com>\n"
 "Language-Team: \n"
@@ -23,16 +23,16 @@ msgstr ""
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
-msgstr ""
+msgstr "输入一个合法的电话号码（例如，{example_number}）或带国际冠码的号码。"
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "输入一个合法的电话号码。"
+msgstr "输入一个合法的电话号码（例如，{example_number}）。"
 
-#: modelfields.py:51
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "电话号码"
 
