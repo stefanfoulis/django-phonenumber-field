@@ -24,6 +24,8 @@ msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Введите корректный номер телефона (e.g. {example_number}) или номер с"
+"международным префиксом."
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
