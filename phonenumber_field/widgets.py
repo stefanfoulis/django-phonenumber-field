@@ -1,5 +1,5 @@
-from babel import Locale
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.utils import translation
@@ -12,15 +12,25 @@ from phonenumbers.phonenumberutil import (
 
 from phonenumber_field.phonenumber import PhoneNumber
 
+try:
+    import babel
+except ModuleNotFoundError:
+    babel = None
+
 
 class PhonePrefixSelect(Select):
     initial = None
 
     def __init__(self, initial=None):
+        if babel is None:
+            raise ImproperlyConfigured(
+                "The PhonePrefixSelect widget requires the babel package be installed."
+            )
+
         choices = [("", "---------")]
         language = translation.get_language() or settings.LANGUAGE_CODE
         if language:
-            locale = Locale(translation.to_locale(language))
+            locale = babel.Locale(translation.to_locale(language))
             if not initial:
                 region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
                 initial = region
