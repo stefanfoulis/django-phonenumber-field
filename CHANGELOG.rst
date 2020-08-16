@@ -4,6 +4,8 @@ CHANGELOG
 UNRELEASED
 ----------
 
+* Add support for Django 3.1.
+
 **Backwards incompatible changes**
 
 * Drop support for end-of-life Django 1.11 and 2.2.
