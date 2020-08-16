@@ -7,10 +7,14 @@ UNRELEASED
 * Add support for Django 3.1.
 * Fix rendering ``PhonePrefixSelect`` with ``initial`` passed to the
   constructor.
+* The Babel dependency is now optional.
 
 **Backwards incompatible changes**
 
 * Drop support for end-of-life Django 1.11 and 2.2.
+* As the Babel dependency is now optional, you must now install it to use
+  ``PhoneNumberPrefixWidget``. If you do not install it, an
+  ``ImproperlyConfigured`` exception will be raised when instantiated.
 
 4.0.0 (2019-12-06)
 ------------------
