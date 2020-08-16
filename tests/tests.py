@@ -3,6 +3,7 @@ from django import forms
 from django.core import checks
 from django.db.models import Model
 from django.test import SimpleTestCase, TestCase, override_settings
+from django.utils import translation
 from django.utils.encoding import force_text
 from phonenumbers import phonenumberutil
 
@@ -599,3 +600,11 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="" selected>---------</option>', rendered)
         self.assertIn('<option value="+86">China +86</option', rendered)
+
+    @override_settings(USE_I18N=True)
+    def test_after_translation_deactivate_all(self):
+        translation.deactivate_all()
+        rendered = PhoneNumberPrefixWidget().render("", "")
+        self.assertIn(
+            '<select name="_0"><option value="" selected>---------</option>', rendered
+        )

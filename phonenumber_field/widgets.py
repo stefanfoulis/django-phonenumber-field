@@ -29,19 +29,18 @@ class PhonePrefixSelect(Select):
 
         choices = [("", "---------")]
         language = translation.get_language() or settings.LANGUAGE_CODE
-        if language:
-            locale = babel.Locale(translation.to_locale(language))
-            if not initial:
-                region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-                initial = region
-            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-                prefix = "+%d" % prefix
-                if initial and initial in values:
-                    self.initial = prefix
-                for country_code in values:
-                    country_name = locale.territories.get(country_code)
-                    if country_name:
-                        choices.append((prefix, "{} {}".format(country_name, prefix)))
+        locale = babel.Locale(translation.to_locale(language))
+        if not initial:
+            region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
+            initial = region
+        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            prefix = "+%d" % prefix
+            if initial and initial in values:
+                self.initial = prefix
+            for country_code in values:
+                country_name = locale.territories.get(country_code)
+                if country_name:
+                    choices.append((prefix, "{} {}".format(country_name, prefix)))
         super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def get_context(self, name, value, attrs):
