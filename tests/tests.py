@@ -2,18 +2,13 @@ import phonenumbers
 from django import forms
 from django.core import checks
 from django.db.models import Model
-from django.test import SimpleTestCase, TestCase, override_settings
-from django.utils import translation
+from django.test import TestCase, override_settings
 from django.utils.encoding import force_text
 from phonenumbers import phonenumberutil
 
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
-from phonenumber_field.widgets import (
-    PhoneNumberInternationalFallbackWidget,
-    PhoneNumberPrefixWidget,
-)
 
 from . import models
 from .forms import CustomPhoneNumberFormField, PhoneNumberForm
@@ -213,26 +208,6 @@ class PhoneNumberFieldTestCase(TestCase):
                     self.storage_numbers[frmt][1],
                 )
 
-    def test_fallback_widget_switches_between_national_and_international(self):
-        region, number_string = self.local_numbers[0]
-        number = PhoneNumber.from_string(number_string, region=region)
-        gb_widget = PhoneNumberInternationalFallbackWidget(region="GB")
-        de_widget = PhoneNumberInternationalFallbackWidget(region="DE")
-        self.assertHTMLEqual(
-            gb_widget.render("number", number),
-            '<input name="number" type="text" value="01606 75178" />',
-        )
-        self.assertHTMLEqual(
-            de_widget.render("number", number),
-            '<input name="number" type="text" value="+44 1606 75178" />',
-        )
-
-        # If there's been a validation error, the value should be included verbatim
-        self.assertHTMLEqual(
-            gb_widget.render("number", "error"),
-            '<input name="number" type="text" value="error" />',
-        )
-
     def test_phone_number_form_empty_value(self):
         form = PhoneNumberForm({"phone_number": ""})
 
@@ -415,47 +390,6 @@ class PhonenumerFieldAppTest(TestCase):
         self.assertIsInstance(models.TestModel.phone, modelfields.PhoneNumberDescriptor)
 
 
-class PhoneNumberFormFieldTest(TestCase):
-    def test_error_message(self):
-        class PhoneNumberForm(forms.Form):
-            number = formfields.PhoneNumberField()
-
-        form = PhoneNumberForm({"number": "invalid"})
-        self.assertIs(form.is_valid(), False)
-        self.assertEqual(
-            form.errors, {"number": ["Enter a valid phone number (e.g. +12125552368)."]}
-        )
-
-    def test_override_error_message(self):
-        class MyPhoneNumberField(formfields.PhoneNumberField):
-            default_error_messages = {"invalid": "MY INVALID MESSAGE!"}
-
-        class PhoneNumberForm(forms.Form):
-            number = MyPhoneNumberField()
-
-        form = PhoneNumberForm({"number": "invalid"})
-        self.assertIs(form.is_valid(), False)
-        self.assertEqual(form.errors, {"number": ["MY INVALID MESSAGE!"]})
-
-    def test_override_error_message_inline(self):
-        class PhoneNumberForm(forms.Form):
-            number = formfields.PhoneNumberField(
-                error_messages={"invalid": "MY INLINE INVALID MESSAGE!"}
-            )
-
-        form = PhoneNumberForm({"number": "invalid"})
-        self.assertIs(form.is_valid(), False)
-        self.assertEqual(form.errors, {"number": ["MY INLINE INVALID MESSAGE!"]})
-
-    def test_algerian_phone_number_in_form(self):
-        class PhoneNumberForm(forms.Form):
-            number = formfields.PhoneNumberField()
-
-        form = PhoneNumberForm({"number": ALGERIAN_PHONE_NUMBER})
-        self.assertTrue(form.is_valid())
-        self.assertEqual(ALGERIAN_PHONE_NUMBER, form.cleaned_data["number"])
-
-
 class RegionPhoneNumberFormFieldTest(TestCase):
     def test_regional_phone(self):
         class PhoneNumberForm(forms.Form):
@@ -582,29 +516,3 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         )
         self.assertEqual(phonenumbers.parse(ALGERIAN_PHONE_NUMBER), m.phone_number)
         self.assertEqual(ALGERIAN_PHONE_NUMBER, m.phone_number)
-
-
-class PhoneNumberPrefixWidgetTest(SimpleTestCase):
-    def test_initial_for_PhoneNumberPrefixWidget(self):
-        rendered = PhoneNumberPrefixWidget(initial="CN").render("", "")
-        self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
-
-    @override_settings(PHONENUMBER_DEFAULT_REGION="CN")
-    def test_uses_default_region_as_initial_for_PhoneNumberPrefixWidget(self):
-        rendered = PhoneNumberPrefixWidget().render("", "")
-        self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
-
-    def test_no_initial_for_PhoneNumberPrefixWidget(self):
-        rendered = PhoneNumberPrefixWidget().render("", "")
-        self.assertIn('<option value="" selected>---------</option>', rendered)
-        self.assertIn('<option value="+86">China +86</option', rendered)
-
-    @override_settings(USE_I18N=True)
-    def test_after_translation_deactivate_all(self):
-        translation.deactivate_all()
-        rendered = PhoneNumberPrefixWidget().render("", "")
-        self.assertIn(
-            '<select name="_0"><option value="" selected>---------</option>', rendered
-        )
