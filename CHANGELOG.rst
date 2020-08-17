@@ -1,13 +1,17 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+5.0.0 (2020-08-17)
+------------------
 
 * Add support for Django 3.1.
 * Fix rendering ``PhonePrefixSelect`` with ``initial`` passed to the
   constructor.
 * The Babel dependency is now optional.
+* Switched to setuptools declarative configuration for packaging and
+  installation.
+* Add Arabic and Russian translation.
+* Correct License information in package metadata.
 
 **Backwards incompatible changes**
 
