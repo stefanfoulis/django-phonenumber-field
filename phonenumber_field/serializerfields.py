@@ -12,4 +12,4 @@ class PhoneNumberField(serializers.CharField):
         phone_number = to_python(data)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages["invalid"])
-        return phone_number
+        return phone_number.as_e164
