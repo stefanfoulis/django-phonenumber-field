@@ -33,17 +33,20 @@ class PhoneNumberFieldTestCase(TestCase):
 
     def test_str_for_valid_number(self):
         self.assertEqual(
-            str(PhoneNumber.from_string(self.test_number_1)), self.test_number_1,
+            str(PhoneNumber.from_string(self.test_number_1)),
+            self.test_number_1,
         )
 
     def test_str_for_invalid_number(self):
         self.assertEqual(
-            str(to_python("invalid")), "invalid",
+            str(to_python("invalid")),
+            "invalid",
         )
 
     def test_repr_for_invalid_number(self):
         self.assertEqual(
-            repr(to_python("invalid")), "InvalidPhoneNumber(raw_input=invalid)",
+            repr(to_python("invalid")),
+            "InvalidPhoneNumber(raw_input=invalid)",
         )
 
     def test_repr_for_valid_number(self):
