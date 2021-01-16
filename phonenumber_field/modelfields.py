@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core import checks
 from django.db import models
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field import formfields
@@ -70,7 +70,7 @@ class PhoneNumberField(models.CharField):
         try:
             validate_region(self.region)
         except ValueError as e:
-            return [checks.Error(force_text(e), obj=self)]
+            return [checks.Error(force_str(e), obj=self)]
         return []
 
     def get_prep_value(self, value):
