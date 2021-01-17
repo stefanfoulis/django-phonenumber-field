@@ -1,0 +1,71 @@
+name: Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - 3.6
+          - 3.7
+          - 3.8
+        tox-environment:
+          - dj21
+          - dj22
+          - dj30
+          - dj31
+          - djmaster
+
+    env:
+      COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
+      COVERALLS_PARALLEL: true
+      COVERALLS_SERVICE_NAME: github
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TOXENV: ${{ matrix.tox-environment }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: python -m pip install coveralls tox
+
+      - name: Run tests
+        run: tox
+
+      - name: Upload coverage data to coveralls.io
+        run: coveralls
+
+  coveralls:
+    name: Indicate completion to coveralls.io
+    runs-on: ubuntu-latest
+
+    needs: test
+    # Push coverage report even if test cases failed
+    if: ${{ always() }}
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install coveralls
+        run: python -m pip install coveralls
+
+      - name: Report coverage to coveralls.io
+        run: coveralls --finish
