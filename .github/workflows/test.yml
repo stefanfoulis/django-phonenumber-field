@@ -17,7 +17,6 @@ jobs:
           - 3.7
           - 3.8
         tox-environment:
-          - dj21
           - dj22
           - dj30
           - dj31
