@@ -89,4 +89,4 @@ available Python interpreters and generate a combined coverage report::
 
 run a specific combination::
 
-    tox -e py36-dj21,py36-dj111
+    tox -e py36-djmaster,py39-djmaster
