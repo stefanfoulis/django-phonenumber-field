@@ -22,7 +22,7 @@ UNRELEASED
 
 **Backwards incompatible changes**
 
-* Drop support for end-of-life Django 1.11 and 2.2.
+* Drop support for end-of-life Django 1.11 and 2.1.
 * As the Babel dependency is now optional, you must now install it to use
   ``PhoneNumberPrefixWidget``. If you do not install it, an
   ``ImproperlyConfigured`` exception will be raised when instantiated.
