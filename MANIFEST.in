@@ -4,4 +4,5 @@ include tox.ini
 recursive-include phonenumber_field/locale django.mo django.po
 recursive-include tests *.py
 
+exclude .gitignore
 prune .github
