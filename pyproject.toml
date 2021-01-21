@@ -1,0 +1,9 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "setuptools_scm[toml]>=3.4",
+]
+
+[tool.setuptools_scm]
+write_to = "phonenumber_field/version.py"
