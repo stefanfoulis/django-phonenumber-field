@@ -4,7 +4,7 @@ CHANGELOG
 UNRELEASED
 ----------
 
-* Add support for Python 3.9
+* Add support for Python 3.9 and Django 3.2
 * Add Argentinian, Bulgarian, Indonesian, Ukrainian translations
 * Update Esperanto and European Spanish translations
 

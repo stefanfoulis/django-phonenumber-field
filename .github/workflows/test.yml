@@ -21,6 +21,7 @@ jobs:
           - dj22
           - dj30
           - dj31
+          - dj32
         include:
           - python-version: 3.8
             tox-environment: djmain
