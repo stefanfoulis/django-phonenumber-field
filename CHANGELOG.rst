@@ -8,6 +8,8 @@ UNRELEASED
 
 * Drop support for Python 3.5
 
+* Add support for Python 3.9
+
 5.0.0 (2020-08-17)
 ------------------
 
