@@ -2,8 +2,8 @@
 django-phonenumber-field
 ========================
 
-.. image:: https://travis-ci.org/stefanfoulis/django-phonenumber-field.svg?branch=master
-    :target: https://travis-ci.org/stefanfoulis/django-phonenumber-field
+.. image:: https://github.com/stefanfoulis/django-phonenumber-field/workflows/Test/badge.svg
+    :target: https://github.com/stefanfoulis/django-phonenumber-field/workflows/Test/badge.svg
 .. image:: https://img.shields.io/coveralls/stefanfoulis/django-phonenumber-field/develop.svg
     :target: https://coveralls.io/github/stefanfoulis/django-phonenumber-field?branch=master
 
