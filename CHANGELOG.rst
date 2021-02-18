@@ -4,6 +4,7 @@ CHANGELOG
 UNRELEASED
 ----------
 
+* Allow sorting ``PhoneNumber``\ s from Python
 * Add support for Python 3.9 and Django 3.2
 * Add Argentinian, Bulgarian, Indonesian, Ukrainian translations
 * Update Esperanto and European Spanish translations
