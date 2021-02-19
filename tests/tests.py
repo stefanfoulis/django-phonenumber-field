@@ -260,7 +260,7 @@ class PhoneNumberFieldTestCase(TestCase):
         )
 
 
-class PhonenumerFieldAppTest(TestCase):
+class PhoneNumberFieldAppTest(TestCase):
     def test_save_field_to_database(self):
         """Basic Field Test"""
         tm = models.TestModel()
