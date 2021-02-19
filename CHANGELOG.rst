@@ -4,13 +4,13 @@ CHANGELOG
 UNRELEASED
 ----------
 
-**Backwards incompatible changes**
-
-* Drop support for Python 3.5
-
 * Add support for Python 3.9
 * Add Argentinian, Bulgarian, Indonesian, Ukrainian translations
 * Update Esperanto and European Spanish translations
+
+**Backwards incompatible changes**
+
+* Drop support for Python 3.5
 
 5.0.0 (2020-08-17)
 ------------------
