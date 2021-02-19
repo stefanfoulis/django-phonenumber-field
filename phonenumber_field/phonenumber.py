@@ -1,7 +1,6 @@
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-from phonenumbers.util import unicod
 
 
 class PhoneNumber(phonenumbers.PhoneNumber):
@@ -41,7 +40,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 
     def __repr__(self):
         if not self.is_valid():
-            return unicod(
+            return str(
                 "Invalid{}(raw_input={})".format(type(self).__name__, self.raw_input)
             )
         return super().__repr__()
