@@ -84,14 +84,14 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         elif isinstance(other, str):
             default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
             other = to_python(other, region=default_region)
-        elif isinstance(other, self.__class__):
+        elif isinstance(other, type(self)):
             # Nothing to do. Good to compare.
             pass
         elif isinstance(other, phonenumbers.PhoneNumber):
             # The parent class of PhoneNumber does not have .is_valid().
             # We need to make it match ours.
             old_other = other
-            other = self.__class__()
+            other = type(self)()
             other.merge_from(old_other)
         else:
             return False
