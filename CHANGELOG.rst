@@ -10,7 +10,7 @@ UNRELEASED
 
 * Add support for Python 3.9
 * Add Argentinian, Bulgarian, Indonesian, Ukrainian translations
-* Update European Spanish translations
+* Update Esperanto and European Spanish translations
 
 5.0.0 (2020-08-17)
 ------------------

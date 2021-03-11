@@ -1,11 +1,9 @@
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-28 13:04-0700\n"
-"PO-Revision-Date: 2016-01-31 20:07+0100\n"
+"PO-Revision-Date: 2021-03-11 16:09+0000\n"
 "Last-Translator: Meiyer <interDist@users.noreply.github.com>\n"
 "Language-Team: Esperanto\n"
 "Language: eo\n"
@@ -20,15 +18,16 @@ msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Bv. enigu ĝustan lokan telefon-numeron (ekz. {example_number}) aŭ numeron "
+"kun internacia voko-prefikso."
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number."
+#, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Bv. enigu ĝustan telefon-numeron."
+msgstr "Bv. enigu ĝustan telefon-numeron (ekz. {example_number})."
 
-#: modelfields.py:51
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "Telefona numero"
 
