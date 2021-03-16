@@ -23,9 +23,9 @@ jobs:
           - dj31
         include:
           - python-version: 3.8
-            tox-environment: djmaster
+            tox-environment: djmain
           - python-version: 3.9
-            tox-environment: djmaster
+            tox-environment: djmain
 
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
