@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+5.1.0 (2021-04-02)
+------------------
 
 * Allow sorting ``PhoneNumber``\ s from Python
 * Add support for Python 3.9 and Django 3.2
