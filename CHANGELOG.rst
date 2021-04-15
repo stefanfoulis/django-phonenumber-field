@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+**Backwards incompatible changes**
+
+* Drop support for end-of-life Django 3.0
+
 5.1.0 (2021-04-02)
 ------------------
 
