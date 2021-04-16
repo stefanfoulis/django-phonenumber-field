@@ -2,7 +2,8 @@ import phonenumbers
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
-from django.utils.translation import gettext as _
+from django.utils.text import format_lazy
+from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field.phonenumber import to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
@@ -31,8 +32,8 @@ class PhoneNumberField(CharField):
                 example_number = "+12125552368"  # Ghostbusters
                 # Translators: {example_number} is an international phone number.
                 error_message = _("Enter a valid phone number (e.g. {example_number}).")
-            self.error_messages["invalid"] = error_message.format(
-                example_number=example_number
+            self.error_messages["invalid"] = format_lazy(
+                error_message, example_number=example_number
             )
 
     def to_python(self, value):

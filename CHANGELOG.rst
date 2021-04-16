@@ -4,9 +4,12 @@ CHANGELOG
 UNRELEASED
 ----------
 
+* Lazy load ``formfields.PhoneNumberField`` translation for ``invalid`` data.
+
 **Backwards incompatible changes**
 
 * Drop support for end-of-life Django 3.0
+
 
 5.1.0 (2021-04-02)
 ------------------

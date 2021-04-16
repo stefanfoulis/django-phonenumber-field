@@ -1,5 +1,8 @@
+from unittest import mock
+
 from django import forms
 from django.test import SimpleTestCase
+from django.utils.functional import lazy
 
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -45,3 +48,13 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
         form = PhoneNumberForm({"number": ALGERIAN_PHONE_NUMBER})
         self.assertTrue(form.is_valid())
         self.assertEqual(ALGERIAN_PHONE_NUMBER, form.cleaned_data["number"])
+
+    def test_error_message_lazy(self):
+        def fail_gettext(msgid):
+            raise Exception("gettext was called unexpectedly.")
+
+        with mock.patch(
+            "phonenumber_field.formfields._",
+            side_effect=lazy(fail_gettext, str),
+        ):
+            PhoneNumberField()
