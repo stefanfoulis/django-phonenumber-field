@@ -539,7 +539,7 @@ class PhoneNumberOrdering(TestCase):
 
     def test_ordering_contains_None(self):
         phone1 = PhoneNumber.from_string("+33600000000")
-        msg = "'<' not supported between instances of " "'PhoneNumber' and 'NoneType'"
+        msg = "'<' not supported between instances of 'PhoneNumber' and 'NoneType'"
         for assertion in [
             self.assertLess,
             self.assertLessEqual,
