@@ -31,8 +31,7 @@ class PhonePrefixSelect(Select):
         language = translation.get_language() or settings.LANGUAGE_CODE
         locale = babel.Locale(translation.to_locale(language))
         if not initial:
-            region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-            initial = region
+            initial = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
             prefix = "+%d" % prefix
             if initial and initial in values:
