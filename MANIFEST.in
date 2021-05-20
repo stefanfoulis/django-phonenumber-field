@@ -1,3 +1,4 @@
 exclude .gitignore
+exclude check-translations
 exclude sonar-project.properties
 prune .github
