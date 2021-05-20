@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+import sys
+
+import django
+from django.core.management import call_command
+
+
+def main():
+    kwargs = {} if django.VERSION < (3,) else {"ignore": ".tox"}
+    with open(os.devnull, "w") as devnull:
+        call_command("compilemessages", **kwargs, stdout=devnull)
+
+    result = subprocess.run(
+        ["git", "status", "--porcelain"],
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    stdout = result.stdout.decode()
+    if stdout != "":
+        print(
+            f"Unexpected changes found in the workspace:\n\n{stdout}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    assert result.stderr is None
+
+
+if __name__ == "__main__":
+    os.environ["DJANGO_SETTINGS_MODULE"] = "tests.settings"
+    django.setup()
+    main()
