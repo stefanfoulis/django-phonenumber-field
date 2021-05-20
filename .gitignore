@@ -32,6 +32,7 @@ lib/
 include/
 tests/tmp/
 *.coverage
+/coverage-reports
 htmlcov/
 share/
 .coverage*
