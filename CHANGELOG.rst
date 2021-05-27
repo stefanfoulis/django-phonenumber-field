@@ -1,10 +1,11 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+5.2.0 (2021-05-31)
+------------------
 
 * Lazy load ``formfields.PhoneNumberField`` translation for ``invalid`` data.
+* Update Russian translations
 
 **Backwards incompatible changes**
 
