@@ -25,10 +25,9 @@ msgstr ""
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number."
+#, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Vul een geldig telefoonnummer in."
+msgstr "Vul een geldig telefoonnummer in (bijvoorbeeld: {example_number})."
 
 #: modelfields.py:51
 msgid "Phone number"
