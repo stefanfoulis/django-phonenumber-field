@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.forms import Select, TextInput
+from django.forms import Select, TextInput, Media
 from django.forms.widgets import MultiWidget
 from django.utils import translation
 from phonenumbers import PhoneNumberFormat
@@ -97,3 +97,19 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
                 formatter = PhoneNumberFormat.NATIONAL
             return value.format_as(formatter)
         return super().format_value(value)
+
+
+class PhoneNumberWidget(TextInput):
+    template_name = 'phonenumber_field/widgets/phonenumber.html'
+
+    input_type = 'tel'
+    # rendering static file one time https://docs.djangoproject.com/en/3.2/topics/forms/media/
+    @property
+    def media(self):
+        return Media(
+            css={"all": ("vendor/css/intlTelInput.min.css",
+                         "vendor/css/phonenumber.css")},
+            js=(
+                "vendor/js/intlTelInput.min.js",
+            ),
+        )

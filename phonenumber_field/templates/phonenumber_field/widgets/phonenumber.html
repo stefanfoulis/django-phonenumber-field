@@ -1,0 +1,53 @@
+{% load static %}
+<input type="{{ widget.type }}" name="{{ widget.name }}" {% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}" {% endif %} {% include "django/forms/widgets/attrs.html" %}>
+<span id="valid-{{ widget.name }}-msg" class="d-none">✓ Valid</span>
+<span id="error-{{ widget.name }}-msg" class="d-none"></span>
+
+<script language="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var input = document.querySelector("#id_{{ widget.name }}");
+
+        errorMsg = document.querySelector("#error-{{ widget.name }}-msg"),
+        validMsg = document.querySelector("#valid-{{ widget.name }}-msg");
+        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+        var iti = window.intlTelInput(input, {
+            utilsScript: "{% static 'vendor/js/intltell_utils.js' %}",
+            initialCountry: "US",
+            hiddenInput: 'phone_number',
+            separateDialCode: true,
+            dropdownContainer: document.body
+        });
+
+        var reset = function() {
+            input.classList.remove("is-invalid");
+            input.classList.remove("is-valid");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("d-none");
+            validMsg.classList.add("d-none");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+        reset();
+        if (input.value.trim()) {
+            if (iti.isValidNumber()) {
+            validMsg.classList.remove("d-none");
+            django.jQuery('#id_{{ widget.name }}').removeClass("is-invalid");
+            django.jQuery('#id_{{ widget.name }}').addClass("is-valid");
+            } else {
+            //input.classList.add("error");
+            django.jQuery('#id_{{ widget.name }}').removeClass("is-valid");
+            django.jQuery('#id_{{ widget.name }}').addClass("is-invalid");
+            var errorCode = iti.getValidationError();
+            errorMsg.innerHTML = errorMap[errorCode];
+            errorMsg.classList.remove("d-none");
+            }
+        }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
+    });
+</script>
