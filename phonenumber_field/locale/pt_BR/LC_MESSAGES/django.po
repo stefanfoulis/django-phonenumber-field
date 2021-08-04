@@ -23,6 +23,8 @@ msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Forneça um número de telefone válido, por exemplo {example_number}, ou um "
+"número que tenha um prefixo internacional."
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
