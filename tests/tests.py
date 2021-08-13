@@ -2,7 +2,7 @@ import phonenumbers
 from django import forms
 from django.core import checks
 from django.db.models import Model
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_str
 from phonenumbers import phonenumberutil
 
@@ -393,7 +393,7 @@ class PhoneNumberFieldAppTest(TestCase):
         self.assertIsInstance(models.TestModel.phone, modelfields.PhoneNumberDescriptor)
 
 
-class RegionPhoneNumberFormFieldTest(TestCase):
+class RegionPhoneNumberFormFieldTest(SimpleTestCase):
     def test_regional_phone(self):
         class PhoneNumberForm(forms.Form):
             canadian_number = formfields.PhoneNumberField(region="CA")

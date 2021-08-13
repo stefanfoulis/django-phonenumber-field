@@ -1,10 +1,10 @@
 import phonenumbers
-from django.test import TestCase
+from django.test import SimpleTestCase
 
 from phonenumber_field.phonenumber import PhoneNumber
 
 
-class PhoneNumberOrdering(TestCase):
+class PhoneNumberOrdering(SimpleTestCase):
     def test_ordering(self):
         phone1 = PhoneNumber.from_string("+33600000000")
         phone2 = PhoneNumber.from_string("+33600000001")
