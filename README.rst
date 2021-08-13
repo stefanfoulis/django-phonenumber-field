@@ -24,8 +24,7 @@ Included are:
   entering a national number. Requires the `Babel`_ package be installed.
 * ``PhoneNumberInternationalFallbackWidget``, a form widget that uses national numbers unless an
   international number is entered.  A ``PHONENUMBER_DEFAULT_REGION`` setting needs to be added
-  to your Django settings in order to know which national number format to recognize.  The
-  setting is a string containing an ISO-3166-1 two-letter country code.
+  to your Django settings in order to know which national number format to recognize.
 
 .. _`Babel`: https://pypi.org/project/Babel/
 
@@ -69,15 +68,48 @@ Internally, PhoneNumberField is based upon ``CharField`` and by default
 represents the number as a string of an international phonenumber in the database (e.g
 ``'+41524204242'``).
 
-Representation can be set by ``PHONENUMBER_DB_FORMAT`` variable in django settings module.
-This variable must be one of  ``'E164'``, ``'INTERNATIONAL'``, ``'NATIONAL'`` or ``'RFC3966'``.
-Recommended is one of the globally meaningful formats  ``'E164'``, ``'INTERNATIONAL'`` or
-``'RFC3966'``. ``'NATIONAL'`` format require to set up ``PHONENUMBER_DEFAULT_REGION`` variable.
-
 The object returned is a PhoneNumber instance, not a string. If strings are used to initialize it,
 e.g. via ``MyModel(phone_number='+41524204242')`` or form handling, it has to be a phone number
 with country code.
 
+Settings
+========
+
+``PHONENUMBER_DB_FORMAT``
+-------------------------
+
+Store phone numbers strings in the specified format.
+
+Default: ``"E164"``.
+
+Choices:
+
+- ``"E164"``,
+- ``"INTERNATIONAL"``,
+- ``"NATIONAL"`` (requires ``PHONENUMBER_DEFAULT_REGION``),
+- ``"RFC3966"`` (requires ``PHONENUMBER_DEFAULT_REGION``).
+
+``PHONENUMBER_DEFAULT_REGION``
+------------------------------
+
+`ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
+two-letter country code indicating how to interpret regional phone numbers.
+
+Default: ``None``.
+
+``PHONENUMBER_DEFAULT_FORMAT``
+------------------------------
+
+String formatting of phone numbers.
+
+Default: ``"E164"``.
+
+Choices:
+
+- ``"E164"``,
+- ``"INTERNATIONAL"``,
+- ``"NATIONAL"``,
+- ``"RFC3966"``.
 
 Running tests
 =============
