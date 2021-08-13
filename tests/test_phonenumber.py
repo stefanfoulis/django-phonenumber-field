@@ -1,7 +1,22 @@
 import phonenumbers
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 
 from phonenumber_field.phonenumber import PhoneNumber
+
+
+class PhoneNumberTest(SimpleTestCase):
+    def test_phonenumber_default_format(self):
+        phone = PhoneNumber.from_string("+33612345678")
+        # E164 by default.
+        self.assertEqual(str(phone), "+33612345678")
+        with override_settings(PHONENUMBER_DEFAULT_FORMAT="E164"):
+            self.assertEqual(str(phone), "+33612345678")
+        with override_settings(PHONENUMBER_DEFAULT_FORMAT="INTERNATIONAL"):
+            self.assertEqual(str(phone), "+33 6 12 34 56 78")
+        with override_settings(PHONENUMBER_DEFAULT_FORMAT="NATIONAL"):
+            self.assertEqual(str(phone), "06 12 34 56 78")
+        with override_settings(PHONENUMBER_DEFAULT_FORMAT="RFC3966"):
+            self.assertEqual(str(phone), "tel:+33-6-12-34-56-78")
 
 
 class PhoneNumberOrdering(SimpleTestCase):
