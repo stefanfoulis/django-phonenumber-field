@@ -111,6 +111,45 @@ Choices:
 - ``"NATIONAL"``,
 - ``"RFC3966"``.
 
+``PHONENUMBER_EXCLUDED_REGIONS``
+------------------------------
+
+A list of `ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
+two-letter country code to exclude from the Prefix Select Widget.
+
+Supersedes all the other Prefix Select Widget display settings. 
+
+Default: ``None``.
+
+``PHONENUMBER_ALLOWED_REGIONS``
+------------------------------
+
+A list of `ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
+two-letter country code to exclude from the Prefix Select Widget.
+
+Useful in cases where not all countries are supported yet. Limits SMS sending or
+SMS related interaction only to supported countries.
+
+Default: ``None``.
+
+``PHONENUMBER_PREFERRED_REGIONS``
+------------------------------
+
+A list of `ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
+two-letter country code to list above the country name sorted entries in the
+Prefix Select Widget. Entries listed here is repeated in the alphabetically sorted
+entries.
+
+Useful in cases where some countries have better support for the provided service.
+
+Default: ``None``.
+
+TODO
+=============
+
+- Extend settings usage to validation/validators, form tamper protection?
+- Write tests
+
 Running tests
 =============
 

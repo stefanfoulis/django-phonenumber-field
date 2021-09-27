@@ -21,26 +21,50 @@ except ModuleNotFoundError:
 class PhonePrefixSelect(Select):
     initial = None
 
-    def __init__(self, initial=None):
+    def __init__(self, initial=None, allowed=None, excluded=None, preferred=None):
         if babel is None:
             raise ImproperlyConfigured(
                 "The PhonePrefixSelect widget requires the babel package be installed."
             )
 
+        preferred_choices = []
         choices = [("", "---------")]
         language = translation.get_language() or settings.LANGUAGE_CODE
         locale = babel.Locale(translation.to_locale(language))
         if not initial:
             initial = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
+        if not excluded:
+            excluded = getattr(settings, "PHONENUMBER_EXCLUDED_REGIONS", None)
+        if not allowed:
+            allowed = getattr(settings, "PHONENUMBER_ALLOWED_REGIONS", None)
+        if not preferred:
+            preferred = getattr(settings, "PHONENUMBER_PREFERRED_REGIONS", None)
         for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            choice = None
             prefix = "+%d" % prefix
             if initial and initial in values:
                 self.initial = prefix
             for country_code in values:
+                if excluded:
+                    if country_code in excluded:
+                        continue
+
+                if allowed:
+                    if country_code not in allowed:
+                        continue
+
                 country_name = locale.territories.get(country_code)
                 if country_name:
-                    choices.append((prefix, "{} {}".format(country_name, prefix)))
-        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
+                    choice = (prefix, "{} {}".format(country_name, prefix))
+                    choices.append(choice)
+
+                if preferred:
+                    if country_code in preferred:
+                        preferred_choices.append(choice)
+
+        choices=sorted(preferred_choices, key=lambda item: item[1]) +  sorted(choices, key=lambda item: item[1])
+        
+        super().__init__(choices=choices)
 
     def get_context(self, name, value, attrs):
         return super().get_context(name, value or self.initial, attrs)
