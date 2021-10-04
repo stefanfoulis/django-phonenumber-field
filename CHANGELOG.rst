@@ -6,6 +6,12 @@ UNRELEASED
 
 - Add support for Python 3.10
 
+**Backwards incompatible changes**
+
+* ``formfields.PhoneNumberField`` with a ``region`` now display national phone
+  numbers in the national format instead of ``PHONENUMBER_DEFAULT_FORMAT``.
+  International numbers are displayed in the ``PHONENUMBER_DEFAULT_FORMAT``.
+
 5.2.0 (2021-05-31)
 ------------------
 
