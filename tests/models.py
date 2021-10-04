@@ -100,3 +100,7 @@ class TestModelPhoneBEDNU(models.Model):
 
 class FrenchPhoneOwner(models.Model):
     cell_number = PhoneNumberField(region="FR")
+
+
+class TestModelRegionAR(models.Model):
+    phone = PhoneNumberField(region="AR", blank=True, null=True)

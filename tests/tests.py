@@ -11,7 +11,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
 from . import models
-from .forms import CustomPhoneNumberFormField, PhoneNumberForm
+from .forms import ARPhoneNumberForm, CustomPhoneNumberFormField, PhoneNumberForm
 
 ALGERIAN_PHONE_NUMBER = "+213799136332"
 
@@ -519,3 +519,119 @@ class RegionPhoneNumberModelFieldTest(TestCase):
         )
         self.assertEqual(phonenumbers.parse(ALGERIAN_PHONE_NUMBER), m.phone_number)
         self.assertEqual(ALGERIAN_PHONE_NUMBER, m.phone_number)
+
+    def test_region_field_empty(self):
+        obj = models.TestModelRegionAR.objects.create()
+        form = ARPhoneNumberForm(instance=obj)
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label>'
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_international_as_E164(self):
+        form = ARPhoneNumberForm({"phone": "+32468547825"})
+        self.assertTrue(form.is_valid())
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label>'
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="+32468547825" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_international_as_E164_from_instance(self):
+        obj = models.TestModelRegionAR.objects.create(phone="+32468547825")
+        form = ARPhoneNumberForm(instance=obj)
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label> '
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="+32468547825" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_national_numbers_as_national(self):
+        form = ARPhoneNumberForm({"phone": "01145482368"})
+        self.assertTrue(form.is_valid())
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label>'
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="011 4548-2368" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_national_numbers_as_national_from_instance(self):
+        obj = models.TestModelRegionAR.objects.create(phone="01145482368")
+        form = ARPhoneNumberForm(instance=obj)
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label> '
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="011 4548-2368" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_national_numbers_from_instance_and_form_data(self):
+        obj = models.TestModelRegionAR.objects.create(phone="01145482368")
+        form = ARPhoneNumberForm({"phone": "011 4548-2368"}, instance=obj)
+        self.assertTrue(form.is_valid())
+        self.assertHTMLEqual(
+            form.as_p(),
+            "<p>"
+            '<label for="id_phone">Phone:</label> '
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="011 4548-2368" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )
+
+    def test_region_field_renders_invalid_numbers(self):
+        form = ARPhoneNumberForm({"phone": "abcdef"})
+        self.assertFalse(form.is_valid())
+        self.assertHTMLEqual(
+            form.as_p(),
+            '<ul class="errorlist">'
+            "<li>Enter a valid phone number (e.g. 011 2345-6789) "
+            "or a number with an international call prefix.</li>"
+            "</ul>"
+            "<p>"
+            '<label for="id_phone">Phone:</label>'
+            "<input "
+            'type="tel" '
+            'name="phone" '
+            'value="abcdef" '
+            'maxlength="128" '
+            'id="id_phone">'
+            "</p>",
+        )

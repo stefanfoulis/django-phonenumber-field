@@ -5,7 +5,7 @@ from django.forms.fields import CharField
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
-from phonenumber_field.phonenumber import to_python, validate_region
+from phonenumber_field.phonenumber import PhoneNumber, to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
 
 
@@ -35,6 +35,24 @@ class PhoneNumberField(CharField):
             self.error_messages["invalid"] = format_lazy(
                 error_message, example_number=example_number
             )
+
+    def prepare_value(self, value):
+        if self.region and value not in validators.EMPTY_VALUES:
+            phone_number = (
+                value
+                if isinstance(value, PhoneNumber)
+                else to_python(value, region=self.region)
+            )
+            try:
+                phone_region_codes = phonenumbers.data._COUNTRY_CODE_TO_REGION_CODE[
+                    phone_number.country_code
+                ]
+            except KeyError:
+                pass
+            else:
+                if self.region in phone_region_codes:
+                    value = phone_number.as_national
+        return value
 
     def to_python(self, value):
         phone_number = to_python(value, region=self.region)
