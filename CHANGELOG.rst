@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+- Add support for Python 3.10
+
 5.2.0 (2021-05-31)
 ------------------
 
