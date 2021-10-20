@@ -4,7 +4,11 @@ CHANGELOG
 UNRELEASED
 ----------
 
-- Add support for Python 3.10
+6.0.0 (2021-10-20)
+------------------
+
+* Add support for Python 3.10
+* Update Czech, Dutch and pt_BR translations
 
 **Backwards incompatible changes**
 
