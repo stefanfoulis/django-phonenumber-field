@@ -4,6 +4,7 @@ requires = [
     "wheel",
     "setuptools_scm[toml]>=3.4",
 ]
+build-backend = "setuptools.build_meta:__legacy__"
 
 [tool.setuptools_scm]
 write_to = "phonenumber_field/version.py"
