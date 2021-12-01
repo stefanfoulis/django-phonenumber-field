@@ -1,4 +1,5 @@
 import phonenumbers
+from django.conf import settings
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.forms.fields import CharField
@@ -17,7 +18,7 @@ class PhoneNumberField(CharField):
         self.widget.input_type = "tel"
 
         validate_region(region)
-        self.region = region
+        self.region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 
         if "invalid" not in self.error_messages:
             if region:

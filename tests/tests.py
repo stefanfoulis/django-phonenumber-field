@@ -431,6 +431,14 @@ class RegionPhoneNumberFormFieldTest(SimpleTestCase):
             },
         )
 
+    @override_settings(PHONENUMBER_DEFAULT_REGION="FR")
+    def test_formfield_uses_default_region(self):
+        class PhoneForm(forms.Form):
+            phone_number = formfields.PhoneNumberField()
+
+        form = PhoneForm()
+        self.assertEqual("FR", form.fields["phone_number"].region)
+
 
 class RegionPhoneNumberModelFieldTest(TestCase):
     def test_uses_region(self):
