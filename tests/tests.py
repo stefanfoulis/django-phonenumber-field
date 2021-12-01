@@ -7,7 +7,6 @@ from django.utils.encoding import force_str
 from phonenumbers import phonenumberutil
 
 from phonenumber_field import formfields, modelfields
-from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
 from . import models
@@ -203,7 +202,7 @@ class PhoneNumberFieldTestCase(TestCase):
         Required output format is set as string constant to guarantee
         consistent database storage values
         """
-        number = PhoneNumberField()
+        number = modelfields.PhoneNumberField()
         for frmt in ["E164", "RFC3966", "INTERNATIONAL"]:
             with override_settings(PHONENUMBER_DB_FORMAT=frmt):
                 self.assertEqual(
