@@ -32,6 +32,9 @@ lib/
 include/
 tests/tmp/
 *.coverage
+/coverage-reports
 htmlcov/
 share/
 .coverage*
+# Written by setuptools_scm.
+phonenumber_field/version.py

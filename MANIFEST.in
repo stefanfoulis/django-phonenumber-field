@@ -1,5 +1,4 @@
-include LICENSE
-include README.rst
-include tox.ini
-recursive-include phonenumber_field/locale django.mo django.po
-recursive-include tests *.py
+exclude .gitignore
+exclude check-translations
+exclude sonar-project.properties
+prune .github

@@ -1,17 +1,17 @@
-# SOME DESCRIPTIVE TITLE.
+# Argentinian Spanish translations for django-phonenumber-field
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the django-phonenumber-field package.
+# Hugo Osvaldo Barrera <hugo@barrera.io>, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
-"PO-Revision-Date: 2020-09-30 18:32+0200\n"
-"Last-Translator: Joao Lopez <jslopez@csrg.inf.utfsm.cl>\n"
+"POT-Creation-Date: 2020-09-30 10:42-0500\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
-"Language: es\n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,14 +23,14 @@ msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
-"Ingrese un número de teléfono válido  (ej.: {example_number}) o un número "
-"con un prefijo de llamado internacional."
+"Ingresá un número de teléfono válido (ej.: {example_number}) o un número con "
+"un prefijo internacional."
 
 #. Translators: {example_number} is an international phone number.
 #: phonenumber_field/formfields.py:33
 #, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Ingrese un número de teléfono válido  (ej.: {example_number})."
+msgstr "Ingresá un número de teléfono válido (ej.: {example_number})."
 
 #: phonenumber_field/modelfields.py:53
 msgid "Phone number"
@@ -38,8 +38,8 @@ msgstr "Número de teléfono"
 
 #: phonenumber_field/serializerfields.py:9
 msgid "Enter a valid phone number."
-msgstr "Ingrese un número de teléfono válido."
+msgstr "Ingresá un número de teléfono válido."
 
 #: phonenumber_field/validators.py:11
 msgid "The phone number entered is not valid."
-msgstr "El número de teléfono ingresado no es válido."
+msgstr "El número de teléfono ingresado es inválido."

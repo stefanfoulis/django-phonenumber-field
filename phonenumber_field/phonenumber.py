@@ -1,9 +1,11 @@
+from functools import total_ordering
+
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-from phonenumbers.util import unicod
 
 
+@total_ordering
 class PhoneNumber(phonenumbers.PhoneNumber):
     """
     A extended version of phonenumbers.PhoneNumber that provides
@@ -41,7 +43,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 
     def __repr__(self):
         if not self.is_valid():
-            return unicod(
+            return str(
                 "Invalid{}(raw_input={})".format(type(self).__name__, self.raw_input)
             )
         return super().__repr__()
@@ -84,14 +86,14 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         elif isinstance(other, str):
             default_region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
             other = to_python(other, region=default_region)
-        elif isinstance(other, self.__class__):
+        elif isinstance(other, type(self)):
             # Nothing to do. Good to compare.
             pass
         elif isinstance(other, phonenumbers.PhoneNumber):
             # The parent class of PhoneNumber does not have .is_valid().
             # We need to make it match ours.
             old_other = other
-            other = self.__class__()
+            other = type(self)()
             other.merge_from(old_other)
         else:
             return False
@@ -101,6 +103,29 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         self_str = self.format_as(fmt) if self.is_valid() else self.raw_input
         other_str = other.format_as(fmt) if other.is_valid() else other.raw_input
         return self_str == other_str
+
+    def __lt__(self, other):
+        if isinstance(other, phonenumbers.PhoneNumber):
+            old_other = other
+            other = type(self)()
+            other.merge_from(old_other)
+        elif not isinstance(other, type(self)):
+            raise TypeError(
+                "'<' not supported between instances of "
+                "'%s' and '%s'" % (type(self).__name__, type(other).__name__)
+            )
+
+        invalid = None
+        if not self.is_valid():
+            invalid = self
+        elif not other.is_valid():
+            invalid = other
+        if invalid is not None:
+            raise ValueError("Invalid phone number: %r" % invalid)
+
+        format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
+        fmt = self.format_map[format_string]
+        return self.format_as(fmt) < other.format_as(fmt)
 
     def __hash__(self):
         return hash(str(self))

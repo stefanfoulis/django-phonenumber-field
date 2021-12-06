@@ -1,6 +1,44 @@
 CHANGELOG
 =========
 
+UNRELEASED
+----------
+
+6.0.0 (2021-10-20)
+------------------
+
+* Add support for Python 3.10
+* Update Czech, Dutch and pt_BR translations
+
+**Backwards incompatible changes**
+
+* ``formfields.PhoneNumberField`` with a ``region`` now display national phone
+  numbers in the national format instead of ``PHONENUMBER_DEFAULT_FORMAT``.
+  International numbers are displayed in the ``PHONENUMBER_DEFAULT_FORMAT``.
+
+5.2.0 (2021-05-31)
+------------------
+
+* Lazy load ``formfields.PhoneNumberField`` translation for ``invalid`` data.
+* Update Russian translations
+
+**Backwards incompatible changes**
+
+* Drop support for end-of-life Django 3.0
+
+
+5.1.0 (2021-04-02)
+------------------
+
+* Allow sorting ``PhoneNumber``\ s from Python
+* Add support for Python 3.9 and Django 3.2
+* Add Argentinian, Bulgarian, Indonesian, Ukrainian translations
+* Update Esperanto and European Spanish translations
+
+**Backwards incompatible changes**
+
+* Drop support for Python 3.5
+
 5.0.0 (2020-08-17)
 ------------------
 
@@ -15,7 +53,7 @@ CHANGELOG
 
 **Backwards incompatible changes**
 
-* Drop support for end-of-life Django 1.11 and 2.2.
+* Drop support for end-of-life Django 1.11 and 2.1.
 * As the Babel dependency is now optional, you must now install it to use
   ``PhoneNumberPrefixWidget``. If you do not install it, an
   ``ImproperlyConfigured`` exception will be raised when instantiated.

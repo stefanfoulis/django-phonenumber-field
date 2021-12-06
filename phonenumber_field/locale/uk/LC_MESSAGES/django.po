@@ -25,13 +25,14 @@ msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Введіть коректний номер телефону (наприклад, {example_number}) або номер з "
+"префіксом міжнародного зв'язку."
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number."
+#, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Введіть коректний номер телефону."
+msgstr "Введіть коректний номер телефону (наприклад, {example_number})."
 
 #: modelfields.py:51
 msgid "Phone number"
