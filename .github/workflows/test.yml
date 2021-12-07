@@ -24,6 +24,12 @@ jobs:
           - dj32
         include:
           - python-version: 3.8
+            tox-environment: dj40
+          - python-version: 3.9
+            tox-environment: dj40
+          - python-version: '3.10'
+            tox-environment: dj40
+          - python-version: 3.8
             tox-environment: djmain
           - python-version: 3.9
             tox-environment: djmain
