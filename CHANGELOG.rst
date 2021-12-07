@@ -7,6 +7,7 @@ UNRELEASED
 * Set the default region of ``phonenumber_field.formfields.PhoneNumberField``
   to ``PHONENUMER_DEFAULT_REGION``.
 * Add Persian (farsi) translations.
+* Update uk_AR translations
 
 6.0.0 (2021-10-20)
 ------------------
