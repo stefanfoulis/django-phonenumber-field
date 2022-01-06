@@ -10,6 +10,10 @@ UNRELEASED
 * Add Persian (farsi) translations.
 * Update uk_AR translations
 
+**Backwards incompatible changes**
+
+* Drop support for Python 3.6
+
 6.0.0 (2021-10-20)
 ------------------
 
