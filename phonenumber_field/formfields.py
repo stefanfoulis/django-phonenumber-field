@@ -21,8 +21,8 @@ class PhoneNumberField(CharField):
         self.region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 
         if "invalid" not in self.error_messages:
-            if region:
-                number = phonenumbers.example_number(region)
+            if self.region:
+                number = phonenumbers.example_number(self.region)
                 example_number = to_python(number).as_national
                 # Translators: {example_number} is a national phone number.
                 error_message = _(
