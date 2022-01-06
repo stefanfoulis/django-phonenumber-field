@@ -121,4 +121,4 @@ available Python interpreters and generate a combined coverage report::
 
 run a specific combination::
 
-    tox -e py36-djmain,py39-djmain
+    tox -e py310-djmain,py39-djmain

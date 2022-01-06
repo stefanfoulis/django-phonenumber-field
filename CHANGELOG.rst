@@ -8,6 +8,10 @@ UNRELEASED
   to ``PHONENUMER_DEFAULT_REGION``.
 * Add Persian (farsi) translations.
 
+**Backwards incompatible changes**
+
+* Drop support for Python 3.6
+
 6.0.0 (2021-10-20)
 ------------------
 
