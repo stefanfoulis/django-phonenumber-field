@@ -6,6 +6,7 @@ UNRELEASED
 
 * Set the default region of ``phonenumber_field.formfields.PhoneNumberField``
   to ``PHONENUMER_DEFAULT_REGION``.
+* Use PHONENUMBER_DEFAULT_REGION for example phone number in form field errors.
 * Add support for Django 4.0
 * Add Persian (farsi) translations.
 * Update uk_AR translations
