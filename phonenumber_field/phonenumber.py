@@ -43,7 +43,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 
     def __repr__(self):
         if not self.is_valid():
-            return "Invalid{}(raw_input={})".format(type(self).__name__, self.raw_input)
+            return f"Invalid{type(self).__name__}(raw_input={self.raw_input})"
         return super().__repr__()
 
     def is_valid(self):

@@ -39,7 +39,7 @@ class PhonePrefixSelect(Select):
             for country_code in values:
                 country_name = locale.territories.get(country_code)
                 if country_name:
-                    choices.append((prefix, "{} {}".format(country_name, prefix)))
+                    choices.append((prefix, f"{country_name} {prefix}"))
         super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def get_context(self, name, value, attrs):
