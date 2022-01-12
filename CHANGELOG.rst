@@ -1,12 +1,14 @@
 CHANGELOG
 =========
 
-UNRELEASED
-----------
+**Releases are now tracked using the `GitHub releases
+<https://github.com/stefanfoulis/django-phonenumber-field/releases>`_. This
+document remains for historical purposes.**
 
-* Set the default region of ``phonenumber_field.formfields.PhoneNumberField``
-  to ``PHONENUMER_DEFAULT_REGION``.
-* Use PHONENUMBER_DEFAULT_REGION for example phone number in form field errors.
+6.1.0 (2022-01-12)
+------------------
+* Make ``formfields.PhoneNumberField`` honor ``PHONENUMBER_DEFAULT_REGION``
+* Use ``PHONENUMBER_DEFAULT_REGION`` for example phone number in form field errors.
 * Add support for Django 4.0
 * Add Persian (farsi) translations.
 * Update uk_AR translations
