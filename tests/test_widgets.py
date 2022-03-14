@@ -1,11 +1,28 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase, override_settings
 from django.utils import translation
 
+from phonenumber_field import widgets
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import (
     PhoneNumberInternationalFallbackWidget,
     PhoneNumberPrefixWidget,
 )
+
+
+class PhonePrefixSelectTest(SimpleTestCase):
+    def setUp(self):
+        super().setUp()
+        self.babel_module = widgets.babel
+
+    def test_without_babel(self):
+        widgets.babel = None
+        with self.assertRaises(ImproperlyConfigured):
+            widgets.PhonePrefixSelect()
+
+    def tearDown(self):
+        widgets.babel = self.babel_module
+        super().tearDown()
 
 
 class PhoneNumberPrefixWidgetTest(SimpleTestCase):
