@@ -29,18 +29,18 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
     def test_initial(self):
         rendered = PhoneNumberPrefixWidget(initial="CN").render("", "")
         self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option>', rendered)
 
     @override_settings(PHONENUMBER_DEFAULT_REGION="CN")
     def test_uses_default_region_as_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option>', rendered)
 
     def test_no_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="" selected>---------</option>', rendered)
-        self.assertIn('<option value="+86">China +86</option', rendered)
+        self.assertIn('<option value="+86">China +86</option>', rendered)
 
     @override_settings(USE_I18N=True)
     def test_after_translation_deactivate_all(self):
