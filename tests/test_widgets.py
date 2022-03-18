@@ -1,6 +1,8 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase, override_settings
 from django.utils import translation
 
+from phonenumber_field import widgets
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import (
     PhoneNumberInternationalFallbackWidget,
@@ -8,22 +10,37 @@ from phonenumber_field.widgets import (
 )
 
 
+class PhonePrefixSelectTest(SimpleTestCase):
+    def setUp(self):
+        super().setUp()
+        self.babel_module = widgets.babel
+
+    def test_without_babel(self):
+        widgets.babel = None
+        with self.assertRaises(ImproperlyConfigured):
+            widgets.PhonePrefixSelect()
+
+    def tearDown(self):
+        widgets.babel = self.babel_module
+        super().tearDown()
+
+
 class PhoneNumberPrefixWidgetTest(SimpleTestCase):
     def test_initial(self):
         rendered = PhoneNumberPrefixWidget(initial="CN").render("", "")
         self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option>', rendered)
 
     @override_settings(PHONENUMBER_DEFAULT_REGION="CN")
     def test_uses_default_region_as_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="">---------</option>', rendered)
-        self.assertIn('<option value="+86" selected>China +86</option', rendered)
+        self.assertIn('<option value="+86" selected>China +86</option>', rendered)
 
     def test_no_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="" selected>---------</option>', rendered)
-        self.assertIn('<option value="+86">China +86</option', rendered)
+        self.assertIn('<option value="+86">China +86</option>', rendered)
 
     @override_settings(USE_I18N=True)
     def test_after_translation_deactivate_all(self):
