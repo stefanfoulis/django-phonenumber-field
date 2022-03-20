@@ -47,7 +47,9 @@ Basic usage
 ===========
 
 First, add ``phonenumber_field`` to the list of the installed apps in
-your ``settings.py`` file::
+your ``settings.py`` file:
+
+.. code-block:: python
 
     INSTALLED_APPS = [
         ...
@@ -55,7 +57,9 @@ your ``settings.py`` file::
         ...
     ]
 
-Then, you can use it like any regular model field::
+Then, you can use it like any regular model field:
+
+.. code-block:: python
 
     from phonenumber_field.modelfields import PhoneNumberField
 
