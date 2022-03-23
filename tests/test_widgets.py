@@ -50,6 +50,12 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             '<select name="_0"><option value="" selected>---------</option>', rendered
         )
 
+    def test_maxlength_not_in_select(self):
+        # Regression test for #490
+        widget = PhoneNumberPrefixWidget()
+        html = widget.render(name="widget", value=None, attrs={"maxlength": 32})
+        self.assertIn('<select name="widget_0">', html)
+
 
 class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
     def test_fallback_widget_switches_between_national_and_international(self):

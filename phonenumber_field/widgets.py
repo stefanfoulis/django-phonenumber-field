@@ -43,6 +43,8 @@ class PhonePrefixSelect(Select):
         super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def get_context(self, name, value, attrs):
+        attrs = (attrs or {}).copy()
+        attrs.pop("maxlength", None)
         return super().get_context(name, value or self.initial, attrs)
 
 
