@@ -44,14 +44,14 @@ def localized_choices(language):
 class PhonePrefixSelect(Select):
     initial = None
 
-    def __init__(self, initial=None):
+    def __init__(self, initial=None, attrs=None):
         language = translation.get_language() or settings.LANGUAGE_CODE
         choices = localized_choices(language)
         if initial is None:
             initial = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
         if initial in REGION_CODE_TO_COUNTRY_CODE:
             self.initial = initial
-        super().__init__(choices=sorted(choices, key=lambda item: item[1]))
+        super().__init__(attrs=attrs, choices=sorted(choices, key=lambda item: item[1]))
 
     def get_context(self, name, value, attrs):
         attrs = (attrs or {}).copy()
@@ -66,8 +66,11 @@ class PhoneNumberPrefixWidget(MultiWidget):
     - an input for local phone number
     """
 
-    def __init__(self, attrs=None, initial=None):
-        widgets = (PhonePrefixSelect(initial), TextInput())
+    def __init__(self, attrs=None, initial=None, country_attrs=None, number_attrs=None):
+        widgets = (
+            PhonePrefixSelect(initial, attrs=country_attrs),
+            TextInput(attrs=number_attrs),
+        )
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
