@@ -205,6 +205,17 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         html = widget.render(name="widget", value=None, attrs={"maxlength": 32})
         self.assertIn('<select name="widget_0">', html)
 
+    def test_custom_attrs(self):
+        widget = PhoneNumberPrefixWidget(
+            country_attrs={"class": "country-input"},
+            number_attrs={"class": "number-input"},
+        )
+        html = widget.render(name="widget", value=None)
+        self.assertIn('<select name="widget_0" class="country-input">', html)
+        self.assertInHTML(
+            '<input type="text" name="widget_1" class="number-input">', html, count=1
+        )
+
 
 class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
     def test_fallback_widget_switches_between_national_and_international(self):
