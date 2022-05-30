@@ -10,36 +10,47 @@ from phonenumbers.phonenumberutil import (
     region_code_for_number,
 )
 
-from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.phonenumber import PhoneNumber, to_python
 
 try:
     import babel
 except ModuleNotFoundError:
     babel = None
 
+# ISO 3166-1 alpha-2 to national prefix
+REGION_CODE_TO_COUNTRY_CODE = {
+    region_code: country_code
+    for country_code, region_codes in COUNTRY_CODE_TO_REGION_CODE.items()
+    for region_code in region_codes
+}
+
+
+def localized_choices(language):
+    if babel is None:
+        raise ImproperlyConfigured(
+            "The PhonePrefixSelect widget requires the babel package be installed."
+        )
+
+    choices = [("", "---------")]
+    locale_name = translation.to_locale(language)
+    locale = babel.Locale(locale_name)
+    for region_code, country_code in REGION_CODE_TO_COUNTRY_CODE.items():
+        region_name = locale.territories.get(region_code)
+        if region_name:
+            choices.append((region_code, f"{region_name} +{country_code}"))
+    return choices
+
 
 class PhonePrefixSelect(Select):
     initial = None
 
     def __init__(self, initial=None):
-        if babel is None:
-            raise ImproperlyConfigured(
-                "The PhonePrefixSelect widget requires the babel package be installed."
-            )
-
-        choices = [("", "---------")]
         language = translation.get_language() or settings.LANGUAGE_CODE
-        locale = babel.Locale(translation.to_locale(language))
-        if not initial:
+        choices = localized_choices(language)
+        if initial is None:
             initial = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-        for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
-            prefix = "+%d" % prefix
-            if initial and initial in values:
-                self.initial = prefix
-            for country_code in values:
-                country_name = locale.territories.get(country_code)
-                if country_name:
-                    choices.append((prefix, f"{country_name} {prefix}"))
+        if initial in REGION_CODE_TO_COUNTRY_CODE:
+            self.initial = initial
         super().__init__(choices=sorted(choices, key=lambda item: item[1]))
 
     def get_context(self, name, value, attrs):
@@ -60,22 +71,28 @@ class PhoneNumberPrefixWidget(MultiWidget):
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
-        if value:
-            if isinstance(value, PhoneNumber):
-                if value.country_code and value.national_number:
-                    return [
-                        "+%d" % value.country_code,
-                        national_significant_number(value),
-                    ]
-            else:
-                return value.split(".")
-        return [None, ""]
+        if isinstance(value, PhoneNumber):
+            if not value.is_valid():
+                region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
+                region_code = getattr(value, "_region", region)
+                return [region_code, value.raw_input]
+            region_code = region_code_for_number(value)
+            national_number = national_significant_number(value)
+            return [region_code, national_number]
+        return [None, None]
 
     def value_from_datadict(self, data, files, name):
-        values = super().value_from_datadict(data, files, name)
-        if all(values):
-            return "%s.%s" % tuple(values)
-        return ""
+        region_code, national_number = super().value_from_datadict(data, files, name)
+
+        if national_number is None:
+            national_number = ""
+        number = to_python(national_number, region=region_code)
+        if isinstance(number, str):
+            number = PhoneNumber()
+            number.raw_input = national_number
+        if not number.is_valid():
+            setattr(number, "_region", region_code)
+        return number
 
 
 class PhoneNumberInternationalFallbackWidget(TextInput):
