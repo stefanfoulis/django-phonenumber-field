@@ -19,7 +19,6 @@ jobs:
           - '3.10'
         tox-environment:
           - dj22
-          - dj31
           - dj32
         include:
           - python-version: 3.8
