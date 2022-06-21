@@ -1,9 +1,9 @@
 CHANGELOG
 =========
 
-**Releases are now tracked using the `GitHub releases
-<https://github.com/stefanfoulis/django-phonenumber-field/releases>`_. This
-document remains for historical purposes.**
+**Note:** Releases are now tracked using
+`GitHub releases <https://github.com/stefanfoulis/django-phonenumber-field/releases>`__.
+This document remains for historical purposes.
 
 6.1.0 (2022-01-12)
 ------------------
