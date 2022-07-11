@@ -123,8 +123,7 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
         self.assertInHTML(
-            '<ul class="errorlist"><li>The phone number entered is not valid.'
-            "</li></ul>",
+            '<ul class="errorlist"><li>This field is required.</li></ul>',
             rendered_form,
         )
         self.assertInHTML(
@@ -132,11 +131,15 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             rendered_form,
             count=1,
         )
-        self.assertInHTML(
-            '<option value="CA" selected>Canada +1</option>',
-            rendered_form,
-            count=1,
-        )
+
+    def test_not_required_empty_data(self):
+        class TestForm(forms.Form):
+            phone = formfields.PhoneNumberField(
+                required=False, widget=PhoneNumberPrefixWidget
+            )
+
+        form = TestForm(data={"phone_0": "", "phone_1": ""})
+        self.assertIs(form.is_valid(), True)
 
     def test_no_region(self):
         form = self.form_class(data={"phone_1": "654321"})
@@ -164,20 +167,24 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
         self.assertInHTML(
-            '<ul class="errorlist"><li>The phone number entered is not valid.'
-            "</li></ul>",
+            '<ul class="errorlist"><li>This field is required.</li></ul>',
             rendered_form,
+            count=1,
         )
         self.assertInHTML(
             '<input type="text" name="phone_1" required id="id_phone_1">',
             rendered_form,
             count=1,
         )
-        self.assertInHTML(
-            '<option value="CA" selected>Canada +1</option>',
-            rendered_form,
-            count=1,
-        )
+
+    def test_not_required_no_data(self):
+        class TestForm(forms.Form):
+            phone = formfields.PhoneNumberField(
+                required=False, widget=PhoneNumberPrefixWidget
+            )
+
+        form = TestForm(data={})
+        self.assertIs(form.is_valid(), True)
 
     def test_keeps_region_with_invalid_national_number(self):
         form = self.form_class(data={"phone_0": "CA", "phone_1": "0000"})

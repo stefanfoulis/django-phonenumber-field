@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import validators
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
@@ -90,11 +91,9 @@ class PhoneNumberPrefixWidget(MultiWidget):
         if national_number is None:
             national_number = ""
         number = to_python(national_number, region=region_code)
-        if isinstance(number, str):
-            number = PhoneNumber()
-            number.raw_input = national_number
-        if not number.is_valid():
-            setattr(number, "_region", region_code)
+        if number in validators.EMPTY_VALUES:
+            return number
+        number._region = region_code
         return number
 
 
