@@ -19,6 +19,7 @@ jobs:
         tox-environment:
           - dj32
           - dj40
+          - dj41
           - djmain
         include:
           - python-version: 3.7
