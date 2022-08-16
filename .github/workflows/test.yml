@@ -13,26 +13,16 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - 3.7
           - 3.8
           - 3.9
           - '3.10'
         tox-environment:
-          - dj22
           - dj32
+          - dj40
+          - djmain
         include:
-          - python-version: 3.8
-            tox-environment: dj40
-          - python-version: 3.9
-            tox-environment: dj40
-          - python-version: '3.10'
-            tox-environment: dj40
-          - python-version: 3.8
-            tox-environment: djmain
-          - python-version: 3.9
-            tox-environment: djmain
-          - python-version: '3.10'
-            tox-environment: djmain
+          - python-version: 3.7
+            tox-environment: dj32
 
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
