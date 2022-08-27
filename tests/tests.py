@@ -552,7 +552,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
             "<input "
             'type="tel" '
             'name="phone" '
-            'value="+32468547825" '
+            'value="+32 468 54 78 25" '
             'maxlength="128" '
             'id="id_phone">'
             "</p>",
@@ -568,7 +568,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
             "<input "
             'type="tel" '
             'name="phone" '
-            'value="+32468547825" '
+            'value="+32 468 54 78 25" '
             'maxlength="128" '
             'id="id_phone">'
             "</p>",
