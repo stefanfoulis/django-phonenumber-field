@@ -9,7 +9,8 @@ class PhoneNumberField(serializers.CharField):
     default_error_messages = {"invalid": _("Enter a valid phone number.")}
 
     def to_internal_value(self, data):
-        phone_number = to_python(data)
+        str_value = super().to_internal_value(data)
+        phone_number = to_python(str_value)
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages["invalid"])
         return phone_number
