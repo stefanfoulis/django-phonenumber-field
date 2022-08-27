@@ -223,6 +223,21 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             '<input type="text" name="widget_1" class="number-input">', html, count=1
         )
 
+    def test_custom_choices(self):
+        widget = PhoneNumberPrefixWidget(
+            country_choices=[("FR", "France"), ("BE", "Belgium")]
+        )
+        self.assertHTMLEqual(
+            widget.render(name="widget", value=None),
+            """
+            <select name="widget_0">
+                <option value="FR">France</option>
+                <option value="BE">Belgium</option>
+            </select>
+            <input name="widget_1" type="text">
+            """,
+        )
+
 
 class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
     def test_fallback_widget_switches_between_national_and_international(self):
