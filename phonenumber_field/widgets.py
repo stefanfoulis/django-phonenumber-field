@@ -45,14 +45,16 @@ def localized_choices(language):
 class PhonePrefixSelect(Select):
     initial = None
 
-    def __init__(self, initial=None, attrs=None):
+    def __init__(self, initial=None, attrs=None, choices=None):
         language = translation.get_language() or settings.LANGUAGE_CODE
-        choices = localized_choices(language)
+        if choices is None:
+            choices = localized_choices(language)
+            choices.sort(key=lambda item: item[1])
         if initial is None:
             initial = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
         if initial in REGION_CODE_TO_COUNTRY_CODE:
             self.initial = initial
-        super().__init__(attrs=attrs, choices=sorted(choices, key=lambda item: item[1]))
+        super().__init__(attrs=attrs, choices=choices)
 
     def get_context(self, name, value, attrs):
         attrs = (attrs or {}).copy()
@@ -67,9 +69,23 @@ class PhoneNumberPrefixWidget(MultiWidget):
     - an input for local phone number
     """
 
-    def __init__(self, attrs=None, initial=None, country_attrs=None, number_attrs=None):
+    def __init__(
+        self,
+        attrs=None,
+        initial=None,
+        country_attrs=None,
+        country_choices=None,
+        number_attrs=None,
+    ):
+        """
+        :param country_choices: Limit the country choices.
+        :type country_choices: list of 2-tuple, optional
+            The first element is the value, which must match a country code
+            recognized by the phonenumbers project.
+            The second element is the label.
+        """
         widgets = (
-            PhonePrefixSelect(initial, attrs=country_attrs),
+            PhonePrefixSelect(initial, attrs=country_attrs, choices=country_choices),
             TextInput(attrs=number_attrs),
         )
         super().__init__(widgets, attrs)
