@@ -119,6 +119,8 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
     an international number will fall back to international format
     """
 
+    input_type = "tel"
+
     def __init__(self, region=None, attrs=None):
         if region is None:
             region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)

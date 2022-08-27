@@ -248,15 +248,15 @@ class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
         de_widget = PhoneNumberInternationalFallbackWidget(region="DE")
         self.assertHTMLEqual(
             gb_widget.render("number", number),
-            '<input name="number" type="text" value="01606 75178" />',
+            '<input name="number" type="tel" value="01606 75178" />',
         )
         self.assertHTMLEqual(
             de_widget.render("number", number),
-            '<input name="number" type="text" value="+44 1606 75178" />',
+            '<input name="number" type="tel" value="+44 1606 75178" />',
         )
 
         # If there's been a validation error, the value should be included verbatim
         self.assertHTMLEqual(
             gb_widget.render("number", "error"),
-            '<input name="number" type="text" value="error" />',
+            '<input name="number" type="tel" value="error" />',
         )
