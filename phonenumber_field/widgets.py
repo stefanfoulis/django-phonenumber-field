@@ -9,6 +9,7 @@ from phonenumbers.phonenumberutil import (
     COUNTRY_CODE_TO_REGION_CODE,
     national_significant_number,
     region_code_for_number,
+    region_codes_for_country_code,
 )
 
 from phonenumber_field.phonenumber import PhoneNumber, to_python
@@ -127,12 +128,21 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
         self.region = region
         super().__init__(attrs)
 
+    def value_from_datadict(self, data, files, name):
+        phone_number_str = super().value_from_datadict(data, files, name)
+
+        if phone_number_str is None:
+            phone_number_str = ""
+        return to_python(phone_number_str, region=self.region)
+
     def format_value(self, value):
         if isinstance(value, PhoneNumber):
-            number_region = region_code_for_number(value)
-            if self.region != number_region:
-                formatter = PhoneNumberFormat.INTERNATIONAL
-            else:
-                formatter = PhoneNumberFormat.NATIONAL
-            return value.format_as(formatter)
+            if value.is_valid():
+                region_codes = region_codes_for_country_code(value.country_code)
+                formatter = (
+                    PhoneNumberFormat.NATIONAL
+                    if self.region in region_codes
+                    else PhoneNumberFormat.INTERNATIONAL
+                )
+                return value.format_as(formatter)
         return super().format_value(value)

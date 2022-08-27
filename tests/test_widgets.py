@@ -244,8 +244,10 @@ class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
         region = "GB"
         number_string = "01606 751 78"
         number = PhoneNumber.from_string(number_string, region=region)
-        gb_widget = PhoneNumberInternationalFallbackWidget(region="GB")
-        de_widget = PhoneNumberInternationalFallbackWidget(region="DE")
+        gb_widget = PhoneNumberInternationalFallbackWidget()
+        gb_widget.region = "GB"
+        de_widget = PhoneNumberInternationalFallbackWidget()
+        de_widget.region = "DE"
         self.assertHTMLEqual(
             gb_widget.render("number", number),
             '<input name="number" type="tel" value="01606 75178" />',
