@@ -53,6 +53,11 @@ class PhoneNumberField(models.CharField):
     description = _("Phone number")
 
     def __init__(self, *args, region=None, **kwargs):
+        """
+        :keyword str region: 2-letter country code as defined in ISO 3166-1.
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+        :keyword int max_length: The maximum length of the underlying char field.
+        """
         kwargs.setdefault("max_length", 128)
         super().__init__(*args, **kwargs)
         self._region = region

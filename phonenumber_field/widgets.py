@@ -66,9 +66,10 @@ class PhonePrefixSelect(Select):
 
 class PhoneNumberPrefixWidget(MultiWidget):
     """
-    A Widget that splits phone number input into:
-    - a country select box for phone prefix
-    - an input for local phone number
+    A Widget that splits a phone number into fields:
+
+    - a :class:`~django.forms.Select` for the country (phone prefix)
+    - a :class:`~django.forms.TextInput` for local phone number
     """
 
     def __init__(
@@ -80,11 +81,17 @@ class PhoneNumberPrefixWidget(MultiWidget):
         number_attrs=None,
     ):
         """
-        :param country_choices: Limit the country choices.
+        :keyword dict attrs: See :attr:`~django.forms.Widget.attrs`
+        :keyword dict initial: See :attr:`~django.forms.Field.initial`
+        :keyword dict country_attrs: The :attr:`~django.forms.Widget.attrs` for
+            the country :class:`~django.forms.Select`.
+        :keyword country_choices: Limit the country choices.
         :type country_choices: list of 2-tuple, optional
             The first element is the value, which must match a country code
             recognized by the phonenumbers project.
             The second element is the label.
+        :keyword dict number_attrs: The :attr:`~django.forms.Widget.attrs` for
+            the local phone number :class:`~django.forms.TextInput`.
         """
         widgets = (
             PhonePrefixSelect(initial, attrs=country_attrs, choices=country_choices),
@@ -117,13 +124,19 @@ class PhoneNumberPrefixWidget(MultiWidget):
 
 class RegionalPhoneNumberWidget(TextInput):
     """
-    A Widget that allows a phone number in a national format, but if given
-    an international number will fall back to international format
+    A :class:`~django.forms.Widget` that prefers displaying numbers in the
+    national format, and falls back to :setting:`PHONENUMBER_DEFAULT_FORMAT`
+    for international numbers.
     """
 
     input_type = "tel"
 
     def __init__(self, region=None, attrs=None):
+        """
+        :keyword str region: 2-letter country code as defined in ISO 3166-1.
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+        :keyword dict attrs: See :attr:`django.forms.Widget.attrs`
+        """
         if region is None:
             region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
         self.region = region

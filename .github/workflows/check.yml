@@ -14,6 +14,7 @@ jobs:
       matrix:
         tox-environment:
           - black
+          - doctest
           - flake8
           - isort
     env:
