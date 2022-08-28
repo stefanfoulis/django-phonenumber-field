@@ -16,6 +16,12 @@ class PhoneNumberField(CharField):
     widget = RegionalPhoneNumberWidget
 
     def __init__(self, *args, region=None, widget=None, **kwargs):
+        """
+        :keyword str region: 2-letter country code as defined in ISO 3166-1.
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+        :keyword django.forms.Widget widget: defaults to
+            :class:`~phonenumber_field.widgets.RegionalPhoneNumberWidget`
+        """
         validate_region(region)
         self.region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 

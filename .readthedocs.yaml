@@ -1,0 +1,11 @@
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+version: 2
+
+python:
+  install:
+    - requirements: docs/requirements.txt
+    - method: pip
+      path: .
+
+sphinx:
+  fail_on_warning: yes

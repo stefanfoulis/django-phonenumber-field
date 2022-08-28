@@ -22,6 +22,11 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 
     @classmethod
     def from_string(cls, phone_number, region=None):
+        """
+        :arg str phone_number: parse this :class:`str` as a phone number.
+        :keyword str region: 2-letter country code as defined in ISO 3166-1.
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+        """
         phone_number_obj = cls()
         if region is None:
             region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
@@ -48,7 +53,10 @@ class PhoneNumber(phonenumbers.PhoneNumber):
 
     def is_valid(self):
         """
-        checks whether the number supplied is actually valid
+        Whether the number supplied is actually valid.
+
+        :return: ``True`` when the phone number is valid.
+        :rtype: bool
         """
         return phonenumbers.is_valid_number(self)
 
