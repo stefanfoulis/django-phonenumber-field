@@ -8,12 +8,12 @@ from django.utils.translation import gettext_lazy as _
 
 from phonenumber_field.phonenumber import to_python, validate_region
 from phonenumber_field.validators import validate_international_phonenumber
-from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+from phonenumber_field.widgets import RegionalPhoneNumberWidget
 
 
 class PhoneNumberField(CharField):
     default_validators = [validate_international_phonenumber]
-    widget = PhoneNumberInternationalFallbackWidget
+    widget = RegionalPhoneNumberWidget
 
     def __init__(self, *args, region=None, widget=None, **kwargs):
         validate_region(region)
