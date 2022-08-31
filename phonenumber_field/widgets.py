@@ -1,10 +1,11 @@
+import warnings
+
 from django.conf import settings
 from django.core import validators
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.utils import translation
-from phonenumbers import PhoneNumberFormat
 from phonenumbers.phonenumberutil import (
     COUNTRY_CODE_TO_REGION_CODE,
     national_significant_number,
@@ -114,7 +115,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
         return number
 
 
-class PhoneNumberInternationalFallbackWidget(TextInput):
+class RegionalPhoneNumberWidget(TextInput):
     """
     A Widget that allows a phone number in a national format, but if given
     an international number will fall back to international format
@@ -139,10 +140,26 @@ class PhoneNumberInternationalFallbackWidget(TextInput):
         if isinstance(value, PhoneNumber):
             if value.is_valid():
                 region_codes = region_codes_for_country_code(value.country_code)
-                formatter = (
-                    PhoneNumberFormat.NATIONAL
-                    if self.region in region_codes
-                    else PhoneNumberFormat.INTERNATIONAL
-                )
-                return value.format_as(formatter)
+                if self.region in region_codes:
+                    return value.as_national
+        return super().format_value(value)
+
+
+class PhoneNumberInternationalFallbackWidget(RegionalPhoneNumberWidget):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        warnings.warn(
+            f"{self.__class__.__name__} will be removed in the next major version. "
+            "Use phonenumber_field.widgets.RegionalPhoneNumberWidget instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+    def format_value(self, value):
+        if isinstance(value, PhoneNumber):
+            if value.is_valid():
+                region_codes = region_codes_for_country_code(value.country_code)
+                if self.region in region_codes:
+                    return value.as_national
+                return value.as_international
         return super().format_value(value)
