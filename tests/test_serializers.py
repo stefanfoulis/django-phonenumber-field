@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase, override_settings
-from rest_framework import serializers
+from rest_framework import renderers, serializers
 
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.serializerfields import PhoneNumberField
@@ -105,3 +105,20 @@ class PhoneNumberSerializerTest(SimpleTestCase):
         serializer = PhoneNumberSerializer(data={"phone": "+33612345678"})
         self.assertIs(serializer.is_valid(), True)
         self.assertIs(serializer.is_valid(), True)
+
+    def test_serialization(self):
+        class PhoneNumberSerializer(serializers.Serializer):
+            phone = PhoneNumberField(region="FR")
+
+        for fmt, expected in [
+            ("E164", b"+33612345678"),
+            ("INTERNATIONAL", b"+33 6 12 34 56 78"),
+            ("RFC3966", b"tel:+33-6-12-34-56-78"),
+        ]:
+            with override_settings(PHONENUMBER_DEFAULT_FORMAT=fmt), self.subTest(fmt):
+                serializer = PhoneNumberSerializer(data={"phone": "0612345678"})
+                serializer.is_valid()
+                self.assertEqual(
+                    b'{"phone":"%b"}' % expected,
+                    renderers.JSONRenderer().render(serializer.data),
+                )
