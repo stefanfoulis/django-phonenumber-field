@@ -21,7 +21,8 @@ msgstr ""
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
-msgstr ""
+msgstr "Vul een geldig telefoonnummer in (bijvoorbeeld: {example_number}) of een "
+"telefoonnummer voorafgegaan door een landcode (bijvoorbeeld: +31)."
 
 #. Translators: {example_number} is an international phone number.
 #: formfields.py:33
