@@ -4,7 +4,6 @@ from django.core import checks
 from django.db.models import Model
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_str
-from phonenumbers import phonenumberutil
 
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
@@ -129,9 +128,7 @@ class PhoneNumberFieldTestCase(TestCase):
         self.assertIsNone(model.phone_number)
         model.phone_number = self.test_number_1
         self.assertIsInstance(model.phone_number, PhoneNumber)
-        model.phone_number = phonenumberutil.parse(
-            self.test_number_1, keep_raw_input=True
-        )
+        model.phone_number = phonenumbers.parse(self.test_number_1, keep_raw_input=True)
         self.assertIsInstance(model.phone_number, PhoneNumber)
 
     def test_can_assign_string_phone_number(self):
@@ -149,10 +146,10 @@ class PhoneNumberFieldTestCase(TestCase):
 
     def test_can_assign_phonenumber(self):
         """
-        Tests assignment phonenumberutil.PhoneNumber to field
+        Tests assignment phonenumbers.PhoneNumber to field
         """
         opt_phone = models.OptionalPhoneNumber()
-        opt_phone.phone_number = phonenumberutil.parse(
+        opt_phone.phone_number = phonenumbers.parse(
             self.test_number_1, keep_raw_input=True
         )
         self.assertIsInstance(opt_phone.phone_number, PhoneNumber)

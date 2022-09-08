@@ -6,7 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.forms import Select, TextInput
 from django.forms.widgets import MultiWidget
 from django.utils import translation
-from phonenumbers.phonenumberutil import (
+from phonenumbers import (
     COUNTRY_CODE_TO_REGION_CODE,
     national_significant_number,
     region_code_for_number,
