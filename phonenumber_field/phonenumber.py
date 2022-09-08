@@ -157,11 +157,8 @@ def to_python(value, region=None):
 
 
 def validate_region(region):
-    if (
-        region is not None
-        and region not in phonenumbers.phonenumberutil.SUPPORTED_REGIONS
-    ):
+    if region is not None and region not in phonenumbers.SUPPORTED_REGIONS:
         raise ValueError(
             "“%s” is not a valid region code. Choices are %r"
-            % (region, phonenumbers.phonenumberutil.SUPPORTED_REGIONS)
+            % (region, phonenumbers.SUPPORTED_REGIONS)
         )
