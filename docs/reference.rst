@@ -366,9 +366,9 @@ Default: ``"E164"``.
 
 Choices:
 
-- ``"E164"``,
-- ``"INTERNATIONAL"``,
-- ``"RFC3966"``,
+- ``"E164"`` (public international numbers),
+- ``"INTERNATIONAL"`` (international numbers, possibly with phone extensions),
+- ``"RFC3966"`` (international numbers, possibly with phone extensions),
 - ``"NATIONAL"`` (discouraged, requires :setting:`PHONENUMBER_DEFAULT_REGION`).
 
 .. setting:: PHONENUMBER_DEFAULT_REGION
@@ -392,7 +392,7 @@ Default: ``"E164"``.
 
 Choices:
 
-- ``"E164"``,
+- ``"E164"`` (no support of phone extensions),
 - ``"INTERNATIONAL"``,
 - ``"RFC3966"``,
 - ``"NATIONAL"`` (discouraged, fails to represent international phone numbers).
