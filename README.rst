@@ -2,6 +2,9 @@
 django-phonenumber-field
 ========================
 
+.. image:: https://jazzband.co/static/img/badge.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
 .. image:: https://github.com/stefanfoulis/django-phonenumber-field/workflows/Test/badge.svg
     :target: https://github.com/stefanfoulis/django-phonenumber-field/workflows/Test/badge.svg
 .. image:: https://img.shields.io/coveralls/stefanfoulis/django-phonenumber-field/develop.svg
