@@ -19,8 +19,12 @@ class PhoneNumberField(serializers.CharField):
         self.region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
 
     def to_internal_value(self, data):
-        str_value = super().to_internal_value(data)
-        phone_number = to_python(str_value, region=self.region)
+        if isinstance(data, PhoneNumber):
+            phone_number = data
+        else:
+            str_value = super().to_internal_value(data)
+            phone_number = to_python(str_value, region=self.region)
+
         if phone_number and not phone_number.is_valid():
             raise ValidationError(self.error_messages["invalid"])
         return phone_number
