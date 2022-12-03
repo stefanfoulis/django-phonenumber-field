@@ -97,3 +97,11 @@ class PhoneNumberSerializerTest(SimpleTestCase):
 
             class PhoneNumberSerializer(serializers.Serializer):
                 phone = PhoneNumberField(region="INVALID")
+
+    def test_multiple_isvalid_calls():
+        class PhoneNumberSerializer(serializers.Serializer):
+            phone = PhoneNumberField()
+
+        serializer = PhoneNumberSerializer(data={"phone": "+33612345678"})
+        self.assertIs(serializer.is_valid(), True)
+        self.assertIs(serializer.is_valid(), True)
