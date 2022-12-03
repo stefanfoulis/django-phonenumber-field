@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from phonenumber_field.phonenumber import to_python, validate_region
+from phonenumber_field.phonenumber import PhoneNumber, to_python, validate_region
 
 
 class PhoneNumberField(serializers.CharField):
