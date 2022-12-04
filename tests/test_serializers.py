@@ -98,7 +98,7 @@ class PhoneNumberSerializerTest(SimpleTestCase):
             class PhoneNumberSerializer(serializers.Serializer):
                 phone = PhoneNumberField(region="INVALID")
 
-    def test_multiple_isvalid_calls():
+    def test_multiple_isvalid_calls(self):
         class PhoneNumberSerializer(serializers.Serializer):
             phone = PhoneNumberField()
 
