@@ -15,6 +15,7 @@ build
 .project
 .pydevproject
 .settings
+.idea
 *~
 docs/_build
 tests/.installed.cfg
