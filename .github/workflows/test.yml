@@ -16,14 +16,17 @@ jobs:
           - 3.8
           - 3.9
           - '3.10'
+          - '3.11'
         tox-environment:
           - dj32
           - dj40
           - dj41
-          - djmain
+          - dj42
         include:
           - python-version: 3.7
             tox-environment: dj32
+          - python-version: '3.10'
+            tox-environment: djmain
 
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
