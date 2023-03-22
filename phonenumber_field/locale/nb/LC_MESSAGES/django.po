@@ -1,4 +1,4 @@
-# Norwegian Bokmaal Translation for django-phonenumber-field.
+# Norwegian Bokmål Translation for django-phonenumber-field.
 # Copyright (C) 2016
 # This file is distributed under the same license as the django-phonenumber-field package.
 # FIRST AUTHOR <klette@klette.us>, 2016.
@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2023-03-22 22:50+0100\n"
 "PO-Revision-Date: 2016-10-21 15:04+0200\n"
 "Last-Translator: Kristian Klette <klette@klette.us>\n"
 "Language-Team: \n"
@@ -18,28 +18,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.9\n"
 
-#: formfields.py:27
+#: formfields.py:43
 #, python-brace-format
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Tast inn et gyldig telefonnummer (f.eks. {example_number}) eller et nummer "
+"med internasjonal landskode."
 
 #. Translators: {example_number} is an international phone number.
-#: formfields.py:33
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number."
+#: formfields.py:49
+#, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Tast inn et gyldig telefonnummer"
+msgstr "Tast inn et gyldig telefonnummer (f.eks. {example_number})."
 
-#: modelfields.py:51
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
-msgstr "Tast inn et gyldig telefonnummer"
+msgstr "Tast inn et gyldig telefonnummer."
 
 #: validators.py:11
 msgid "The phone number entered is not valid."
-msgstr "Ugyldig telefonnummer"
+msgstr "Telefonnummeret er ugyldig."
