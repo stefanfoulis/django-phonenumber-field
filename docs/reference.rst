@@ -6,7 +6,7 @@
    django.setup()
 
    def print_html(html):
-       print(BeautifulSoup(html).prettify())
+       print(BeautifulSoup(html).prettify().strip())
 
 
 The PhoneNumber wrapper
