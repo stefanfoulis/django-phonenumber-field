@@ -255,6 +255,41 @@ class PhoneNumberFieldTestCase(TestCase):
             1,
         )
 
+    def test_values_list(self):
+        num0 = "+33600000000"
+        num1 = "+33611111111"
+        models.MandatoryPhoneNumber.objects.bulk_create(
+            [
+                models.MandatoryPhoneNumber(phone_number=num0),
+                models.MandatoryPhoneNumber(phone_number=num1),
+            ]
+        )
+        number0, number1 = models.MandatoryPhoneNumber.objects.order_by(
+            "phone_number"
+        ).values_list("phone_number", flat=True)
+        self.assertIsInstance(number0, PhoneNumber)
+        self.assertEqual(to_python(num0), number0)
+        self.assertIsInstance(number1, PhoneNumber)
+        self.assertEqual(to_python(num1), number1)
+
+    def test_values_with_null(self):
+        num0 = "+33600000000"
+        models.NullablePhoneNumber.objects.bulk_create(
+            [
+                models.NullablePhoneNumber(phone_number=num0),
+                models.NullablePhoneNumber(phone_number=""),
+                models.NullablePhoneNumber(phone_number=None),
+            ]
+        )
+        number0, number1, number2 = models.NullablePhoneNumber.objects.order_by(
+            "pk"
+        ).values_list("phone_number", flat=True)
+        self.assertIsInstance(number0, PhoneNumber)
+        self.assertEqual(to_python(num0), number0)
+        self.assertIsInstance(number1, str)
+        self.assertEqual(number1, "")
+        self.assertIsNone(number2)
+
 
 class PhoneNumberFieldAppTest(TestCase):
     def test_save_field_to_database(self):
