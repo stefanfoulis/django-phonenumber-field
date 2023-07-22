@@ -54,5 +54,21 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.mypy]
+python_version = "3.8"
+check_untyped_defs = true
+show_error_context = true
+pretty = true
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+warn_no_return = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
+
 [tool.setuptools_scm]
 write_to = "phonenumber_field/version.py"

@@ -17,6 +17,7 @@ jobs:
           - doctest
           - flake8
           - isort
+          - mypy
     env:
       TOXENV: ${{ matrix.tox-environment }}
 
