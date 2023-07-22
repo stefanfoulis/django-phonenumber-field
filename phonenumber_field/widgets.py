@@ -18,7 +18,7 @@ from phonenumber_field.phonenumber import PhoneNumber, to_python
 try:
     import babel
 except ModuleNotFoundError:
-    babel = None
+    babel = None  # type: ignore
 
 # ISO 3166-1 alpha-2 to national prefix
 REGION_CODE_TO_COUNTRY_CODE = {
@@ -151,7 +151,7 @@ class RegionalPhoneNumberWidget(TextInput):
 
     def format_value(self, value):
         if isinstance(value, PhoneNumber):
-            if value.is_valid():
+            if value.is_valid() and value.country_code:
                 region_codes = region_codes_for_country_code(value.country_code)
                 if self.region in region_codes:
                     return value.as_national
@@ -170,7 +170,7 @@ class PhoneNumberInternationalFallbackWidget(RegionalPhoneNumberWidget):
 
     def format_value(self, value):
         if isinstance(value, PhoneNumber):
-            if value.is_valid():
+            if value.is_valid() and value.country_code:
                 region_codes = region_codes_for_country_code(value.country_code)
                 if self.region in region_codes:
                     return value.as_national
