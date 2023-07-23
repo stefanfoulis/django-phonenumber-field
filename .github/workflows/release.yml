@@ -1,0 +1,51 @@
+name: Upload release to PyPI
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build distribution files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install --user build setuptools twine wheel
+
+      - name: Build package
+        run: python -m build
+
+      - name: Verify package
+        run: twine check --strict dist/*
+
+      - name: Upload distributions to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    name: Send distribution files to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-release
+      url: https://pypi.org/p/django-phonenumber-field
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
