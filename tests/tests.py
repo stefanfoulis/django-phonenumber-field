@@ -5,10 +5,7 @@ from django.db.models import Model
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_str
 
-try:
-    from typing import assert_type
-except ImportError:
-    from typing_extensions import assert_type
+from typing_extensions import assert_type
 
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
