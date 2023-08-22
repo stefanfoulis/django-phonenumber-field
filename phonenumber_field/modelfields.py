@@ -55,10 +55,8 @@ if not hasattr(models.CharField, "__class_getitem__"):
     # we don't want every user setting up django_stubs_ext just for this feature.
     # In theory, this can be replaced with `if TYPE_CHECKING` clause for base class,
     # but mypy does not support it at the time of writing (22 Aug 2023).
-    setattr(
-        models.CharField,
-        "__class_getitem__",
-        classmethod(lambda cls, *args, **kwargs: cls),
+    models.CharField.__class_getitem__ = classmethod(  # type: ignore
+        lambda cls, *args, **kwargs: cls
     )
 
 
