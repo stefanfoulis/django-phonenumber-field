@@ -5,6 +5,11 @@ from django.db.models import Model
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_str
 
+try:
+    from typing import assert_type
+except ImportError:
+    from typing_extensions import assert_type
+
 from phonenumber_field import formfields, modelfields
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 
@@ -292,6 +297,7 @@ class PhoneNumberFieldTestCase(TestCase):
 
 
 class PhoneNumberFieldAppTest(TestCase):
+
     def test_save_field_to_database(self):
         """Basic Field Test"""
         tm = models.TestModel()
@@ -674,3 +680,10 @@ class RegionPhoneNumberModelFieldTest(TestCase):
             'id="id_phone">'
             "</p>",
         )
+
+
+def test_typing() -> None:
+    obj = models.TestModel()
+
+    assert_type(obj, models.TestModel)
+    assert_type(obj.phone, PhoneNumber)

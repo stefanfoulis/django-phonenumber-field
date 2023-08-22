@@ -1,6 +1,9 @@
+from typing import Union
+
 from django.conf import settings
 from django.core import checks
 from django.db import models
+from django.db.models.expressions import Combinable
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
@@ -45,7 +48,23 @@ class PhoneNumberDescriptor:
         instance.__dict__[self.field.name] = to_python(value, region=self.field.region)
 
 
-class PhoneNumberField(models.CharField):
+if not hasattr(models.CharField, "__class_getitem__"):
+    # https://github.com/typeddjango/django-stubs/tree/master/django_stubs_ext
+    # For generic classes to work at runtime we need to define `__class_getitem__`.
+    # We're defining it here, instead of relying on django_stubs_ext, because
+    # we don't want every user setting up django_stubs_ext just for this feature.
+    # In theory, this can be replaced with `if TYPE_CHECKING` clause for base class,
+    # but mypy does not support it at the time of writing (22 Aug 2023).
+    setattr(
+        models.CharField,
+        "__class_getitem__",
+        classmethod(lambda cls, *args, **kwargs: cls),
+    )
+
+
+class PhoneNumberField(
+    models.CharField[Union[str, PhoneNumber, Combinable], PhoneNumber]
+):
     attr_class = PhoneNumber
     descriptor_class = PhoneNumberDescriptor
     default_validators = [validate_international_phonenumber]
