@@ -4,7 +4,6 @@ from django.core import checks
 from django.db.models import Model
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.utils.encoding import force_str
-
 from typing_extensions import assert_type
 
 from phonenumber_field import formfields, modelfields
