@@ -1,3 +1,4 @@
+import django
 import phonenumbers
 from django import forms
 from django.core import checks
@@ -658,6 +659,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_field_renders_invalid_numbers(self):
         form = ARPhoneNumberForm({"phone": "abcdef"})
         self.assertFalse(form.is_valid())
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertHTMLEqual(
             form.as_p(),
             '<ul class="errorlist">'
@@ -671,6 +673,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
             'name="phone" '
             'value="abcdef" '
             'maxlength="128" '
+            f"{aria_invalid}"
             'id="id_phone">'
             "</p>",
         )
