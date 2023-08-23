@@ -1,5 +1,6 @@
 from unittest import mock
 
+import django
 from django import forms
 from django.test import SimpleTestCase, override_settings
 from django.utils.functional import lazy
@@ -91,8 +92,9 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
         )
         self.maxDiff = None
         form_html = form.as_p()
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            """
+            f"""
             <ul class="errorlist">
                 <li>
                 Ensure this value has at least 4 characters (it has 1).
@@ -105,6 +107,7 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
                    maxlength="100"
                    minlength="4"
                    name="name"
+                   {aria_invalid}
                    required
                    type="text"
                    value="a">
