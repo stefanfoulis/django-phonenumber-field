@@ -1,3 +1,4 @@
 django
 djangorestframework
 phonenumberslite
+sphinx-rtd-theme
