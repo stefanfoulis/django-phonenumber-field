@@ -355,31 +355,53 @@ Validates:
 Settings
 ========
 
+.. _settings-format-choices:
+
+Phone number format choices
+---------------------------
+
++------------------------+---------------+------------+-----------------------------------------------------------------+
+| Setting value          | International | Extensions | Notes                                                           |
++========================+===============+============+=================================================================+
+| ``"E164"`` *(default)* | ✓             | ❌         | https://en.wikipedia.org/wiki/E.164                             |
++------------------------+---------------+------------+-----------------------------------------------------------------+
+| ``"INTERNATIONAL"``    | ✓             | ✓          | https://en.wikipedia.org/wiki/E.123#Telephone_number            |
++------------------------+---------------+------------+-----------------------------------------------------------------+
+| ``"RFC3966"``          | ✓             | ✓          | https://www.rfc-editor.org/rfc/rfc3966.html                     |
++------------------------+---------------+------------+-----------------------------------------------------------------+
+| ``"NATIONAL"``         | ❌            | ✓          | **DISCOURAGED**, requires :setting:`PHONENUMBER_DEFAULT_REGION` |
++------------------------+---------------+------------+-----------------------------------------------------------------+
+
+.. warning::
+
+    By default, the library uses `E.164, the international public
+    telecommunication numbering plan <https://en.wikipedia.org/wiki/E.164>`_,
+    which **does not support phone numbers extensions**. Set **both**
+    :setting:`PHONENUMBER_DB_FORMAT` and :setting:`PHONENUMBER_DEFAULT_FORMAT`
+    to an extension-compatible format to handle phone numbers extensions.
+
 .. setting:: PHONENUMBER_DB_FORMAT
 
 ``PHONENUMBER_DB_FORMAT``
 -------------------------
 
-Store phone numbers strings in the specified format.
+Store phone numbers strings in the specified format in the database.
 
 Default: ``"E164"``.
 
-Choices:
+See :ref:`settings-format-choices`.
 
-- ``"E164"`` (public international numbers),
-- ``"INTERNATIONAL"`` (international numbers, possibly with phone extensions),
-- ``"RFC3966"`` (international numbers, possibly with phone extensions),
-- ``"NATIONAL"`` (discouraged, requires :setting:`PHONENUMBER_DEFAULT_REGION`).
+.. warning:: **Data loss may occur when changing the DB format.**
 
-.. setting:: PHONENUMBER_DEFAULT_REGION
+   Phone numbers stored in the database are parsed every time they are loaded
+   from the database.
 
-``PHONENUMBER_DEFAULT_REGION``
-------------------------------
+   When switching from a format that can represent extensions to a format that
+   cannot, the **extension information is definitely lost**.
 
-`ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
-two-letter country code indicating how to interpret regional phone numbers.
-
-Default: ``None``.
+   When using :setting:`PHONENUMBER_DB_FORMAT`\ ``="NATIONAL"``, changing the
+   :setting:`PHONENUMBER_DEFAULT_REGION` will cause phone numbers stored in the
+   database to be interpreted differently, resulting in data corruption.
 
 .. setting:: PHONENUMBER_DEFAULT_FORMAT
 
@@ -390,9 +412,14 @@ String formatting of phone numbers.
 
 Default: ``"E164"``.
 
-Choices:
+See :ref:`settings-format-choices`.
 
-- ``"E164"`` (no support of phone extensions),
-- ``"INTERNATIONAL"``,
-- ``"RFC3966"``,
-- ``"NATIONAL"`` (discouraged, fails to represent international phone numbers).
+.. setting:: PHONENUMBER_DEFAULT_REGION
+
+``PHONENUMBER_DEFAULT_REGION``
+------------------------------
+
+`ISO-3166-1 <https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes>`_
+two-letter country code indicating how to interpret regional phone numbers.
+
+Default: ``None``.
