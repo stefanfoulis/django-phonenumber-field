@@ -28,6 +28,7 @@ class PhoneNumberTest(SimpleTestCase):
                 phone = PhoneNumber.from_string(data)
                 self.assertEqual(phone.as_international, "+33 6 12 34 56 78 ext. 456")
                 self.assertEqual(phone.as_rfc3966, "tel:+33-6-12-34-56-78;ext=456")
+                self.assertEqual(phone.as_national, "06 12 34 56 78 ext. 456")
 
     def test_phonenumber_formatting_properties(self):
         phone = PhoneNumber.from_string("+33612345678")
