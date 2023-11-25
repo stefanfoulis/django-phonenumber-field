@@ -42,6 +42,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
             region=region,
             keep_raw_input=True,
             numobj=phone_number_obj,
+            _check_region=bool(region),
         )
         return phone_number_obj
 
