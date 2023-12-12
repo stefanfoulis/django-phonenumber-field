@@ -143,7 +143,7 @@ Usage
       Enter a valid phone number (e.g. (506) 234-5678) or a number with an international call prefix.
      </li>
     </ul>
-    <input id="id_number" name="number" required="" type="tel" value="invalid"/>
+    <input aria-invalid="true" id="id_number" name="number" required="" type="tel" value="invalid"/>
    </div>
 
 .. note:: Because the PhoneNumberField specifies a region, the example number
