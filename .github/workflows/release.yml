@@ -25,7 +25,7 @@ jobs:
         run: twine check --strict dist/*
 
       - name: Upload distributions to GitHub
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
