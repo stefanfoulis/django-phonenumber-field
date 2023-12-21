@@ -67,6 +67,11 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         self.assertIn('<option value="">---------</option>', rendered)
         self.assertIn('<option value="CN" selected>China +86</option>', rendered)
 
+    def test_uses_kwarg_region_as_prefix(self):
+        rendered = PhoneNumberPrefixWidget(region="CN").render("", "")
+        self.assertIn('<option value="">---------</option>', rendered)
+        self.assertIn('<option value="CN" selected>China +86</option>', rendered)
+
     def test_no_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="" selected>---------</option>', rendered)
