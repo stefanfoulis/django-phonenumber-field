@@ -3,11 +3,12 @@
 #
 # Francesco Facconi <francesco@immediatic.it>, 2013-2017.
 # Paolo Melchiorre <paolo@melchiorre.org>, 2018.
+# Ruggero Fabbiano <ruggero_fabbiano@outlook.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2023-12-28 15:43+0100\n"
 "PO-Revision-Date: 2018-02-28 20:23+0100\n"
 "Last-Translator: Paolo Melchiorre <paolo@melchiorre.org>\n"
 "Language-Team: Italian <paolo@melchiorre.org>\n"
@@ -18,28 +19,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: formfields.py:27
+#: .\formfields.py:43
 #, python-brace-format
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
+"Inserisci un numero di telefono valido (esempio: {example_number}) o un "
+"numero con un prefisso internazionale."
 
 #. Translators: {example_number} is an international phone number.
-#: formfields.py:33
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number."
+#: .\formfields.py:49
+#, python-brace-format
 msgid "Enter a valid phone number (e.g. {example_number})."
-msgstr "Inserire un numero di telefono valido."
+msgstr "Inserisci un numero di telefono valido (esempio: {example_number})."
 
-#: modelfields.py:51
+#: .\modelfields.py:53
 msgid "Phone number"
 msgstr "Numero di telefono"
 
-#: serializerfields.py:9
+#: .\serializerfields.py:10
 msgid "Enter a valid phone number."
-msgstr "Inserire un numero di telefono valido."
+msgstr "Inserisci un numero di telefono valido."
 
-#: validators.py:11
+#: .\validators.py:11
 msgid "The phone number entered is not valid."
 msgstr "Il numero di telefono inserito non è valido."
