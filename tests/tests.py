@@ -1,3 +1,4 @@
+import django
 import phonenumbers
 from django import forms
 from django.core import checks
@@ -293,6 +294,13 @@ class PhoneNumberFieldTestCase(TestCase):
 
 
 class PhoneNumberFieldAppTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Drop alias with support for Django 3.2.
+        if django.VERSION < (4, 2):
+            cls.assertQuerySetEqual = cls.assertQuerysetEqual
+
     def test_save_field_to_database(self):
         """Basic Field Test"""
         tm = models.TestModel()
@@ -303,7 +311,7 @@ class PhoneNumberFieldAppTest(TestCase):
 
         tm = models.TestModel.objects.get(pk=pk)
         self.assertIsInstance(tm.phone, PhoneNumber)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             models.TestModel.objects.all(),
             [(tm.pk, "", "+41524242424")],
             transform=phone_transform,
@@ -343,7 +351,7 @@ class PhoneNumberFieldAppTest(TestCase):
 
         pk = tm.id
         tm = models.TestModelPhoneB.objects.get(pk=pk)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             models.TestModelPhoneB.objects.all(),
             [(tm.pk, "", "")],
             transform=phone_transform,
@@ -357,7 +365,7 @@ class PhoneNumberFieldAppTest(TestCase):
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
         self.assertIsNone(tm.phone)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             TestModel.objects.all(), [(tm.pk, "", None)], transform=phone_transform
         )
 
@@ -388,7 +396,7 @@ class PhoneNumberFieldAppTest(TestCase):
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             TestModel.objects.all(),
             [(tm.pk, "", "+41524242424")],
             transform=phone_transform,
@@ -409,7 +417,7 @@ class PhoneNumberFieldAppTest(TestCase):
 
         pk = tm.id
         tm = TestModel.objects.get(pk=pk)
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             TestModel.objects.all(), [(tm.pk, "", "")], transform=phone_transform
         )
 
@@ -659,6 +667,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_field_renders_invalid_numbers(self):
         form = ARPhoneNumberForm({"phone": "abcdef"})
         self.assertFalse(form.is_valid())
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertHTMLEqual(
             form.as_p(),
             '<ul class="errorlist">'
@@ -672,6 +681,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
             'name="phone" '
             'value="abcdef" '
             'maxlength="128" '
+            f"{aria_invalid}"
             'id="id_phone">'
             "</p>",
         )

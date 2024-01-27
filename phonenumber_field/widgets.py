@@ -79,6 +79,7 @@ class PhoneNumberPrefixWidget(MultiWidget):
         country_attrs=None,
         country_choices=None,
         number_attrs=None,
+        region=None,
     ):
         """
         :keyword dict attrs: See :attr:`~django.forms.Widget.attrs`
@@ -92,9 +93,15 @@ class PhoneNumberPrefixWidget(MultiWidget):
             The second element is the label.
         :keyword dict number_attrs: The :attr:`~django.forms.Widget.attrs` for
             the local phone number :class:`~django.forms.TextInput`.
+        :keyword str region: 2-letter country code as defined in ISO 3166-1.
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
         """
         widgets = (
-            PhonePrefixSelect(initial, attrs=country_attrs, choices=country_choices),
+            PhonePrefixSelect(
+                initial or region,
+                attrs=country_attrs,
+                choices=country_choices,
+            ),
             TextInput(attrs=number_attrs),
         )
         super().__init__(widgets, attrs)

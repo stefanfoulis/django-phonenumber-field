@@ -1,3 +1,4 @@
+import django
 import phonenumbers
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
@@ -66,6 +67,11 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
         self.assertIn('<option value="">---------</option>', rendered)
         self.assertIn('<option value="CN" selected>China +86</option>', rendered)
 
+    def test_uses_kwarg_region_as_prefix(self):
+        rendered = PhoneNumberPrefixWidget(region="CN").render("", "")
+        self.assertIn('<option value="">---------</option>', rendered)
+        self.assertIn('<option value="CN" selected>China +86</option>', rendered)
+
     def test_no_initial(self):
         rendered = PhoneNumberPrefixWidget().render("", "")
         self.assertIn('<option value="" selected>---------</option>', rendered)
@@ -107,10 +113,12 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             "(e.g. +12125552368).</li></ul>",
             rendered_form,
         )
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         # Keeps national number input.
         self.assertInHTML(
-            f'<input type="text" name="phone_1" '
-            f'value="{invalid_national_number}" required id="id_phone_1">',
+            '<input type="text" name="phone_1" '
+            f'value="{invalid_national_number}" {aria_invalid} required '
+            'id="id_phone_1">',
             rendered_form,
             count=1,
         )
@@ -128,8 +136,10 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             '<ul class="errorlist"><li>This field is required.</li></ul>',
             rendered_form,
         )
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            '<input type="text" name="phone_1" required id="id_phone_1">',
+            f'<input type="text" name="phone_1" {aria_invalid} '
+            'required id="id_phone_1">',
             rendered_form,
             count=1,
         )
@@ -152,8 +162,9 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             "(e.g. +12125552368).</li></ul>",
             rendered_form,
         )
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            '<input type="text" name="phone_1" value="654321" '
+            f'<input type="text" name="phone_1" value="654321" {aria_invalid} '
             'required id="id_phone_1">',
             rendered_form,
             count=1,
@@ -173,8 +184,10 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             rendered_form,
             count=1,
         )
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            '<input type="text" name="phone_1" required id="id_phone_1">',
+            f'<input type="text" name="phone_1" {aria_invalid} '
+            'required id="id_phone_1">',
             rendered_form,
             count=1,
         )
@@ -197,8 +210,10 @@ class PhoneNumberPrefixWidgetTest(SimpleTestCase):
             "</li></ul>",
             rendered_form,
         )
+        aria_invalid = "" if django.VERSION[0] < 5 else 'aria-invalid="true" '
         self.assertInHTML(
-            '<input type="text" name="phone_1" value="0000" required id="id_phone_1">',
+            f'<input type="text" name="phone_1" value="0000" {aria_invalid} '
+            'required id="id_phone_1">',
             rendered_form,
             count=1,
         )

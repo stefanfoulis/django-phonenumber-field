@@ -18,6 +18,18 @@ class PhoneNumberTest(SimpleTestCase):
         with override_settings(PHONENUMBER_DEFAULT_FORMAT="RFC3966"):
             self.assertEqual(str(phone), "tel:+33-6-12-34-56-78")
 
+    def test_phonenumber_extensions(self):
+        for data in [
+            "+33612345678 extension 456",
+            "+33612345678 ext. 456",
+            "+33612345678,456",
+        ]:
+            with self.subTest(data):
+                phone = PhoneNumber.from_string(data)
+                self.assertEqual(phone.as_international, "+33 6 12 34 56 78 ext. 456")
+                self.assertEqual(phone.as_rfc3966, "tel:+33-6-12-34-56-78;ext=456")
+                self.assertEqual(phone.as_national, "06 12 34 56 78 ext. 456")
+
     def test_phonenumber_formatting_properties(self):
         phone = PhoneNumber.from_string("+33612345678")
         self.assertEqual(phone.as_e164, "+33612345678")
