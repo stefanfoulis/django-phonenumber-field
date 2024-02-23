@@ -1,5 +1,3 @@
-import warnings
-
 from django.conf import settings
 from django.core import validators
 from django.core.exceptions import ImproperlyConfigured
@@ -162,24 +160,4 @@ class RegionalPhoneNumberWidget(TextInput):
                 region_codes = region_codes_for_country_code(value.country_code)
                 if self.region in region_codes:
                     return value.as_national
-        return super().format_value(value)
-
-
-class PhoneNumberInternationalFallbackWidget(RegionalPhoneNumberWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        warnings.warn(
-            f"{self.__class__.__name__} will be removed in the next major version. "
-            "Use phonenumber_field.widgets.RegionalPhoneNumberWidget instead.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-
-    def format_value(self, value):
-        if isinstance(value, PhoneNumber):
-            if value.is_valid() and value.country_code:
-                region_codes = region_codes_for_country_code(value.country_code)
-                if self.region in region_codes:
-                    return value.as_national
-                return value.as_international
         return super().format_value(value)
