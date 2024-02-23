@@ -7,11 +7,7 @@ from django.utils import translation
 
 from phonenumber_field import formfields, widgets
 from phonenumber_field.phonenumber import PhoneNumber
-from phonenumber_field.widgets import (
-    PhoneNumberInternationalFallbackWidget,
-    PhoneNumberPrefixWidget,
-    RegionalPhoneNumberWidget,
-)
+from phonenumber_field.widgets import PhoneNumberPrefixWidget, RegionalPhoneNumberWidget
 
 
 class PhonePrefixSelectTest(SimpleTestCase):
@@ -313,41 +309,3 @@ class RegionalPhoneNumberWidgetTest(SimpleTestCase):
                         widget.render("number", number),
                         f'<input name="number" type="tel" value="{expected}" />',
                     )
-
-
-class PhoneNumberInternationalFallbackWidgetTest(SimpleTestCase):
-    def test_raises_deprecation_warning(self):
-        msg = (
-            "PhoneNumberInternationalFallbackWidget will be removed in the next major "
-            "version. Use phonenumber_field.widgets.RegionalPhoneNumberWidget "
-            "instead."
-        )
-        with self.assertWarnsMessage(DeprecationWarning, msg):
-
-            class _(forms.Form):
-                number = formfields.PhoneNumberField(
-                    widget=PhoneNumberInternationalFallbackWidget
-                )
-
-    def test_fallback_widget_switches_between_national_and_international(self):
-        region = "GB"
-        number_string = "01606 751 78"
-        number = PhoneNumber.from_string(number_string, region=region)
-        gb_widget = PhoneNumberInternationalFallbackWidget()
-        gb_widget.region = "GB"
-        de_widget = PhoneNumberInternationalFallbackWidget()
-        de_widget.region = "DE"
-        self.assertHTMLEqual(
-            gb_widget.render("number", number),
-            '<input name="number" type="tel" value="01606 75178" />',
-        )
-        self.assertHTMLEqual(
-            de_widget.render("number", number),
-            '<input name="number" type="tel" value="+44 1606 75178" />',
-        )
-
-        # If there's been a validation error, the value should be included verbatim
-        self.assertHTMLEqual(
-            gb_widget.render("number", "error"),
-            '<input name="number" type="tel" value="error" />',
-        )
