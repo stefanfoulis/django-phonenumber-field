@@ -8,6 +8,12 @@
    def print_html(html):
        print(BeautifulSoup(html).prettify().strip())
 
+   def print_html_compact(html):
+       output = BeautifulSoup(html).prettify().strip().splitlines()
+       print("\n".join(output[:15]))
+       print("   ...")
+       print("\n".join(output[-7:]))
+
 
 The PhoneNumber wrapper
 =======================
@@ -85,8 +91,11 @@ Usage
        # An optional phone number.
        phone_number = PhoneNumberField(blank=True)
 
-Form field
-==========
+Form fields
+===========
+
+:class:`~phonenumber_field.formfields.PhoneNumberField`
+-------------------------------------------------------
 
 The :class:`~phonenumber_field.formfields.PhoneNumberField` :ref:`form field
 <ref/forms/fields:form fields>` to validate
@@ -104,7 +113,7 @@ The :class:`~phonenumber_field.formfields.PhoneNumberField` :ref:`form field
    .. automethod:: __init__
 
 Usage
------
+~~~~~
 
 .. doctest:: formfield
 
@@ -150,6 +159,127 @@ Usage
    is a national number from that region. When no region is specified, an
    international example phone number in the E.164 format is suggested.
 
+
+:class:`~phonenumber_field.formfields.SplitPhoneNumberField`
+------------------------------------------------------------
+
+A :class:`~django.forms.MultiValueField` that offers:
+
+- a ``<select … >`` element to choose the region, and
+- an ``<input type="tel" … >`` to enter the phone number.
+
+This widget uses an example phone number from the selected region for the
+``invalid`` key in :attr:`~django.forms.Field.error_messages`, when the region
+choice is valid.
+
+To customize the dynamic message, use
+:func:`phonenumber_field.formfields.SplitPhoneNumberField.invalid_error_message`.
+
+.. important:: Requires the `Babel <https://pypi.org/project/Babel/>`_ package.
+
+.. autoclass:: phonenumber_field.formfields.SplitPhoneNumberField
+
+   .. automethod:: __init__
+   .. automethod:: invalid_error_message
+
+Usage
+~~~~~
+
+.. doctest:: SplitPhoneNumberField
+
+   >>> from django import forms
+   >>> from phonenumber_field.formfields import SplitPhoneNumberField
+
+   >>> class PhoneForm(forms.Form):
+   ...     number = SplitPhoneNumberField()
+   ...
+
+   >>> form = PhoneForm()
+   >>> print_html_compact(form.as_div())
+   <div>
+    <fieldset>
+     <legend>
+      Number:
+     </legend>
+     <select id="id_number_0" name="number_0" required="">
+      <option selected="" value="">
+       ---------
+      </option>
+      <option value="AF">
+       Afghanistan +93
+      </option>
+      <option value="AL">
+       Albania +355
+      </option>
+      ...
+      <option value="AX">
+       Åland Islands +358
+      </option>
+     </select>
+     <input id="id_number_1" name="number_1" required="" type="tel"/>
+    </fieldset>
+   </div>
+
+   # Limiting country choices.
+   >>> class DemoSplitPhoneNumberField(SplitPhoneNumberField):
+   ...     def prefix_field(self):
+   ...         return forms.ChoiceField(choices=[
+   ...             ("", "---------"),
+   ...             ("CA", "Canada"),
+   ...             ("FR", "France"),
+   ...         ])
+   ...
+   >>> class LimitedCountryPhoneForm(forms.Form):
+   ...     number = DemoSplitPhoneNumberField()
+   ...
+   >>> form = LimitedCountryPhoneForm()
+   >>> print_html(form.as_div())
+   <div>
+    <fieldset>
+     <legend>
+      Number:
+     </legend>
+     <select id="id_number_0" name="number_0" required="">
+      <option selected="" value="">
+       ---------
+      </option>
+      <option value="CA">
+       Canada
+      </option>
+      <option value="FR">
+       France
+      </option>
+     </select>
+     <input id="id_number_1" name="number_1" required="" type="tel"/>
+    </fieldset>
+   </div>
+
+   # Pre-selecting a country.
+   >>> class FrenchPhoneForm(forms.Form):
+   ...     number = DemoSplitPhoneNumberField(region="FR")
+   ...
+
+   >>> form = FrenchPhoneForm()
+   >>> print_html(form.as_div())
+   <div>
+    <fieldset>
+     <legend>
+      Number:
+     </legend>
+     <select id="id_number_0" name="number_0" required="">
+      <option value="">
+       ---------
+      </option>
+      <option value="CA">
+       Canada
+      </option>
+      <option selected="" value="FR">
+       France
+      </option>
+     </select>
+     <input id="id_number_1" name="number_1" required="" type="tel"/>
+    </fieldset>
+   </div>
 
 Widgets
 -------
@@ -209,88 +339,7 @@ Usage
 PhoneNumberPrefixWidget
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. important:: Requires the `Babel <https://pypi.org/project/Babel/>`_ package
-   be installed.
-
 .. autoclass:: phonenumber_field.widgets.PhoneNumberPrefixWidget
-
-   .. automethod:: __init__
-
-Usage
-.....
-
-.. doctest:: prefixwidget
-
-   >>> from django import forms
-   >>> from phonenumber_field.formfields import PhoneNumberField
-   >>> from phonenumber_field.widgets import PhoneNumberPrefixWidget
-
-   # Limiting country choices.
-   >>> class CanadianPhoneForm(forms.Form):
-   ...     # RegionalPhoneNumberWidget is the default widget.
-   ...     number = PhoneNumberField(
-   ...         region="CA",
-   ...         widget=PhoneNumberPrefixWidget(
-   ...             country_choices=[
-   ...                  ("CA", "Canada"),
-   ...                  ("FR", "France"),
-   ...             ],
-   ...         ),
-   ...     )
-   ...
-
-   >>> form = CanadianPhoneForm({"number_0": "CA", "number_1": "6044011234"})
-   >>> print_html(form.as_div())
-   <div>
-    <fieldset>
-     <legend>
-      Number:
-     </legend>
-     <select id="id_number_0" name="number_0" required="">
-      <option selected="" value="CA">
-       Canada
-      </option>
-      <option value="FR">
-       France
-      </option>
-     </select>
-     <input id="id_number_1" name="number_1" required="" type="text" value="6044011234"/>
-    </fieldset>
-   </div>
-
-   # Pre-selecting a country.
-   >>> class FrenchPhoneForm(forms.Form):
-   ...     # RegionalPhoneNumberWidget is the default widget.
-   ...     number = PhoneNumberField(
-   ...         region="FR",
-   ...         widget=PhoneNumberPrefixWidget(
-   ...             initial="FR",
-   ...             country_choices=[
-   ...                  ("CA", "Canada"),
-   ...                  ("FR", "France"),
-   ...             ],
-   ...         ),
-   ...     )
-   ...
-
-   >>> form = FrenchPhoneForm()
-   >>> print_html(form.as_div())
-   <div>
-    <fieldset>
-     <legend>
-      Number:
-     </legend>
-     <select id="id_number_0" name="number_0" required="">
-      <option value="CA">
-       Canada
-      </option>
-      <option selected="" value="FR">
-       France
-      </option>
-     </select>
-     <input id="id_number_1" name="number_1" required="" type="text"/>
-    </fieldset>
-   </div>
 
 Serializer field
 ================
@@ -350,7 +399,7 @@ Validates:
 
 .. autofunction:: phonenumber_field.validators.validate_international_phonenumber
 
-**code**: ``"invalid_phone_number"``
+**code**: ``"invalid"``
 
 Settings
 ========

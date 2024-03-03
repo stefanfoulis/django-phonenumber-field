@@ -8,5 +8,5 @@ def validate_international_phonenumber(value):
     phone_number = to_python(value)
     if isinstance(phone_number, PhoneNumber) and not phone_number.is_valid():
         raise ValidationError(
-            _("The phone number entered is not valid."), code="invalid_phone_number"
+            _("The phone number entered is not valid."), code="invalid"
         )
