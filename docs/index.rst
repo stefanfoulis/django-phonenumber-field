@@ -44,4 +44,5 @@ your ``settings.py`` file :external+django:setting:`INSTALLED_APPS`:
    :maxdepth: 2
    :caption: Contents:
 
+   phonenumbers
    reference
