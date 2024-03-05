@@ -34,7 +34,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         """
         :arg str phone_number: parse this :class:`str` as a phone number.
         :keyword str region: 2-letter country code as defined in ISO 3166-1.
-                When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
         """
         phone_number_obj = cls()
         if region is None:
