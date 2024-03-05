@@ -4,8 +4,10 @@ from functools import total_ordering
 from typing import TYPE_CHECKING
 
 import phonenumbers
+from phonenumbers import NumberParseException
 from django.conf import settings
 from django.core import validators
+from django.core.exceptions import ImproperlyConfigured
 
 if TYPE_CHECKING:
     # Use ‘from typing import Self’ from Python 3.11 onwards.
@@ -28,22 +30,30 @@ class PhoneNumber(phonenumbers.PhoneNumber):
     }
 
     @classmethod
-    def from_string(cls, phone_number, region=None) -> Self:
+    def from_string(cls, phone_number, region=None, check_region=True) -> Self:
         """
         :arg str phone_number: parse this :class:`str` as a phone number.
         :keyword str region: 2-letter country code as defined in ISO 3166-1.
-            When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
+                When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
         """
         phone_number_obj = cls()
         if region is None:
             region = getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
-        phonenumbers.parse(
-            number=phone_number,
-            region=region,
-            keep_raw_input=True,
-            numobj=phone_number_obj,
-            _check_region=bool(region),
-        )
+        try:
+            phonenumbers.parse(
+                number=phone_number,
+                region=region,
+                keep_raw_input=True,
+                numobj=phone_number_obj,
+                _check_region=check_region,
+            )
+        except NumberParseException as e:
+            if not e.error_type == NumberParseException.INVALID_COUNTRY_CODE:
+                raise e
+            raise ImproperlyConfigured(
+                "Either explicitly specify 'region' as an argument, define "
+                "'PHONENUMBER_DEFAULT_REGION', or pass 'check_region' as False."
+            ) from e
         return phone_number_obj
 
     def __str__(self):
