@@ -10,6 +10,7 @@ from django.utils.functional import lazy
 
 from phonenumber_field.formfields import PhoneNumberField, SplitPhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.validators import validate_phonenumber
 
 ALGERIAN_PHONE_NUMBER = "+213799136332"
 
@@ -131,6 +132,16 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
         self.assertEqual(
             form.errors, {"number": ["Enter a valid phone number (e.g. +12125552368)."]}
         )
+
+    def test_validate_shortcode(self):
+        class ShortCodePhoneNumberField(PhoneNumberField):
+            default_validators = [validate_phonenumber]
+
+        class TestForm(forms.Form):
+            phone = ShortCodePhoneNumberField(region="FR")
+
+        form = TestForm({"phone": "1010"})
+        self.assertIs(form.is_valid(), True)
 
 
 class SplitPhoneNumberFormFieldTest(SimpleTestCase):
@@ -580,3 +591,13 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
                 form = TestForm(phone_data)
                 self.assertIs(form.is_valid(), False)
                 self.assertEqual(form.errors["phone"], [error_message])
+
+    def test_validate_shortcode(self):
+        class ShortCodeSplitPhoneNumberField(SplitPhoneNumberField):
+            default_validators = [validate_phonenumber]
+
+        class TestForm(forms.Form):
+            phone = ShortCodeSplitPhoneNumberField()
+
+        form = TestForm({"phone_0": "FR", "phone_1": "1010"})
+        self.assertIs(form.is_valid(), True)
