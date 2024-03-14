@@ -204,7 +204,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             rendered,
         )
 
-    def test_value_from_datadict(self):
+    def test_example_numbers(self):
         example_numbers = (
             self.example_number("US"),
             self.example_number("CA"),
