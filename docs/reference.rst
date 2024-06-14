@@ -373,7 +373,7 @@ Usage
     >>> serializer.is_valid()
     True
     >>> serializer.validated_data
-    OrderedDict([('number', PhoneNumber(country_code=1, national_number=6044011234, extension=None, italian_leading_zero=None, number_of_leading_zeros=None, country_code_source=20, preferred_domestic_carrier_code=None))])
+    {'number': PhoneNumber(country_code=1, national_number=6044011234, extension=None, italian_leading_zero=None, number_of_leading_zeros=None, country_code_source=20, preferred_domestic_carrier_code=None)}
 
     # Using the PHONENUMBER_DEFAULT_FORMAT.
     >>> renderers.JSONRenderer().render(serializer.data)
