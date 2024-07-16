@@ -125,7 +125,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         elif not isinstance(other, type(self)):
             raise TypeError(
                 "'<' not supported between instances of "
-                "'%s' and '%s'" % (type(self).__name__, type(other).__name__)
+                f"'{type(self).__name__}' and '{type(other).__name__}'"
             )
 
         invalid = None
@@ -134,7 +134,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
         elif not other.is_valid():
             invalid = other
         if invalid is not None:
-            raise ValueError("Invalid phone number: %r" % invalid)
+            raise ValueError(f"Invalid phone number: {invalid!r}")
 
         format_string = getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
         fmt = self.format_map[format_string]
@@ -159,13 +159,13 @@ def to_python(value, region=None):
         phone_number = PhoneNumber()
         phone_number.merge_from(value)
     else:
-        raise TypeError("Can't convert %s to PhoneNumber." % type(value).__name__)
+        raise TypeError(f"Can't convert {type(value).__name__} to PhoneNumber.")
     return phone_number
 
 
 def validate_region(region):
     if region is not None and region not in phonenumbers.SUPPORTED_REGIONS:
         raise ValueError(
-            "“%s” is not a valid region code. Choices are %r"
-            % (region, phonenumbers.SUPPORTED_REGIONS)
+            f"“{region}” is not a valid region code. "
+            f"Choices are {phonenumbers.SUPPORTED_REGIONS!r}"
         )
