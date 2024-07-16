@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-15 12:56+0000\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2021-05-15 19:57+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,11 +15,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: formfields.py:27
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
@@ -27,9 +31,17 @@ msgstr ""
 "Введите корректный номер телефона (например, {example_number}) или номер с "
 "префиксом международной связи."
 
-#. Translators: {example_number} is an international phone number.
-#: formfields.py:33
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Введите корректный номер телефона (например, {example_number})."
+
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Введите корректный номер телефона (например, {example_number})."
 
@@ -37,10 +49,10 @@ msgstr "Введите корректный номер телефона (нап�
 msgid "Phone number"
 msgstr "Номер телефона"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Введите корректный номер телефона."
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Введен некорректный номер телефона."

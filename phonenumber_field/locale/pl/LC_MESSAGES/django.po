@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2022-03-22 08:45+0100\n"
 "Last-Translator: Andrzej Mateja <mateja.and@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: phonenumber_field/formfields.py:29
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
@@ -27,20 +31,28 @@ msgstr ""
 "Wprowadź poprawny numer telefonu (np. {example_number}) lub numer "
 "poprzedzony międzynarodowym numerem kierunkowym."
 
-#. Translators: {example_number} is an international phone number.
-#: phonenumber_field/formfields.py:35
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Wprowadź poprawny numer telefonu (np. {example_number})."
 
-#: phonenumber_field/modelfields.py:53
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Wprowadź poprawny numer telefonu (np. {example_number})."
+
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "Numer telefonu"
 
-#: phonenumber_field/serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Wprowadź poprawny numer telefonu."
 
-#: phonenumber_field/validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Wprowadzony numer telefonu jest nieprawidłowy."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2017-12-05 22:18+0100\n"
 "Last-Translator: Jonas Lidén <jonas@lideen.se>\n"
 "Language-Team: Swedish\n"
@@ -18,29 +18,41 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: formfields.py:27
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
-msgstr "Ange ett giltigt telefonnummer (t ex {example_number}) eller ett nummer med "
+msgstr ""
+"Ange ett giltigt telefonnummer (t ex {example_number}) eller ett nummer med "
 "internationellt format."
 
-#. Translators: {example_number} is an international phone number.
-#: formfields.py:33
-#, python-brace-format
-#| msgid "Enter a valid phone number."
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Ange ett giltigt telefonnummer (t ex {example_number})."
 
-#: modelfields.py:51
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Ange ett giltigt telefonnummer (t ex {example_number})."
+
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Ange ett giltigt telefonnummer."
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Det angivna telefonnumret är inte giltigt."

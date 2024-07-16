@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: django-phonenumber-field 5.2.0\n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2021-07-28 21:06+0200\n"
 "Last-Translator: melanger\n"
 "Language-Team: Melanger.cz\n"
@@ -11,16 +12,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: formfields.py:28
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr ""
-"Vložte platné telefonní číslo (např. {example_number}) nebo číslo s mezinárodní předvolbou."
+"Vložte platné telefonní číslo (např. {example_number}) nebo číslo s "
+"mezinárodní předvolbou."
 
-#: formfields.py:34
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Vložte platné telefonní číslo (např. {example_number})."
+
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Vložte platné telefonní číslo (např. {example_number})."
 
@@ -28,10 +43,10 @@ msgstr "Vložte platné telefonní číslo (např. {example_number})."
 msgid "Phone number"
 msgstr "Telefonní číslo"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Vložte platné telefonní číslo."
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Zadané telefonní číslo není platné."

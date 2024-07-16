@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.forms.fields import CharField, ChoiceField, MultiValueField
 from django.utils import translation
 from django.utils.text import format_lazy
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext, pgettext_lazy
 from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
 
 from phonenumber_field import widgets
@@ -52,15 +52,17 @@ class PhoneNumberField(CharField):
             if self.region:
                 number = phonenumbers.example_number(self.region)
                 example_number = to_python(number).as_national
-                # Translators: {example_number} is a national phone number.
-                error_message = _(
+                error_message = pgettext_lazy(
+                    "{example_number} is a national phone number.",
                     "Enter a valid phone number (e.g. {example_number}) "
-                    "or a number with an international call prefix."
+                    "or a number with an international call prefix.",
                 )
             else:
                 example_number = "+12125552368"  # Ghostbusters
-                # Translators: {example_number} is an international phone number.
-                error_message = _("Enter a valid phone number (e.g. {example_number}).")
+                error_message = pgettext_lazy(
+                    "{example_number} is an international phone number.",
+                    "Enter a valid phone number (e.g. {example_number}).",
+                )
             self.error_messages["invalid"] = format_lazy(
                 error_message, example_number=example_number
             )
@@ -150,8 +152,10 @@ class SplitPhoneNumberField(MultiValueField):
         Include the example number in the message with the ``{example_number}``
         placeholder.
         """
-        # Translators: {example_number} is a national phone number.
-        return _("Enter a valid phone number (e.g. {example_number}).")
+        return pgettext(
+            "{example_number} is a national phone number.",
+            "Enter a valid phone number (e.g. {example_number}).",
+        )
 
     def compress(self, data_list):
         if not data_list:
