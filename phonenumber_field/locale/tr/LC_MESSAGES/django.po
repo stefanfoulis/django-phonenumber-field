@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-28 13:04-0700\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2022-01-15 14:51+0300\n"
 "Last-Translator: Şuayip Üzülmez <suayip.541@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: formfields.py:29
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
@@ -26,9 +30,17 @@ msgstr ""
 "Geçerli bir telefon numarası girin (ör. {example_number}) ya da uluslararası "
 "arama öneki olan bir numara girin."
 
-#. Translators: {example_number} is an international phone number.
-#: formfields.py:35
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Geçerli bir telefon numarası giriniz (ör. {example_number})."
+
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Geçerli bir telefon numarası giriniz (ör. {example_number})."
 
@@ -36,10 +48,10 @@ msgstr "Geçerli bir telefon numarası giriniz (ör. {example_number})."
 msgid "Phone number"
 msgstr "Telefon numarası"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Geçerli bir telefon numarası giriniz."
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Girmiş olduğunuz telefon numarası geçersiz."

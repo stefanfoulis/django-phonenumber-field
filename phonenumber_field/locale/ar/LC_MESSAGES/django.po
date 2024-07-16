@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-23 15:35+0100\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2020-03-23 15:41+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,27 +20,39 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: phonenumber_field/formfields.py:27
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr "أدخل رقم هاتف صالح (مثال {example_number} ) أو رقم له بادئة دولية "
 
-#. Translators: {example_number} is an international phone number.
-#: phonenumber_field/formfields.py:33
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "أدخل رقم هاتف صالح (مثال {example_number} )."
 
-#: phonenumber_field/modelfields.py:53
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "أدخل رقم هاتف صالح (مثال {example_number} )."
+
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "رقم الهاتف"
 
-#: phonenumber_field/serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "أدخل رقم هاتف صالح"
 
-#: phonenumber_field/validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "رقم الهاتف الذي تم إدخاله غير صالح."

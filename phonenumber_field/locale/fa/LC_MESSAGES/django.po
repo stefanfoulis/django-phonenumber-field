@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-10 14:27+0330\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2021-12-10 14:27+0330\n"
 "Last-Translator: Mahmood Heidari mahmoodh1378@gmail.com\n"
 "Language-Team: \n"
@@ -16,16 +16,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: formfields.py:29
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
-msgstr "یک شماره تماس معتبر (مانند {example_number}) یا یک شماره با پیشوند کشور مورد نظر وارد نمایید."
+msgstr ""
+"یک شماره تماس معتبر (مانند {example_number}) یا یک شماره با پیشوند کشور مورد "
+"نظر وارد نمایید."
 
-#. Translators: {example_number} is an international phone number.
-#: formfields.py:35
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "یک شماره تماس معتبر وارد نمایید (مانند {example_number})."
+
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "یک شماره تماس معتبر وارد نمایید (مانند {example_number})."
 
@@ -33,10 +47,10 @@ msgstr "یک شماره تماس معتبر وارد نمایید (مانند {e
 msgid "Phone number"
 msgstr "شماره تماس"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "یک شماره تماس معتبر وارد نمایید."
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "شماره تماس وارد شده معتبر نیست."

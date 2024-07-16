@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-15 21:40+0300\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: 2020-10-15 21:22+0300\n"
 "Last-Translator: KiraLT <info@kiralt.dev>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/django/django)\n"
@@ -18,8 +18,12 @@ msgstr ""
 "11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? "
 "1 : n % 1 != 0 ? 2: 3);\n"
 
-#: phonenumber_field/formfields.py:27
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
@@ -27,20 +31,28 @@ msgstr ""
 "Įveskite teisingą telefono numerį (pvz. {example_number}) arba numerį su "
 "tarptautinio skambučio kodu."
 
-#. Translators: {example_number} is an international phone number.
-#: phonenumber_field/formfields.py:33
-#, python-brace-format
+#: formfields.py:64
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Įveskite teisingą telefono numerį (pvz. {example_number})."
 
-#: phonenumber_field/modelfields.py:53
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number (e.g. {example_number})."
+msgctxt "{example_number} is a national phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "Įveskite teisingą telefono numerį (pvz. {example_number})."
+
+#: modelfields.py:53
 msgid "Phone number"
 msgstr "Telefono numeris"
 
-#: phonenumber_field/serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "Įveskite teisingą telefono numerį."
 
-#: phonenumber_field/validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "Įvestas telefono numeris nėra teisingas."

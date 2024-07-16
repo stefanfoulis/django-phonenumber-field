@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-25 09:52+0800\n"
+"POT-Creation-Date: 2024-07-16 11:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Wentao Han <wentao.han@gmail.com>\n"
 "Language-Team: \n"
@@ -18,17 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: formfields.py:27
-#, python-brace-format
+#: formfields.py:57
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
+#| "international call prefix."
+msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
 "international call prefix."
 msgstr "输入一个合法的电话号码（例如，{example_number}）或带国际冠码的号码。"
 
-#. Translators: {example_number} is an international phone number.
-#: formfields.py:33
+#: formfields.py:64
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
+msgctxt "{example_number} is an international phone number."
+msgid "Enter a valid phone number (e.g. {example_number})."
+msgstr "输入一个合法的电话号码（例如，{example_number}）。"
+
+#: formfields.py:157
+#, fuzzy, python-brace-format
+#| msgid "Enter a valid phone number."
+msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "输入一个合法的电话号码（例如，{example_number}）。"
 
@@ -36,10 +47,10 @@ msgstr "输入一个合法的电话号码（例如，{example_number}）。"
 msgid "Phone number"
 msgstr "电话号码"
 
-#: serializerfields.py:9
+#: serializerfields.py:10
 msgid "Enter a valid phone number."
 msgstr "输入一个合法的电话号码。"
 
-#: validators.py:11
+#: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
 msgstr "输入的电话号码不合法。"

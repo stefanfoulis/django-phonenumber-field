@@ -77,7 +77,7 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
             raise Exception("gettext was called unexpectedly.")
 
         with mock.patch(
-            "phonenumber_field.formfields._",
+            "phonenumber_field.formfields.pgettext_lazy",
             side_effect=lazy(fail_gettext, str),
         ):
             PhoneNumberField()
