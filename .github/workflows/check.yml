@@ -13,11 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         tox-environment:
-          - black
           - doctest
-          - flake8
-          - isort
           - mypy
+          - ruff
     env:
       TOXENV: ${{ matrix.tox-environment }}
 

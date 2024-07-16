@@ -46,8 +46,17 @@ Source = "https://github.com/stefanfoulis/django-phonenumber-field"
 Tracker = "https://github.com/stefanfoulis/django-phonenumber-field/issues/"
 Changelog = "https://github.com/stefanfoulis/django-phonenumber-field/releases/"
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+# see prefixes in https://beta.ruff.rs/docs/rules/
+select = [
+    "F",   # pyflakes
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehension
+]
+
 
 [build-system]
 requires = [
