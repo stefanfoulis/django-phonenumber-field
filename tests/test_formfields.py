@@ -7,6 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase, override_settings
 from django.utils import translation
 from django.utils.functional import lazy
+from phonenumbers import COUNTRY_CODES_FOR_NON_GEO_REGIONS
 
 from phonenumber_field.formfields import PhoneNumberField, SplitPhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
@@ -175,6 +176,8 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         rendered = str(TestForm())
         self.assertIn('<option value="" selected>---------</option>', rendered)
         self.assertIn('<option value="CN">China +86</option>', rendered)
+        for prefix in COUNTRY_CODES_FOR_NON_GEO_REGIONS:
+            self.assertNotIn(f"+{prefix}", rendered)
 
     def test_initial(self):
         class TestForm(forms.Form):

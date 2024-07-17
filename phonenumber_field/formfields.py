@@ -6,7 +6,7 @@ from django.forms.fields import CharField, ChoiceField, MultiValueField
 from django.utils import translation
 from django.utils.text import format_lazy
 from django.utils.translation import pgettext, pgettext_lazy
-from phonenumbers import COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers import COUNTRY_CODE_TO_REGION_CODE, COUNTRY_CODES_FOR_NON_GEO_REGIONS
 
 from phonenumber_field import widgets
 from phonenumber_field.phonenumber import to_python, validate_region
@@ -17,10 +17,13 @@ try:
 except ModuleNotFoundError:
     babel = None  # type: ignore
 
+GEO_COUNTRY_CODE_TO_REGION_CODE = COUNTRY_CODE_TO_REGION_CODE.copy()
+for country_code in COUNTRY_CODES_FOR_NON_GEO_REGIONS:
+    del GEO_COUNTRY_CODE_TO_REGION_CODE[country_code]
 # ISO 3166-1 alpha-2 to national prefix
 REGION_CODE_TO_COUNTRY_CODE = {
     region_code: country_code
-    for country_code, region_codes in COUNTRY_CODE_TO_REGION_CODE.items()
+    for country_code, region_codes in GEO_COUNTRY_CODE_TO_REGION_CODE.items()
     for region_code in region_codes
 }
 
