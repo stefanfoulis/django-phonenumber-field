@@ -19,7 +19,6 @@ jobs:
           - '3.11'
           - '3.12'
         tox-environment:
-          - dj32
           - dj42
           - dj50
         include:
