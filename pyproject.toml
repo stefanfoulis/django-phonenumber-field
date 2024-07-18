@@ -15,7 +15,6 @@ license = { text="MIT" }
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "Intended Audience :: Developers",
@@ -33,7 +32,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
 ]
 dynamic = ["version"]
-dependencies = ["Django>=3.2"]
+dependencies = ["Django>=4.2"]
 
 [project.optional-dependencies]
 phonenumbers = ["phonenumbers >= 7.0.2"]

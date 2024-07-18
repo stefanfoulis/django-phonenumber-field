@@ -293,13 +293,6 @@ class PhoneNumberFieldTestCase(TestCase):
 
 
 class PhoneNumberFieldAppTest(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        # Drop alias with support for Django 3.2.
-        if django.VERSION < (4, 2):
-            cls.assertQuerySetEqual = cls.assertQuerysetEqual
-
     def test_save_field_to_database(self):
         """Basic Field Test"""
         tm = models.TestModel()
