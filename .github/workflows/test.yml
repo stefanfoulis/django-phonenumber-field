@@ -13,20 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
+          - '3.8'
+          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
           - '3.13-dev'
-        tox-environment:
-          - dj50
-          - dj51
-          - djmain
-        include:
-          - python-version: '3.8'
-            tox-environment: dj42
-          - python-version: '3.9'
-            tox-environment: dj42
-
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
       COVERALLS_PARALLEL: true
@@ -48,7 +40,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install coveralls tox
+        run: python -m pip install coveralls tox-gh
 
       - name: Run tests
         run: tox
