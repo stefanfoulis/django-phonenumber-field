@@ -1,6 +1,9 @@
+from typing import Optional
+
 from django.conf import settings
 from django.core import checks
 from django.db import models
+from django.forms import Field
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
@@ -114,11 +117,19 @@ class PhoneNumberField(models.CharField):
         kwargs["region"] = self._region
         return name, path, args, kwargs
 
-    def formfield(self, **kwargs):
+    def formfield(
+        self,
+        form_class=None,
+        choices_form_class=None,
+        **kwargs,
+    ) -> Optional[Field]:
         defaults = {
-            "form_class": formfields.PhoneNumberField,
+            "form_class": (
+                formfields.PhoneNumberField if form_class is None else form_class
+            ),
             "region": self.region,
             "error_messages": self.error_messages,
+            "choices_form_class": choices_form_class,
         }
         defaults.update(kwargs)
         return super().formfield(**defaults)
