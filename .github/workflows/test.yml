@@ -17,7 +17,7 @@ jobs:
           - '3.10'
           - '3.11'
           - '3.12'
-          - '3.13-dev'
+          - '3.13'
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
       COVERALLS_PARALLEL: true
