@@ -1,6 +1,6 @@
 [project]
 name = "django-phonenumber-field"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 description = "An international phone number field for django models."
 readme = "README.rst"
 authors = [
@@ -24,7 +24,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -68,7 +67,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 check_untyped_defs = true
 show_error_context = true
 pretty = true
