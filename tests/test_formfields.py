@@ -252,7 +252,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "", "phone_1": invalid_national_number})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """<ul class="errorlist" id="id_phone_error">
                 <li>This field is required.</li>
@@ -287,7 +287,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA", "phone_1": ""})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_phone_error">
@@ -323,7 +323,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_1": "654321"})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_phone_error">
@@ -357,7 +357,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA"})
         self.assertFalse(form.is_valid())
         rendered_form = form.as_ul()
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_phone_error">
@@ -395,7 +395,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
         form = TestForm(data={"phone_0": "CA", "phone_1": "0000"})
         self.assertFalse(form.is_valid())
         rendered_form = str(form)
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_phone_error">
@@ -530,7 +530,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             {"name": ["Ensure this value has at least 4 characters (it has 1)."]},
         )
         form_html = form.as_p()
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_name_error">
@@ -609,7 +609,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             number = SplitPhoneNumberField()
 
         form = PhoneNumberForm({"number_0": "FR", "number_1": "1"})
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertIn(
                 '<ul class="errorlist" id="id_number_error"><li>'
                 "Enter a valid phone number (e.g. 01 23 45 67 89)."
@@ -633,7 +633,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
             phone = CustomSplitPhoneNumberField()
 
         form = TestForm({"phone_0": "FR", "phone_1": "1"})
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertInHTML(
                 """
                 <ul class="errorlist" id="id_phone_error">

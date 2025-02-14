@@ -659,7 +659,7 @@ class RegionPhoneNumberModelFieldTest(TestCase):
     def test_region_field_renders_invalid_numbers(self):
         form = ARPhoneNumberForm({"phone": "abcdef"})
         self.assertFalse(form.is_valid())
-        if django.VERSION >= (6,):
+        if django.VERSION >= (5, 2):
             self.assertHTMLEqual(
                 form.as_p(),
                 '<ul class="errorlist" id="id_phone_error">'
