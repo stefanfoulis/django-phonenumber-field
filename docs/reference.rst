@@ -168,6 +168,14 @@ A :class:`~django.forms.MultiValueField` that offers:
 - a ``<select … >`` element to choose the region, and
 - an ``<input type="tel" … >`` to enter the phone number.
 
+To customize each field, subclass
+:class:`~phonenumber_field.formfields.SplitPhoneNumberField` and override:
+
+- :func:`~phonenumber_field.formfields.SplitPhoneNumberField.prefix_field`
+  for the phone number prefix field,
+- :func:`~phonenumber_field.formfields.SplitPhoneNumberField.number_field`
+  for the phone number field.
+
 This widget uses an example phone number from the selected region for the
 ``invalid`` key in :attr:`~django.forms.Field.error_messages`, when the region
 choice is valid.
@@ -180,6 +188,8 @@ To customize the dynamic message, use
 .. autoclass:: phonenumber_field.formfields.SplitPhoneNumberField
 
    .. automethod:: __init__
+   .. automethod:: prefix_field
+   .. automethod:: number_field
    .. automethod:: invalid_error_message
 
 Usage
