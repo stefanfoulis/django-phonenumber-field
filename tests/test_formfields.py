@@ -317,6 +317,7 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
 
         form = TestForm(data={"phone_0": "", "phone_1": ""})
         self.assertIs(form.is_valid(), True)
+        self.assertEqual(form.cleaned_data["phone"], "")
 
     def test_no_region(self):
         class TestForm(forms.Form):
@@ -389,6 +390,17 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
 
         form = TestForm(data={})
         self.assertIs(form.is_valid(), True)
+        self.assertEqual(form.cleaned_data["phone"], "")
+
+    def test_not_required_empty_value(self):
+        class TestForm(forms.Form):
+            phone = SplitPhoneNumberField(required=False)
+            phone_none = SplitPhoneNumberField(required=False, empty_value=None)
+
+        form = TestForm(data={})
+        self.assertIs(form.is_valid(), True)
+        self.assertEqual(form.cleaned_data["phone"], "")
+        self.assertIsNone(form.cleaned_data["phone_none"])
 
     def test_keeps_region_with_invalid_national_number(self):
         class TestForm(forms.Form):
