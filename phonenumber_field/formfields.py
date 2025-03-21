@@ -136,13 +136,19 @@ class SplitPhoneNumberField(MultiValueField):
 
     def prefix_field(self):
         """
-        Customize the phone number prefix field.
+        Returns the default :class:`~django.forms.Field` for the phone
+        number prefix field.
+
+        Use this hook to set widget attributes or update the field definition.
         """
         return PrefixChoiceField()
 
     def number_field(self):
         """
-        Customize the phone number input field.
+        Returns the default :class:`~django.forms.Field` for the phone
+        number field.
+
+        Use this hook to set widget attributes or update the field definition.
         """
         number_field = CharField()
         number_field.widget.input_type = "tel"
