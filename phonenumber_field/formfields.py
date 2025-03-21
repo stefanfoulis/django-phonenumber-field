@@ -104,7 +104,9 @@ class SplitPhoneNumberField(MultiValueField):
     default_validators = [validate_international_phonenumber]
     widget = widgets.PhoneNumberPrefixWidget
 
-    def __init__(self, *, initial=None, region=None, widget=None, **kwargs):
+    def __init__(
+        self, *, initial=None, region=None, widget=None, empty_value="", **kwargs
+    ):
         """
         :keyword list initial: A two-elements iterable:
 
@@ -122,6 +124,7 @@ class SplitPhoneNumberField(MultiValueField):
             When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
         :keyword ~django.forms.MultiWidget widget: defaults to
             :class:`~phonenumber_field.widgets.PhoneNumberPrefixWidget`
+        :keyword empty_value: value to use when the field is empty
         """
         validate_region(region)
         region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
@@ -132,6 +135,7 @@ class SplitPhoneNumberField(MultiValueField):
         fields = (prefix_field, number_field)
         if widget is None:
             widget = self.widget((prefix_field.widget, number_field.widget))
+        self.empty_value = empty_value
         super().__init__(fields, initial=initial, widget=widget, **kwargs)
 
     def prefix_field(self):
@@ -168,7 +172,7 @@ class SplitPhoneNumberField(MultiValueField):
 
     def compress(self, data_list):
         if not data_list:
-            return data_list
+            return self.empty_value
         region, national_number = data_list
         return to_python(national_number, region=region)
 
