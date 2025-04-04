@@ -117,10 +117,9 @@ Usage
 
 .. doctest:: formfield
 
-   >>> from django import forms
    >>> from phonenumber_field.formfields import PhoneNumberField
 
-   >>> class PhoneForm(forms.Form):
+   >>> class PhoneForm(django.forms.Form):
    ...     number = PhoneNumberField(region="CA")
    ...
 
@@ -197,10 +196,9 @@ Usage
 
 .. doctest:: SplitPhoneNumberField
 
-   >>> from django import forms
    >>> from phonenumber_field.formfields import SplitPhoneNumberField
 
-   >>> class PhoneForm(forms.Form):
+   >>> class PhoneForm(django.forms.Form):
    ...     number = SplitPhoneNumberField()
    ...
 
@@ -233,13 +231,13 @@ Usage
    # Limiting country choices.
    >>> class DemoSplitPhoneNumberField(SplitPhoneNumberField):
    ...     def prefix_field(self):
-   ...         return forms.ChoiceField(choices=[
+   ...         return django.forms.ChoiceField(choices=[
    ...             ("", "---------"),
    ...             ("CA", "Canada"),
    ...             ("FR", "France"),
    ...         ])
    ...
-   >>> class LimitedCountryPhoneForm(forms.Form):
+   >>> class LimitedCountryPhoneForm(django.forms.Form):
    ...     number = DemoSplitPhoneNumberField()
    ...
    >>> form = LimitedCountryPhoneForm()
@@ -265,7 +263,7 @@ Usage
    </div>
 
    # Pre-selecting a country.
-   >>> class FrenchPhoneForm(forms.Form):
+   >>> class FrenchPhoneForm(django.forms.Form):
    ...     number = DemoSplitPhoneNumberField(region="FR")
    ...
 
@@ -317,10 +315,9 @@ Usage
 
 .. doctest:: fallbackwidget
 
-   >>> from django import forms
    >>> from phonenumber_field.formfields import PhoneNumberField
 
-   >>> class CanadianPhoneForm(forms.Form):
+   >>> class CanadianPhoneForm(django.forms.Form):
    ...     # RegionalPhoneNumberWidget is the default widget.
    ...     number = PhoneNumberField(region="CA")
    ...
