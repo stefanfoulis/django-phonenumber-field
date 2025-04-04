@@ -194,7 +194,10 @@ To customize the dynamic message, use
 Usage
 ~~~~~
 
-.. doctest:: SplitPhoneNumberField
+Simple
+......
+
+.. doctest:: SplitPhoneNumberField.basic
 
    >>> from phonenumber_field.formfields import SplitPhoneNumberField
 
@@ -228,7 +231,13 @@ Usage
     </fieldset>
    </div>
 
-   # Limiting country choices.
+Limiting country choices
+........................
+
+.. doctest:: SplitPhoneNumberField.country_choices
+
+   >>> from phonenumber_field.formfields import SplitPhoneNumberField
+
    >>> class DemoSplitPhoneNumberField(SplitPhoneNumberField):
    ...     def prefix_field(self):
    ...         return django.forms.ChoiceField(choices=[
@@ -262,7 +271,22 @@ Usage
     </fieldset>
    </div>
 
-   # Pre-selecting a country.
+Pre-selecting a country
+.......................
+
+.. doctest:: SplitPhoneNumberField.preselecting_country
+
+   >>> from phonenumber_field.formfields import SplitPhoneNumberField
+
+   >>> class DemoSplitPhoneNumberField(SplitPhoneNumberField):
+   ...     def prefix_field(self):
+   ...         return django.forms.ChoiceField(choices=[
+   ...             ("", "---------"),
+   ...             ("CA", "Canada"),
+   ...             ("FR", "France"),
+   ...         ])
+   ...
+
    >>> class FrenchPhoneForm(django.forms.Form):
    ...     number = DemoSplitPhoneNumberField(region="FR")
    ...
