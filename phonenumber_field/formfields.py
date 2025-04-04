@@ -162,7 +162,7 @@ class SplitPhoneNumberField(MultiValueField):
 
     def compress(self, data_list):
         if not data_list:
-            return data_list
+            return None if isinstance(data_list, list) else data_list
         region, national_number = data_list
         return to_python(national_number, region=region)
 
