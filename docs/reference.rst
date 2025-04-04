@@ -313,6 +313,53 @@ Pre-selecting a country
     </fieldset>
    </div>
 
+Customizing widget attrs
+........................
+
+.. doctest:: SplitPhoneNumberField.preselecting_country
+
+   >>> from phonenumber_field.formfields import SplitPhoneNumberField
+
+   >>> class DemoSplitPhoneNumberField(SplitPhoneNumberField):
+   ...     def prefix_field(self):
+   ...         return django.forms.ChoiceField(choices=[
+   ...             ("", "---------"),
+   ...             ("CA", "Canada"),
+   ...             ("FR", "France"),
+   ...         ])
+   ...
+   ...     def number_field(self):
+   ...         number_field = super().number_field()
+   ...         number_field.widget.attrs["class"] = "form-control"
+   ...         return number_field
+   ...
+
+   >>> class BootstrapPhoneForm(django.forms.Form):
+   ...     number = DemoSplitPhoneNumberField()
+   ...
+
+   >>> form = BootstrapPhoneForm()
+   >>> print_html(form.as_div())
+   <div>
+    <fieldset>
+     <legend>
+      Number:
+     </legend>
+     <select id="id_number_0" name="number_0" required="">
+      <option selected="" value="">
+       ---------
+      </option>
+      <option value="CA">
+       Canada
+      </option>
+      <option value="FR">
+       France
+      </option>
+     </select>
+     <input class="form-control" id="id_number_1" name="number_1" required="" type="tel"/>
+    </fieldset>
+   </div>
+
 Widgets
 -------
 
