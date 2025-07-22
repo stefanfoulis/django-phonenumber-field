@@ -105,7 +105,14 @@ class SplitPhoneNumberField(MultiValueField):
     widget = widgets.PhoneNumberPrefixWidget
 
     def __init__(
-        self, *, initial=None, region=None, widget=None, empty_value="", **kwargs
+        self,
+        *,
+        initial=None,
+        region=None,
+        widget=None,
+        empty_value="",
+        max_length=None,
+        **kwargs,
     ):
         """
         :keyword list initial: A two-elements iterable:
@@ -125,6 +132,8 @@ class SplitPhoneNumberField(MultiValueField):
         :keyword ~django.forms.MultiWidget widget: defaults to
             :class:`~phonenumber_field.widgets.PhoneNumberPrefixWidget`
         :keyword empty_value: value to use when the field is empty
+        :keyword int max_length: maximum length of the phone number, when
+            represented as :setting:`PHONENUMBER_DB_FORMAT`.
         """
         validate_region(region)
         region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
@@ -136,6 +145,7 @@ class SplitPhoneNumberField(MultiValueField):
         if widget is None:
             widget = self.widget((prefix_field.widget, number_field.widget))
         self.empty_value = empty_value
+        self.max_length = max_length
         super().__init__(fields, initial=initial, widget=widget, **kwargs)
 
     def prefix_field(self):
@@ -192,4 +202,19 @@ class SplitPhoneNumberField(MultiValueField):
                         error_message,
                         example_number=example_number,
                     )
-        return super().clean(value)
+        clean_value = super().clean(value)
+        if self.max_length is not None:
+            phonenumber_str = clean_value.format_as(
+                getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
+            )
+            if len(phonenumber_str) > self.max_length:
+                raise ValidationError(
+                    format_lazy(
+                        "Ensure this value has no more than {max_length} characters, "
+                        "“{value}” is {length} characters long.",
+                        max_length=self.max_length,
+                        value=phonenumber_str,
+                        length=len(phonenumber_str),
+                    )
+                )
+        return clean_value
