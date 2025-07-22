@@ -12,6 +12,7 @@ from phonenumbers import COUNTRY_CODES_FOR_NON_GEO_REGIONS
 from phonenumber_field.formfields import PhoneNumberField, SplitPhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.validators import validate_phonenumber
+from tests.models import NullablePhoneNumber, PhoneNumberWithMaxLength
 
 ALGERIAN_PHONE_NUMBER = "+213799136332"
 
@@ -708,3 +709,39 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
 
         form = TestForm({"phone_0": "FR", "phone_1": "1010"})
         self.assertIs(form.is_valid(), True)
+
+    def test_formfield_with_maxlength_null(self):
+        class TestForm(forms.Form):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.fields = forms.fields_for_model(
+                    NullablePhoneNumber,
+                    ["phone_number"],
+                    field_classes={"phone_number": SplitPhoneNumberField},
+                )
+
+        form = TestForm(data={"phone_number_0": "FR", "phone_number_1": "612345678"})
+        self.assertIs(form.is_valid(), True)
+        self.assertEqual(form.cleaned_data["phone_number"], "+33612345678")
+
+    def test_formfield_with_max_length(self):
+        class TestForm(forms.Form):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.fields = forms.fields_for_model(
+                    PhoneNumberWithMaxLength,
+                    ["phone"],
+                    field_classes={"phone": SplitPhoneNumberField},
+                )
+
+        form = TestForm(data={"phone_0": "FR", "phone_1": "33612345678"})
+        self.assertIs(form.is_valid(), False)
+        self.assertEqual(
+            form.errors,
+            {
+                "phone": [
+                    "Ensure this value has no more than 3 characters, "
+                    "“6 12 34 56 78” is 13 characters long."
+                ],
+            },
+        )
