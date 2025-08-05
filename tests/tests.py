@@ -309,6 +309,22 @@ class PhoneNumberFieldAppTest(TestCase):
             transform=phone_transform,
         )
 
+    @override_settings(PHONENUMBER_DEFAULT_FORMAT="NATIONAL")
+    def test_internal_phone_when_default_format_is_national(self):
+        """Test that the region is not lost in a string conversion."""
+        tm = models.TestModel()
+        tm.phone = "+41 52 424 2424"
+        tm.full_clean()
+        tm.save()
+
+        tm = models.TestModel.objects.get(pk=tm.pk)
+        self.assertIsInstance(tm.phone, PhoneNumber)
+        self.assertQuerySetEqual(
+            models.TestModel.objects.all(),
+            [(tm.pk, "", "+41524242424")],
+            transform=phone_transform,
+        )
+
     def test_create_with_invalid_number_works(self):
         obj = models.TestModel.objects.create(phone="invalid")
         self.assertEqual(obj.phone.raw_input, "invalid")
