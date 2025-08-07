@@ -148,7 +148,6 @@ class PhoneNumberFormFieldTest(SimpleTestCase):
 class SplitPhoneNumberFormFieldTest(SimpleTestCase):
     def example_number(self, region_code: str) -> PhoneNumber:
         number = phonenumbers.example_number(region_code)
-        assert number is not None
         e164 = phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
         return PhoneNumber.from_string(e164, region=region_code)
 

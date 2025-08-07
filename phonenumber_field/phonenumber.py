@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
 
 import phonenumbers
 from django.conf import settings
 from django.core import validators
-
-if TYPE_CHECKING:
-    # Use ‘from typing import Self’ from Python 3.11 onwards.
-    from typing_extensions import Self
 
 
 @total_ordering
@@ -28,7 +23,7 @@ class PhoneNumber(phonenumbers.PhoneNumber):
     }
 
     @classmethod
-    def from_string(cls, phone_number, region=None) -> Self:
+    def from_string(cls, phone_number, region=None):
         """
         :arg str phone_number: parse this :class:`str` as a phone number.
         :keyword str region: 2-letter country code as defined in ISO 3166-1.
