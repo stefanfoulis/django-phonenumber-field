@@ -1,4 +1,4 @@
-# Swedish Locale
+# Swedish Locale.
 # Copyright (C) 2017
 # This file is distributed under the same license as the django-phonenumber-field package.
 # Jonas Lidén <jonas@lideen.se>, 2017.
@@ -19,10 +19,7 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 
 #: formfields.py:57
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
-#| "international call prefix."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -32,15 +29,13 @@ msgstr ""
 "internationellt format."
 
 #: formfields.py:64
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Ange ett giltigt telefonnummer (t ex {example_number})."
 
 #: formfields.py:157
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Ange ett giltigt telefonnummer (t ex {example_number})."

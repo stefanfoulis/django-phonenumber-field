@@ -1,4 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
+# Arabic locale.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -21,10 +21,7 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: formfields.py:57
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
-#| "international call prefix."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -32,15 +29,13 @@ msgid ""
 msgstr "أدخل رقم هاتف صالح (مثال {example_number} ) أو رقم له بادئة دولية "
 
 #: formfields.py:64
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "أدخل رقم هاتف صالح (مثال {example_number} )."
 
 #: formfields.py:157
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "أدخل رقم هاتف صالح (مثال {example_number} )."
