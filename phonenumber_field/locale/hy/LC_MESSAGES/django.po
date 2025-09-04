@@ -1,4 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
+# Armenian locale.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -19,10 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: formfields.py:57
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Enter a valid phone number (e.g. {example_number}) or a number with an "
-#| "international call prefix."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid ""
 "Enter a valid phone number (e.g. {example_number}) or a number with an "
@@ -32,15 +29,13 @@ msgstr ""
 "ձեւաչափով։"
 
 #: formfields.py:64
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Մուտքագրեք վավեր հեռախոսահամար (օրինակ, {example_number})։"
 
 #: formfields.py:157
-#, fuzzy, python-brace-format
-#| msgid "Enter a valid phone number (e.g. {example_number})."
+#, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Մուտքագրեք վավեր հեռախոսահամար (օրինակ, {example_number})։"
@@ -51,7 +46,7 @@ msgstr "Հեռախոսահամար"
 
 #: serializerfields.py:10
 msgid "Enter a valid phone number."
-msgstr "Մուտքագրեք վավեր հեռախոսահամար"
+msgstr "Մուտքագրեք վավեր հեռախոսահամար։"
 
 #: validators.py:12 validators.py:23
 msgid "The phone number entered is not valid."
