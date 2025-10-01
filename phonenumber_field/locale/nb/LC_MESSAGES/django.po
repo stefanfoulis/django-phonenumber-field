@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:14+0200\n"
+"POT-Creation-Date: 2025-10-01 18:06+0200\n"
 "PO-Revision-Date: 2016-10-21 15:04+0200\n"
 "Last-Translator: Kristian Klette <klette@klette.us>\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.9\n"
 
-#: formfields.py:57
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid ""
@@ -28,26 +28,26 @@ msgstr ""
 "Tast inn et gyldig telefonnummer (f.eks. {example_number}) eller et nummer "
 "med internasjonal landskode."
 
-#: formfields.py:64
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Tast inn et gyldig telefonnummer (f.eks. {example_number})."
 
-#: formfields.py:157
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Tast inn et gyldig telefonnummer (f.eks. {example_number})."
 
-#: modelfields.py:53
+#: modelfields.py
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: serializerfields.py:10
+#: serializerfields.py
 msgid "Enter a valid phone number."
 msgstr "Tast inn et gyldig telefonnummer."
 
-#: validators.py:12 validators.py:23
+#: validators.py
 msgid "The phone number entered is not valid."
 msgstr "Telefonnummeret er ugyldig."
