@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:14+0200\n"
+"POT-Creation-Date: 2025-10-01 18:06+0200\n"
 "PO-Revision-Date: 2020-11-12 13:04+0200\n"
 "Last-Translator: ELENA ROGLEVA <elena.rogleva@gmail.com>\n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: formfields.py:57
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid ""
@@ -27,26 +27,26 @@ msgstr ""
 "Моля, въведете валиден телефонен номер (например {example_number}) или номер "
 "с международен телефонен код."
 
-#: formfields.py:64
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Моля, въведете валиден телефонен номер (например {example_number})."
 
-#: formfields.py:157
+#: formfields.py
 #, python-brace-format
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "Моля, въведете валиден телефонен номер (например {example_number})."
 
-#: modelfields.py:53
+#: modelfields.py
 msgid "Phone number"
 msgstr "Телефонен номер"
 
-#: serializerfields.py:10
+#: serializerfields.py
 msgid "Enter a valid phone number."
 msgstr "Моля, въведете валиден телефонен номер."
 
-#: validators.py:12 validators.py:23
+#: validators.py
 msgid "The phone number entered is not valid."
 msgstr "Въведеният телефонен номер е невалиден."

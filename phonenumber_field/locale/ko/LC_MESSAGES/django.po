@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:14+0200\n"
+"POT-Creation-Date: 2025-10-01 18:06+0200\n"
 "PO-Revision-Date: 2017-04-15 16:56+0100\n"
 "Last-Translator: Jiyoon Ha <cryptography@konkuk.ac.kr>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: formfields.py:57
+#: formfields.py
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgctxt "{example_number} is a national phone number."
@@ -25,28 +25,28 @@ msgid ""
 "international call prefix."
 msgstr "올바른 전화번호를 입력해주세요."
 
-#: formfields.py:64
+#: formfields.py
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgctxt "{example_number} is an international phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "올바른 전화번호를 입력해주세요."
 
-#: formfields.py:157
+#: formfields.py
 #, fuzzy, python-brace-format
 #| msgid "Enter a valid phone number."
 msgctxt "{example_number} is a national phone number."
 msgid "Enter a valid phone number (e.g. {example_number})."
 msgstr "올바른 전화번호를 입력해주세요."
 
-#: modelfields.py:53
+#: modelfields.py
 msgid "Phone number"
 msgstr "전화번호"
 
-#: serializerfields.py:10
+#: serializerfields.py
 msgid "Enter a valid phone number."
 msgstr "올바른 전화번호를 입력해주세요."
 
-#: validators.py:12 validators.py:23
+#: validators.py
 msgid "The phone number entered is not valid."
 msgstr "입력하신 전화번호가 올바른 형식이 아닙니다."
