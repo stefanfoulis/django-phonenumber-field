@@ -104,7 +104,16 @@ class SplitPhoneNumberField(MultiValueField):
     default_validators = [validate_international_phonenumber]
     widget = widgets.PhoneNumberPrefixWidget
 
-    def __init__(self, *, initial=None, region=None, widget=None, **kwargs):
+    def __init__(
+        self,
+        *,
+        initial=None,
+        region=None,
+        widget=None,
+        empty_value="",
+        max_length=None,
+        **kwargs,
+    ):
         """
         :keyword list initial: A two-elements iterable:
 
@@ -122,6 +131,9 @@ class SplitPhoneNumberField(MultiValueField):
             When not supplied, defaults to :setting:`PHONENUMBER_DEFAULT_REGION`
         :keyword ~django.forms.MultiWidget widget: defaults to
             :class:`~phonenumber_field.widgets.PhoneNumberPrefixWidget`
+        :keyword empty_value: value to use when the field is empty
+        :keyword int max_length: maximum length of the phone number, when
+            represented as :setting:`PHONENUMBER_DB_FORMAT`.
         """
         validate_region(region)
         region = region or getattr(settings, "PHONENUMBER_DEFAULT_REGION", None)
@@ -132,6 +144,8 @@ class SplitPhoneNumberField(MultiValueField):
         fields = (prefix_field, number_field)
         if widget is None:
             widget = self.widget((prefix_field.widget, number_field.widget))
+        self.empty_value = empty_value
+        self.max_length = max_length
         super().__init__(fields, initial=initial, widget=widget, **kwargs)
 
     def prefix_field(self):
@@ -168,7 +182,7 @@ class SplitPhoneNumberField(MultiValueField):
 
     def compress(self, data_list):
         if not data_list:
-            return data_list
+            return self.empty_value
         region, national_number = data_list
         return to_python(national_number, region=region)
 
@@ -188,4 +202,19 @@ class SplitPhoneNumberField(MultiValueField):
                         error_message,
                         example_number=example_number,
                     )
-        return super().clean(value)
+        clean_value = super().clean(value)
+        if self.max_length is not None:
+            phonenumber_str = clean_value.format_as(
+                getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
+            )
+            if len(phonenumber_str) > self.max_length:
+                raise ValidationError(
+                    format_lazy(
+                        "Ensure this value has no more than {max_length} characters, "
+                        "“{value}” is {length} characters long.",
+                        max_length=self.max_length,
+                        value=phonenumber_str,
+                        length=len(phonenumber_str),
+                    )
+                )
+        return clean_value
