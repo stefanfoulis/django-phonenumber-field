@@ -203,7 +203,7 @@ class SplitPhoneNumberField(MultiValueField):
                         example_number=example_number,
                     )
         clean_value = super().clean(value)
-        if self.max_length is not None:
+        if clean_value not in self.empty_values and self.max_length is not None:
             phonenumber_str = clean_value.format_as(
                 getattr(settings, "PHONENUMBER_DB_FORMAT", "E164")
             )
