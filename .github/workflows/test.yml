@@ -13,12 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
-          - '3.14-dev'
+          - '3.14'
     env:
       COVERALLS_FLAG_NAME: Python ${{ matrix.python-version }} / ${{ matrix.tox-environment }}
       COVERALLS_PARALLEL: true
