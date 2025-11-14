@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.conf import settings
 from django.core import checks
 from django.db import models
@@ -120,7 +118,7 @@ class PhoneNumberField(models.CharField):
         form_class=None,
         choices_form_class=None,
         **kwargs,
-    ) -> Optional[Field]:
+    ) -> Field | None:
         defaults = {
             "form_class": (
                 formfields.PhoneNumberField if form_class is None else form_class
