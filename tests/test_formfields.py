@@ -734,14 +734,30 @@ class SplitPhoneNumberFormFieldTest(SimpleTestCase):
                     field_classes={"phone": SplitPhoneNumberField},
                 )
 
-        form = TestForm(data={"phone_0": "FR", "phone_1": "33612345678"})
-        self.assertIs(form.is_valid(), False)
-        self.assertEqual(
-            form.errors,
-            {
-                "phone": [
-                    "Ensure this value has no more than 3 characters, "
-                    "“6 12 34 56 78” is 13 characters long."
-                ],
-            },
-        )
+        with self.subTest("no data"):
+            form = TestForm(data={})
+            self.assertIs(form.is_valid(), True)
+            self.assertEqual(form.cleaned_data["phone"], "")
+
+        with self.subTest("empty phone number"):
+            form = TestForm(data={"phone_0": "", "phone_1": ""})
+            self.assertIs(form.is_valid(), True)
+            self.assertEqual(form.cleaned_data["phone"], "")
+
+        with self.subTest("phone number within max_length"):
+            form = TestForm(data={"phone_0": "AU", "phone_1": "0444444444"})
+            self.assertIs(form.is_valid(), True)
+            self.assertEqual(form.cleaned_data["phone"], "+61444444444")
+
+        with self.subTest("phone number exceeding max_length"):
+            form = TestForm(data={"phone_0": "FR", "phone_1": "33612345678"})
+            self.assertIs(form.is_valid(), False)
+            self.assertEqual(
+                form.errors,
+                {
+                    "phone": [
+                        "Ensure this value has no more than 12 characters, "
+                        "“6 12 34 56 78” is 13 characters long."
+                    ],
+                },
+            )

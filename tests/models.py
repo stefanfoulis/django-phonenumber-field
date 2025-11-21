@@ -107,4 +107,4 @@ class TestModelRegionAR(models.Model):
 
 
 class PhoneNumberWithMaxLength(models.Model):
-    phone = PhoneNumberField(max_length=3)
+    phone = PhoneNumberField(max_length=12, blank=True, default="")
