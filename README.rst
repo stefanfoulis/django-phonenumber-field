@@ -27,6 +27,5 @@ available Python interpreters and generate a combined coverage report::
 
     tox
 
-run a specific combination::
-
-    tox -e py310-djmain,py39-djmain
+The `cheat sheet for tox <https://tox.wiki/en/latest/user_guide.html#cli>`__
+gives the most useful commands.
