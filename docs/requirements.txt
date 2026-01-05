@@ -2,3 +2,4 @@ django
 djangorestframework
 phonenumberslite
 sphinx-rtd-theme
+phonenumbers
